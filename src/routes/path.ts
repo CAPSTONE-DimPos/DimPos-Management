@@ -1,0 +1,27 @@
+
+const path = (root: string, sublink: string) => {
+  return `${root}${sublink}`;
+}
+
+const ROOTS_AUTH = '/auth';
+const ROOTS_DASHBOARD = '/dashboard';
+
+export const PATH_AUTH = {
+  root: ROOTS_AUTH,
+  login: path(ROOTS_AUTH, '/login'),
+  logout: path(ROOTS_AUTH, '/logout'),
+};
+
+export const PATH_DASHBOARD = {
+  root: ROOTS_DASHBOARD,
+  general: {
+    app: path(ROOTS_DASHBOARD, '/app'),
+    ecommerce: path(ROOTS_DASHBOARD, '/ecommerce'),
+  },
+  category: {
+    root: path(ROOTS_DASHBOARD, '/category'),
+  },
+  product: {
+    root: path(ROOTS_DASHBOARD, '/product'),
+  },
+}
