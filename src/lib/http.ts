@@ -33,7 +33,6 @@ const request =(apiUrl : string) : AxiosInstance => {
         paramsSerializer: parseParams,
         withCredentials: false,
         headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
             "Access-Control-Allow-Origin": "*",
         },
     });
