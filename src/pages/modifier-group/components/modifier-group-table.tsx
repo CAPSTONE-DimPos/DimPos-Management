@@ -2,9 +2,9 @@ import { DataTable } from "@/components/table/data-table";
 import { useProduct } from "@/hooks/use-product";
 import { useQueryParams } from "@/hooks/use-query-params";
 import { handleApiError } from "@/lib/error";
-import { columns } from "./product-table/column";
+import { columns } from "./modifier-group-table/column";
 
-const ProductTable = () =>
+const ModifierGroupTable = () =>
 {
     const {
         currentPage,
@@ -14,24 +14,14 @@ const ProductTable = () =>
         setSort,
         setPage,
         setPageSize,
-        filter,
-        setFilter,
-    } = useQueryParams( {
-        defaultFilter: [
-            {
-                id: "name",
-                value: "",
-            },
-        ]
-    } );
+    } = useQueryParams();
 
-    const { getProducts } = useProduct()
-    const { data, isLoading, isError, error } = getProducts( {
+    const { getModifierGroups } = useProduct()
+    const { data, isLoading, isError, error } = getModifierGroups( {
         size: pageSize,
         page: currentPage,
         sortBy: sortBy,
         isAsc: isAsc,
-        name: filter.find( f => f.id === "name" )?.value as string || "",
     } );
 
     if ( isError && error )
@@ -42,10 +32,6 @@ const ProductTable = () =>
     const items = data?.data.data.items || [];
     const total = data?.data.data.total || 0;
 
-    const searchValues = filter.map( f => ( {
-        ...f,
-        searchPlaceholder: f.id === "name" ? "Tìm kiếm theo tên sản phẩm" : "",
-    } ) )
     const sortValue = {
         id: sortBy,
         desc: !isAsc,
@@ -60,8 +46,6 @@ const ProductTable = () =>
             onPageChange={ setPage }
             onPageSizeChange={ setPageSize }
             isLoading={ isLoading }
-            onSearchChange={ setFilter }
-            searchValues={ searchValues }
             sortValues={ [ sortValue ] }
             onSortChange={ ( newSort ) =>
             {
@@ -71,4 +55,4 @@ const ProductTable = () =>
     )
 }
 
-export default ProductTable
+export default ModifierGroupTable

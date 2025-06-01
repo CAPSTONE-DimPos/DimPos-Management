@@ -22,9 +22,12 @@ const LoginPage = Loadable( lazy( () => import( "@/pages/login/login-page" ) ) )
 const GeneralAppPage = Loadable( lazy( () => import( "@/pages/general-app" ) ) )
 const GeneralEcommercePage = Loadable( lazy( () => import( "@/pages/general-ecommerce" ) ) )
 
-const CategoryPage = Loadable( lazy( () => import( "@/pages/category/category-page" ) ) )
+const CategoryPage = Loadable( lazy( () => import( "@/pages/category" ) ) )
 
-const ProductPage = Loadable( lazy( () => import( "@/pages/product/product-page" ) ) )
+const ProductPage = Loadable( lazy( () => import( "@/pages/product" ) ) )
+const ProductCreatePage = Loadable( lazy( () => import( "@/pages/create-product" ) ) )
+const ProductVariantPage = Loadable( lazy( () => import( "@/pages/product-variant" ) ) )
+const ModifierGroupPage = Loadable( lazy( () => import( "@/pages/modifier-group" ) ) )
 
 export const AppRoutes = () =>
     useRoutes( [
@@ -78,6 +81,18 @@ export const AppRoutes = () =>
                 {
                     path: 'product',
                     element: <ProductPage />,
+                },
+                {
+                    path: 'product/new',
+                    element: <ProductCreatePage />,
+                },
+                {
+                    path: 'product-variant',
+                    element: <ProductVariantPage />,
+                },
+                {
+                    path: 'modifier-group',
+                    element: <ModifierGroupPage />,
                 }
             ],
         },

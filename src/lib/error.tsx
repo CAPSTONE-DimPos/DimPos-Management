@@ -1,9 +1,9 @@
 import type { BaseResponse } from "@/types/response.type";
 import { toast } from "sonner";
 
-export const handleApiError = ( error: any ): BaseResponse<String> | null =>
+export const handleApiError = ( error: any ): BaseResponse<any> | null =>
 {
-    let handledError: BaseResponse<String> | null = null;
+    let handledError: BaseResponse<any> | null = null;
     if ( error.response )
     {
         const { status, data } = error.response;
@@ -14,31 +14,39 @@ export const handleApiError = ( error: any ): BaseResponse<String> | null =>
                 message: "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.",
                 data: "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.",
             };
-        }
-        if ( status === 403 )
-        {
-            handledError = {
-                status: status,
-                message: "Bạn không có quyền truy cập vào tài nguyên này.",
-                data: "Bạn không có quyền truy cập vào tài nguyên này.",
-            };
-        }
-
-        if ( data && data.status && data.message && data.data )
-        {
-            handledError = {
-                status: data.status,
-                message: data.message,
-                data: data.data,
-            };
         } else
-        {
-            handledError = {
-                status: status,
-                message: data?.message || "Một lỗi không xác định đã xảy ra.",
-                data: data?.message || "Một lỗi không xác định đã xảy ra.",
-            };
-        }
+            if ( status === 403 )
+            {
+                handledError = {
+                    status: status,
+                    message: "Bạn không có quyền truy cập vào tài nguyên này.",
+                    data: "Bạn không có quyền truy cập vào tài nguyên này.",
+                };
+            } else
+                if ( status === 400 )
+                {
+                    handledError = {
+                        status: status,
+                        message: "Dữ liệu không hợp lệ.",
+                        data: data.data[ 0 ].errorMessage,
+                    };
+                } else
+
+                    if ( data && data.status && data.message && data.data )
+                    {
+                        handledError = {
+                            status: data.status,
+                            message: data.message,
+                            data: data.data,
+                        };
+                    } else
+                    {
+                        handledError = {
+                            status: status,
+                            message: data?.message || "Một lỗi không xác định đã xảy ra.",
+                            data: data?.message || "Một lỗi không xác định đã xảy ra.",
+                        };
+                    }
     } else if ( error.request )
     {
         handledError = {

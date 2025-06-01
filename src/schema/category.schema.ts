@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const allowedExtensions = [".jpeg", ".png", ".jpg", ".gif", ".bmp", ".webp"];
+export const allowedExtensions = [".jpeg", ".png", ".jpg", ".gif", ".bmp", ".webp"];
 
 export const CategoryResponseSchema = z.object({
     id: z.string().uuid(),

@@ -2,9 +2,9 @@ import { DataTable } from "@/components/table/data-table";
 import { useProduct } from "@/hooks/use-product";
 import { useQueryParams } from "@/hooks/use-query-params";
 import { handleApiError } from "@/lib/error";
-import { columns } from "./product-table/column";
+import { columns } from "./product-variant-table/columns";
 
-const ProductTable = () =>
+const ProductVariantTable = () =>
 {
     const {
         currentPage,
@@ -22,11 +22,12 @@ const ProductTable = () =>
                 id: "name",
                 value: "",
             },
-        ]
+        ],
+        defaultSortBy: "name",
     } );
 
-    const { getProducts } = useProduct()
-    const { data, isLoading, isError, error } = getProducts( {
+    const { getProductVariants } = useProduct()
+    const { data, isLoading, isError, error } = getProductVariants( {
         size: pageSize,
         page: currentPage,
         sortBy: sortBy,
@@ -71,4 +72,4 @@ const ProductTable = () =>
     )
 }
 
-export default ProductTable
+export default ProductVariantTable

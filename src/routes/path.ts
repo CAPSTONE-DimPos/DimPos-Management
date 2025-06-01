@@ -23,5 +23,8 @@ export const PATH_DASHBOARD = {
   },
   product: {
     root: path(ROOTS_DASHBOARD, '/product'),
+    createProduct: path(ROOTS_DASHBOARD, '/product/new'),
+    variant: path(ROOTS_DASHBOARD, '/product-variant'),
+    modifier: path(ROOTS_DASHBOARD, '/modifier-group'),
   },
 }

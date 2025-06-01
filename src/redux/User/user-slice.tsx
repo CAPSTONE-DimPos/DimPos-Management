@@ -36,6 +36,14 @@ const userSlice = createSlice( {
             const storedUser = localStorage.getItem( "user" );
             state.user = storedUser ? JSON.parse( storedUser ) : null;
             state.isAuthenticated = !!state.user;
+            const accessToken = localStorage.getItem( "accessToken" );
+            const refreshToken = localStorage.getItem( "refreshToken" );
+            if ( accessToken && refreshToken )
+            {
+                apiRequest.catalog.defaults.headers.common.Authorization = `Bearer ${ accessToken }`;
+                apiRequest.identity.defaults.headers.common.Authorization = `Bearer ${ accessToken }`;
+                apiRequest.menu.defaults.headers.common.Authorization = `Bearer ${ accessToken }`;
+            }
         },
         logout ( state )
         {

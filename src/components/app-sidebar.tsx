@@ -103,13 +103,18 @@ const data = {
     mainTitle: "Quản lý sản phẩm",
     items: [
       {
-        title: "Sản Phẩm",
+        title: "Sản Phẩm Gốc",
         url: PATH_DASHBOARD.product.root,
         icon: SquareTerminal,
       },
       {
         title: "Biến Thể Sản Phẩm",
-        url: "/",
+        url: PATH_DASHBOARD.product.variant,
+        icon: SquareTerminal,
+      },
+      {
+        title: "Tùy Chọn Sản Phẩm",
+        url: PATH_DASHBOARD.product.modifier,
         icon: SquareTerminal,
       }
     ]
