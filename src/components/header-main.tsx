@@ -18,7 +18,7 @@ const HeaderMain = () =>
         return segments.length >= 3;
     };
     return (
-        <nav className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 sticky top-0 bg-background/98 z-10">
+        <nav className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 sticky top-0 bg-sidebar/98 z-10">
             <div className="flex items-center gap-2 px-4 justify-between w-full" >
                 <div className="flex items-center gap-2">
                     { shouldShowBack() && (

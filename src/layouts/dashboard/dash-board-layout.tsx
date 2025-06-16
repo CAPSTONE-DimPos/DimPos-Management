@@ -10,9 +10,7 @@ const DashBoardLayout = () =>
             <AppSidebar />
             <SidebarInset>
                 <HeaderMain />
-                <div className="px-4">
-                    <Outlet />
-                </div>
+                <Outlet />
             </SidebarInset>
         </SidebarProvider>
     )

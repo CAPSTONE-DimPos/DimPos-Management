@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import
 {
     DropdownMenu,
@@ -53,6 +54,29 @@ const SortableHeader = ( { column, children }: { column: any, children: React.Re
 
 export const columns: ColumnDef<TCategoryResponse>[] = [
     {
+        id: "select",
+        header: ( { table } ) => (
+            <Checkbox
+                color=""
+                checked={
+                    table.getIsAllPageRowsSelected() ||
+                    ( table.getIsSomePageRowsSelected() && "indeterminate" )
+                }
+                onCheckedChange={ ( value ) => table.toggleAllPageRowsSelected( !!value ) }
+                aria-label="Select all"
+            />
+        ),
+        cell: ( { row } ) => (
+            <Checkbox
+                checked={ row.getIsSelected() }
+                onCheckedChange={ ( value ) => row.toggleSelected( !!value ) }
+                aria-label="Select row"
+            />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+    },
+    {
         accessorKey: "displayOrder",
         header: () => (
             <div className="text-center font-semibold text-muted-foreground">
@@ -62,7 +86,7 @@ export const columns: ColumnDef<TCategoryResponse>[] = [
         cell: ( info ) => (
             <div className="text-center">
                 <Badge variant="outline" className="font-mono text-xs">
-                    { Number( info.row.id ) + 1 }
+                    { info.getValue() as number }
                 </Badge>
             </div>
         ),

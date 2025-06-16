@@ -1,23 +1,31 @@
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import type { TModifierOptionResponse } from "@/schema/product.schema";
 import type { ColumnDef } from "@tanstack/react-table";
 
 export const columns: ColumnDef<TModifierOptionResponse>[] = [
     {
-        accessorKey: "id",
-        header: () => (
-            <div className="text-center font-semibold text-muted-foreground">
-                STT
-            </div>
+        id: "select",
+        header: ( { table } ) => (
+            <Checkbox
+                color=""
+                checked={
+                    table.getIsAllPageRowsSelected() ||
+                    ( table.getIsSomePageRowsSelected() && "indeterminate" )
+                }
+                onCheckedChange={ ( value ) => table.toggleAllPageRowsSelected( !!value ) }
+                aria-label="Select all"
+            />
         ),
-        cell: ( info ) => (
-            <div className="text-center">
-                <Badge variant="outline" className="font-mono text-xs">
-                    { Number( info.row.id ) + 1 }
-                </Badge>
-            </div>
+        cell: ( { row } ) => (
+            <Checkbox
+                checked={ row.getIsSelected() }
+                onCheckedChange={ ( value ) => row.toggleSelected( !!value ) }
+                aria-label="Select row"
+            />
         ),
-        size: 80,
+        enableSorting: false,
+        enableHiding: false,
     },
     {
         accessorKey: "name",

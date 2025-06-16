@@ -25,7 +25,7 @@ export function NavMain ( {
 {
   const { open, toggleSidebar } = useSidebar()
   const pathname = useLocation().pathname;
-  console.log( "NavMain: ", pathname );
+  console.log( "NavMain: ", ( '/' + pathname.replace( /^\//, '' ).split( '/' ).slice( 0, 2 ).join( '/' ) ) );
   return (
     <SidebarGroup>
       <SidebarGroupLabel className="text-sm mb-1">{ content.mainTitle }</SidebarGroupLabel>
@@ -33,7 +33,7 @@ export function NavMain ( {
         { content.items.map( ( item ) => (
           <Link to={ item.url } key={ item.title }>
             <SidebarMenuItem onClick={ open ? undefined : toggleSidebar }>
-              <SidebarMenuButton tooltip={ item.title }>
+              <SidebarMenuButton tooltip={ item.title } isActive={ ( '/' + pathname.replace( /^\//, '' ).split( '/' ).slice( 0, 2 ).join( '/' ) ) === item.url }>
                 { item.icon && <item.icon /> }
                 <span>{ item.title }</span>
               </SidebarMenuButton>

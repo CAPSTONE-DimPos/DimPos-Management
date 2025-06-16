@@ -1,3 +1,4 @@
+import SearchIcon from "@/assets/icons/search-icon";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -23,11 +24,6 @@ import { cn } from "@/lib/utils";
 
 import
 {
-    DoubleArrowLeftIcon,
-    DoubleArrowRightIcon,
-} from "@radix-ui/react-icons";
-import
-{
     type ColumnDef,
     type ColumnFilter,
     type ColumnFiltersState,
@@ -45,7 +41,6 @@ import
     ChevronLeftIcon,
     ChevronRightIcon,
     RotateCcw,
-    Search,
     Settings
 } from "lucide-react";
 import { useState } from "react";
@@ -153,6 +148,7 @@ export function DataTable<TData, TValue> ( {
     onSettings,
 }: DataTableProps<TData, TValue> )
 {
+    const [ rowSelection, setRowSelection ] = useState( {} )
 
     const [ inputValues, setInputValues ] = useState<Record<string, string>>( () =>
         Object.fromEntries( searchValues.map( f => [ f.id, String( f.value ?? "" ) ] ) )
@@ -202,6 +198,7 @@ export function DataTable<TData, TValue> ( {
             pagination: paginationState,
             columnFilters: searchState,
             sorting: sortingState,
+            rowSelection,
         },
         onPaginationChange: handlePaginationChange,
         onColumnFiltersChange: handleColumnFiltersChange,
@@ -210,13 +207,14 @@ export function DataTable<TData, TValue> ( {
         getPaginationRowModel: getPaginationRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
+        onRowSelectionChange: setRowSelection,
         manualPagination: true,
         manualFiltering: true,
         manualSorting: true,
     } );
 
     return (
-        <div className="space-y-4 rounded-lg border bg-card p-4 shadow-xl">
+        <div className="space-y-4">
             {/* Enhanced Header Section */ }
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex flex-1 items-center gap-4">
@@ -226,8 +224,7 @@ export function DataTable<TData, TValue> ( {
                         {
                             const currentValue = inputValues[ search.id ] ?? "";
                             return (
-                                <div key={ search.id } className="relative flex-1 max-w-sm">
-                                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                <div key={ search.id } className="relative flex-1 max-w-sm bg-sidebar rounded-lg">
                                     <Input
                                         placeholder={ search.searchPlaceholder || "Tìm kiếm..." }
                                         value={ currentValue }
@@ -248,13 +245,13 @@ export function DataTable<TData, TValue> ( {
                                                 onSearchChange?.( newFilters );
                                             }
                                         } }
-                                        className="pl-9"
+                                        className="py-5 rounded-lg"
                                         disabled={ isLoading }
                                     />
+                                    <SearchIcon className="absolute right-6 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
                                 </div>
                             );
                         } ) }
-
 
                     {/* Filter Dropdown */ }
                     { onFilterChange && filterOptions.length > 0 && (
@@ -305,21 +302,41 @@ export function DataTable<TData, TValue> ( {
                 </div>
             </div>
 
+            <div className="w-full sm:w-auto h-[calc(5vh)] md:h-[calc(10dvh)] bg-table-header rounded-2xl p-4 items-center flex justify-between">
+                <div className="flex-1 items-center">
+                    <span className="text-black text-sm font-semibold">
+                        { table.getFilteredSelectedRowModel().rows.length } kết quả được chọn { " " }
+                    </span>
+                    <span className="text-muted-foreground text-sm">
+                        (Tối đa 10)
+                    </span>
+                </div>
+                <Button
+                    variant="default"
+                    size="sm"
+                    className="h-8 w-8 px-12 py-2 bg-accent text-muted-foreground hover:bg-muted-foreground/10"
+                    disabled={ table.getFilteredSelectedRowModel().rows.length === 0 || isLoading }
+                >
+                    Xóa
+                </Button>
+            </div>
+
+
             {/* Table Container with improved styling */ }
-            <div className="">
-                <ScrollArea className="h-[calc(80vh-280px)] md:h-[calc(90dvh-250px)]">
+            <div className="rounded-2xl border bg-card">
+                <ScrollArea className="h-[calc(80vh-280px)] md:h-[calc(90dvh-250px)] rounded-tr-2xl rounded-tl-2xl">
                     {/* Conditionally render skeleton or actual table based on loading state */ }
                     { isLoading ? (
                         <TableSkeleton columns={ columns } pageSize={ pageSize } />
                     ) : (
                         <Table className="relative">
-                            <TableHeader className="rounded-lg sticky z-10 top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                            <TableHeader className="rounded-lg sticky z-10 top-0 bg-table-header">
                                 { table.getHeaderGroups().map( ( headerGroup ) => (
-                                    <TableRow key={ headerGroup.id } className="rounded-lg bg-muted/60">
+                                    <TableRow key={ headerGroup.id } className="rounded-lg transition-colors hover:bg-table-header">
                                         { headerGroup.headers.map( ( header ) => (
                                             <TableHead
                                                 key={ header.id }
-                                                className="h-12 px-4 text-left align-middle font-medium text-muted-foreground"
+                                                className="h-12 px-4 text-left align-middle font-medium text-foreground"
                                             >
                                                 { header.isPlaceholder
                                                     ? null
@@ -340,7 +357,7 @@ export function DataTable<TData, TValue> ( {
                                             data-state={ row.getIsSelected() && "selected" }
                                             onClick={ () => onRowClick && onRowClick( row.original ) }
                                             className={ cn(
-                                                'bg-background transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted',
+                                                'bg-sidebar transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted',
                                                 onRowClick ? 'cursor-pointer' : '' )
                                             }
                                         >
@@ -377,32 +394,7 @@ export function DataTable<TData, TValue> ( {
                 </ScrollArea>
 
                 {/* Enhanced Pagination Section */ }
-                <div className="flex flex-col items-center justify-between gap-4 border-t px-4 py-4 sm:flex-row">
-                    {/* Results Info */ }
-                    <div className="flex-1 text-sm text-muted-foreground">
-                        { isLoading ? (
-                            <Skeleton className="h-4 w-48" />
-                        ) : totalItems > 0 ? (
-                            <>
-                                Hiển thị{ " " }
-                                <span className="font-medium">
-                                    { paginationState.pageIndex * paginationState.pageSize + 1 }
-                                </span>{ " " }
-                                đến{ " " }
-                                <span className="font-medium">
-                                    { Math.min(
-                                        ( paginationState.pageIndex + 1 ) * paginationState.pageSize,
-                                        totalItems
-                                    ) }
-                                </span>{ " " }
-                                của{ " " }
-                                <span className="font-medium">{ totalItems }</span>{ " " }
-                                kết quả
-                            </>
-                        ) : (
-                            "Không có dữ liệu"
-                        ) }
-                    </div>
+                <div className="flex flex-col items-center justify-end gap-4 border-t px-4 py-4 sm:flex-row">
 
                     {/* Page Size Selector */ }
                     <div className="flex items-center gap-6">
@@ -432,56 +424,142 @@ export function DataTable<TData, TValue> ( {
                         </div>
 
                         {/* Page Info */ }
-                        <div className="flex items-center justify-center text-sm font-medium min-w-[100px]">
+                        <div className="flex-1 text-sm text-muted-foreground">
                             { isLoading ? (
-                                <Skeleton className="h-4 w-24" />
+                                <Skeleton className="h-4 w-48" />
                             ) : totalItems > 0 ? (
                                 <>
-                                    Trang { paginationState.pageIndex + 1 } trong tổng{ " " }
-                                    { table.getPageCount() }
+                                    Hiển thị{ " " }
+                                    <span className="font-medium">
+                                        { paginationState.pageIndex + 1 }
+                                    </span>{ " " }
+                                    trên{ " " }
+                                    <span className="font-medium">
+                                        { table.getPageCount() }
+                                    </span>
                                 </>
                             ) : (
-                                "0 trang"
+                                "Không có dữ liệu"
                             ) }
                         </div>
 
                         {/* Navigation Buttons */ }
-                        <div className="flex items-center gap-1">
-                            <Button
-                                aria-label="Trang đầu"
-                                variant="outline"
-                                className="hidden h-8 w-8 p-0 lg:flex"
-                                onClick={ () => onPageChange( 1 ) }
-                                disabled={ currentPage === 1 || isLoading }
-                            >
-                                <DoubleArrowLeftIcon className="h-4 w-4" aria-hidden="true" />
-                            </Button>
+                        <div className="flex items-center gap-2">
+                            {/* Previous Arrow */ }
                             <Button
                                 aria-label="Trang trước"
-                                variant="outline"
+                                variant="ghost"
                                 className="h-8 w-8 p-0"
                                 onClick={ () => onPageChange( currentPage - 1 ) }
                                 disabled={ currentPage === 1 || isLoading }
                             >
                                 <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
                             </Button>
+
+                            {/* Page Numbers */ }
+                            { ( () =>
+                            {
+                                const totalPages = table.getPageCount();
+                                const current = currentPage;
+                                const pages = [];
+
+                                // Calculate which pages to show
+                                // This logic creates a smart pagination that shows relevant page numbers
+                                let startPage = Math.max( 1, current - 2 );
+                                let endPage = Math.min( totalPages, current + 2 );
+
+                                // Adjust range to always show 5 pages when possible
+                                if ( endPage - startPage < 4 )
+                                {
+                                    if ( startPage === 1 )
+                                    {
+                                        endPage = Math.min( totalPages, startPage + 4 );
+                                    } else if ( endPage === totalPages )
+                                    {
+                                        startPage = Math.max( 1, endPage - 4 );
+                                    }
+                                }
+
+                                // Always show first page if not in range
+                                if ( startPage > 1 )
+                                {
+                                    pages.push(
+                                        <Button
+                                            key={ 1 }
+                                            variant={ 1 === current ? "default" : "outline" }
+                                            className="h-6 w-6 p-0"
+                                            onClick={ () => onPageChange( 1 ) }
+                                            disabled={ isLoading }
+                                        >
+                                            1
+                                        </Button>
+                                    );
+
+                                    // Add ellipsis if there's a gap
+                                    if ( startPage > 2 )
+                                    {
+                                        pages.push(
+                                            <span key="ellipsis-start" className="px-2 text-muted-foreground">
+                                                ...
+                                            </span>
+                                        );
+                                    }
+                                }
+
+                                // Add the main range of pages
+                                for ( let i = startPage; i <= endPage; i++ )
+                                {
+                                    pages.push(
+                                        <Button
+                                            key={ i }
+                                            variant={ i === current ? "default" : "outline" }
+                                            className="h-6 w-6 p-0"
+                                            onClick={ () => onPageChange( i ) }
+                                            disabled={ isLoading }
+                                        >
+                                            { i }
+                                        </Button>
+                                    );
+                                }
+
+                                // Always show last page if not in range
+                                if ( endPage < totalPages )
+                                {
+                                    // Add ellipsis if there's a gap
+                                    if ( endPage < totalPages - 1 )
+                                    {
+                                        pages.push(
+                                            <span key="ellipsis-end" className="px-2 text-muted-foreground">
+                                                ...
+                                            </span>
+                                        );
+                                    }
+
+                                    pages.push(
+                                        <Button
+                                            key={ totalPages }
+                                            variant={ totalPages === current ? "default" : "outline" }
+                                            className="h-6 w-6 p-0"
+                                            onClick={ () => onPageChange( totalPages ) }
+                                            disabled={ isLoading }
+                                        >
+                                            { totalPages }
+                                        </Button>
+                                    );
+                                }
+
+                                return pages;
+                            } )() }
+
+                            {/* Next Arrow */ }
                             <Button
                                 aria-label="Trang sau"
-                                variant="outline"
+                                variant="ghost"
                                 className="h-8 w-8 p-0"
                                 onClick={ () => onPageChange( currentPage + 1 ) }
                                 disabled={ currentPage >= table.getPageCount() || isLoading }
                             >
                                 <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
-                            </Button>
-                            <Button
-                                aria-label="Trang cuối"
-                                variant="outline"
-                                className="hidden h-8 w-8 p-0 lg:flex"
-                                onClick={ () => onPageChange( table.getPageCount() ) }
-                                disabled={ currentPage >= table.getPageCount() || isLoading }
-                            >
-                                <DoubleArrowRightIcon className="h-4 w-4" aria-hidden="true" />
                             </Button>
                         </div>
                     </div>

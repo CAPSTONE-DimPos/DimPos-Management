@@ -98,6 +98,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-label: var(--sidebar-label);
+  --color-table-header: var(--table-header);
 }
 
 :root {
@@ -134,6 +135,7 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
   --sidebar-label: oklch(0.6195 0.0473 276.35);
+  --table-header: oklch(0.8935 0.0236 275.34);
 }
 
 .dark {

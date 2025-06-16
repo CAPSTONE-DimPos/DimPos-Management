@@ -5,6 +5,7 @@ import CollapseIcon from "@/assets/icons/collapse-icon"
 import DiscountIcon from "@/assets/icons/discount-icon"
 import GeneralAppIcon from "@/assets/icons/general-app-icon"
 import HomeIcon from "@/assets/icons/home-icon"
+import InventoryReportIcon from "@/assets/icons/inventory-report-icon"
 import MenuIcon from "@/assets/icons/menu-icon"
 import ProductIcon from "@/assets/icons/product-icon"
 import ReceiptIcon from "@/assets/icons/receipt-icon"
@@ -20,8 +21,8 @@ import
   SidebarRail,
   useSidebar
 } from "@/components/ui/sidebar"
-import { PATH_DASHBOARD } from "@/routes/path"
 import { cn } from "@/lib/utils"
+import { PATH_DASHBOARD } from "@/routes/path"
 
 // This is sample data.
 const data = {
@@ -33,6 +34,11 @@ const data = {
         url: PATH_DASHBOARD.general.app,
         icon: GeneralAppIcon,
       },
+      {
+        title: "Báo cáo Kho",
+        url: PATH_DASHBOARD.general.inventoryReport,
+        icon: InventoryReportIcon,
+      }
     ],
   },
   productManagement: {

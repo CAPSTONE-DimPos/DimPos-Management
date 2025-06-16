@@ -16,6 +16,7 @@ import { handleApiError } from '@/lib/error';
 import { useCategory } from '@/hooks/use-category';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { Switch } from '@/components/ui/switch';
 
 const CreateProductPage = () =>
 {
@@ -92,6 +93,11 @@ const CreateProductPage = () =>
     {
         const files = event.target.files;
         if ( !files ) return;
+        if ( imageFields.length >= 4 )
+        {
+            toast.error( 'Bạn chỉ có thể tải lên tối đa 4 hình ảnh.' );
+            return;
+        }
 
         Array.from( files ).forEach( ( file ) =>
         {
@@ -245,550 +251,549 @@ const CreateProductPage = () =>
     };
 
     return (
-        <div className="container mx-auto p-6 max-w-4xl">
-            <div className="mb-6">
-                <h1 className="text-3xl font-bold">Tạo Sản Phẩm Mới</h1>
-                <p className="text-muted-foreground">Điền thông tin để tạo sản phẩm mới</p>
-            </div>
+        <Form { ...form }>
+            <div className='relative'>
+                <div className="container px-10 pb-6">
+                    <div className="my-6">
+                        <h1 className="text-2xl font-semibold">Tạo Sản Phẩm Mới</h1>
+                    </div>
 
-            <Form { ...form }>
-                <form className="space-y-6" onSubmit={ form.handleSubmit( onSubmit ) } noValidate>
-                    {/* Basic Information */ }
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Thông Tin Cơ Bản</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <FormField
-                                    control={ form.control }
-                                    name="code"
-                                    render={ ( { field } ) => (
-                                        <FormItem>
-                                            <FormLabel>Mã Sản Phẩm *</FormLabel>
-                                            <FormControl>
-                                                <Input disabled={ createProductMutation.isPending } placeholder="Nhập mã sản phẩm" { ...field } />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    ) }
-                                />
-                                <FormField
-                                    control={ form.control }
-                                    name="alternativeCode"
-                                    render={ ( { field } ) => (
-                                        <FormItem>
-                                            <FormLabel>Mã Thay Thế</FormLabel>
-                                            <FormControl>
-                                                <Input disabled={ createProductMutation.isPending } placeholder="Nhập mã thay thế" { ...field } />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    ) }
-                                />
-                            </div>
 
-                            <FormField
-                                control={ form.control }
-                                name="name"
-                                render={ ( { field } ) => (
-                                    <FormItem>
-                                        <FormLabel>Tên Sản Phẩm *</FormLabel>
-                                        <FormControl>
-                                            <Input disabled={ createProductMutation.isPending } placeholder="Nhập tên sản phẩm" { ...field } />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                ) }
-                            />
-
-                            <FormField
-                                control={ form.control }
-                                name="description"
-                                render={ ( { field } ) => (
-                                    <FormItem>
-                                        <FormLabel>Mô Tả *</FormLabel>
-                                        <FormControl>
-                                            <Textarea
-                                                disabled={ createProductMutation.isPending }
-                                                placeholder="Nhập mô tả sản phẩm"
-                                                className="min-h-[100px]"
-                                                { ...field }
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                ) }
-                            />
-                            <FormField
-                                control={ form.control }
-                                name="note"
-                                render={ ( { field } ) => (
-                                    <FormItem>
-                                        <FormLabel>Ghi chú</FormLabel>
-                                        <FormControl>
-                                            <Textarea
-                                                disabled={ createProductMutation.isPending }
-                                                placeholder="Nhập ghi chú cho sản phẩm"
-                                                className="min-h-[100px]"
-                                                { ...field }
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                ) }
-                            />
-                        </CardContent>
-                    </Card>
-
-                    {/* Pricing */ }
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Giá Cả</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <FormField
-                                    control={ form.control }
-                                    name="price"
-                                    render={ ( { field } ) => (
-                                        <FormItem>
-                                            <FormLabel>Giá Bán *</FormLabel>
-                                            <FormControl>
-                                                <Input
+                    <form className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-6 gap-4" onSubmit={ form.handleSubmit( onSubmit ) } noValidate>
+                        {/* Product Images */ }
+                        <Card className='shadow-muted lg:col-span-2 2xl:col-span-2'>
+                            <CardHeader>
+                                <CardTitle className="flex items-center justify-between">
+                                    Ảnh Sản Phẩm
+                                    <div>
+                                        <input
+                                            type="file"
+                                            multiple
+                                            accept="image/*"
+                                            onChange={ ( e ) => handleImageUpload( e ) }
+                                            className="hidden"
+                                            id="image-upload"
+                                        />
+                                    </div>
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                { imageFields.length > 0 ? (
+                                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
+                                        { imageFields.map( ( field, index ) => (
+                                            <div key={ field.id } className="relative">
+                                                <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                                                    { imagePreview[ index ] && (
+                                                        <img
+                                                            src={ imagePreview[ index ] }
+                                                            alt={ `Preview ${ index }` }
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    ) }
+                                                </div>
+                                                <Button
                                                     disabled={ createProductMutation.isPending }
-                                                    type="number"
-                                                    placeholder="0"
-                                                    { ...field }
-                                                    onChange={ ( e ) => field.onChange( Number( e.target.value ) ) }
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    ) }
-                                />
-                                <FormField
-                                    control={ form.control }
-                                    name="discountPrice"
-                                    render={ ( { field } ) => (
-                                        <FormItem>
-                                            <FormLabel>Giá Giảm</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    disabled={ createProductMutation.isPending }
-                                                    type="number"
-                                                    placeholder="0"
-                                                    { ...field }
-                                                    onChange={ ( e ) => field.onChange( Number( e.target.value ) ) }
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    ) }
-                                />
-                                <FormField
-                                    control={ form.control }
-                                    name="discountPercent"
-                                    render={ ( { field } ) => (
-                                        <FormItem>
-                                            <FormLabel>% Giảm Giá</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    disabled={ createProductMutation.isPending }
-                                                    type="number"
-                                                    placeholder="0"
-                                                    min="0"
-                                                    max="100"
-                                                    { ...field }
-                                                    onChange={ ( e ) => field.onChange( e.target.value ? Number( e.target.value ) : undefined ) }
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    ) }
-                                />
-                                <FormField
-                                    control={ form.control }
-                                    name="priceCOGS"
-                                    render={ ( { field } ) => (
-                                        <FormItem>
-                                            <FormLabel>Giá COGS</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    disabled={ createProductMutation.isPending }
-                                                    type="number"
-                                                    placeholder="0"
-                                                    min="0"
-                                                    { ...field }
-                                                    onChange={ ( e ) => field.onChange( e.target.value ? Number( e.target.value ) : undefined ) }
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    ) }
-                                />
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    {/* Settings */ }
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Cài Đặt</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <FormField
-                                    control={ form.control }
-                                    name="categoryId"
-                                    render={ ( { field } ) => (
-                                        <FormItem>
-                                            <FormLabel>Danh Mục *</FormLabel>
-                                            <Select disabled={ createProductMutation.isPending || isLoading } onValueChange={ field.onChange } defaultValue={ field.value }>
-                                                <FormControl>
-                                                    <SelectTrigger>
-                                                        <SelectValue placeholder="Chọn danh mục" />
-                                                    </SelectTrigger>
-                                                </FormControl>
-                                                <SelectContent>
-                                                    {
-                                                        data?.data.data.items.map( ( category ) => (
-                                                            <SelectItem key={ category.id } value={ category.id }>
-                                                                { category.name }
-                                                            </SelectItem>
-                                                        ) )
-                                                    }
-                                                    { data?.data.data.items.length === 0 && (
-                                                        <SelectItem disabled value="">
-                                                            Không có danh mục nào
-                                                        </SelectItem>
-                                                    )
-                                                    }
-                                                </SelectContent>
-                                            </Select>
-                                            <FormMessage />
-                                        </FormItem>
-                                    ) }
-                                />
-                                <FormField
-                                    control={ form.control }
-                                    name="saleType"
-                                    render={ ( { field } ) => (
-                                        <FormItem>
-                                            <FormLabel>Loại Hình Bán *</FormLabel>
-                                            <Select disabled={ createProductMutation.isPending } onValueChange={ ( value ) => field.onChange( Number( value ) ) } defaultValue={ field.value?.toString() }>
-                                                <FormControl>
-                                                    <SelectTrigger>
-                                                        <SelectValue placeholder="Chọn loại hình" />
-                                                    </SelectTrigger>
-                                                </FormControl>
-                                                <SelectContent>
-                                                    <SelectItem value="0">Hoàn thiện khi đặt</SelectItem>
-                                                    <SelectItem value="1">Sản phẩm bán sẵn</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                            <FormMessage />
-                                        </FormItem>
-                                    ) }
-                                />
-                            </div>
-                            <div className='my-4'>
-                                <FormField
-                                    control={ form.control }
-                                    name="modifierGroupIds"
-                                    render={ ( { field } ) =>
-                                    {
-                                        const selectedValues = field.value || [];
-
-                                        const handleCheckboxChange = ( groupId: string, checked: boolean ) =>
-                                        {
-                                            const updatedValues = checked
-                                                ? [ ...selectedValues, groupId ]
-                                                : selectedValues.filter( ( id: string ) => id !== groupId );
-                                            field.onChange( updatedValues );
-                                        };
-
-                                        return (
-                                            <FormItem>
-                                                <FormLabel>Tùy chọn sản phẩm</FormLabel>
-                                                <FormControl>
-                                                    <div className="border rounded-md p-3 max-h-48 overflow-y-auto">
-                                                        { modifierGroupsData?.data.data.items.length === 0 ? (
-                                                            <p className="text-sm text-muted-foreground">Không có tùy chọn nào</p>
-                                                        ) : (
-                                                            <div className="space-y-2">
-                                                                { modifierGroupsData?.data.data.items.map( ( group ) => (
-                                                                    <div key={ group.id } className="flex items-center space-x-2">
-                                                                        <Checkbox
-                                                                            id={ `modifier-${ group.id }` }
-                                                                            checked={ selectedValues.includes( group.id ) }
-                                                                            onCheckedChange={ ( checked ) =>
-                                                                                handleCheckboxChange( group.id, checked as boolean )
-                                                                            }
-                                                                            disabled={ createProductMutation.isPending || isModifierGroupLoading }
-                                                                        />
-                                                                        <label
-                                                                            htmlFor={ `modifier-${ group.id }` }
-                                                                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-                                                                        >
-                                                                            { group.name }
-                                                                        </label>
-                                                                    </div>
-                                                                ) ) }
-                                                            </div>
+                                                    type="button"
+                                                    variant="destructive"
+                                                    size="sm"
+                                                    className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0"
+                                                    onClick={ () => removeImagePreview( index ) }
+                                                >
+                                                    <X className="w-3 h-3" />
+                                                </Button>
+                                                <div className="mt-2 space-y-2">
+                                                    <FormField
+                                                        control={ form.control }
+                                                        name={ `productImages.${ index }.isMainImage` }
+                                                        render={ ( { field } ) => (
+                                                            <FormItem className="flex flex-row items-start space-x-2 space-y-0">
+                                                                <FormControl>
+                                                                    <Checkbox
+                                                                        disabled={ createProductMutation.isPending }
+                                                                        checked={ field.value }
+                                                                        onCheckedChange={ field.onChange }
+                                                                    />
+                                                                </FormControl>
+                                                                <FormLabel className="text-xs">Ảnh chính</FormLabel>
+                                                            </FormItem>
                                                         ) }
-                                                    </div>
+                                                    />
+                                                    <FormField
+                                                        control={ form.control }
+                                                        name={ `productImages.${ index }.altText` }
+                                                        render={ ( { field } ) => (
+                                                            <FormItem>
+                                                                <FormControl>
+                                                                    <Input
+                                                                        disabled={ createProductMutation.isPending }
+                                                                        placeholder="Alt text"
+                                                                        className="text-xs"
+                                                                        { ...field }
+                                                                    />
+                                                                </FormControl>
+                                                            </FormItem>
+                                                        ) }
+                                                    />
+                                                </div>
+                                            </div>
+                                        ) ) }
+                                    </div>
+                                ) : (
+                                    <div
+                                        className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors cursor-pointer"
+                                        onClick={ () => document.getElementById( 'image-upload' )?.click() }
+                                    >
+                                        <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                                        <p className="text-sm text-gray-600">
+                                            Kéo thả thêm ảnh hoặc click để chọn
+                                        </p>
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            Hỗ trợ: JPG, PNG, GIF (tối đa 5MB mỗi file)
+                                        </p>
+                                    </div>
+                                ) }
+                            </CardContent>
+                        </Card>
+                        {/* Basic Information */ }
+                        <Card className='shadow-muted lg:col-span-2 2xl:col-span-4'>
+                            <CardHeader>
+                                <CardTitle>Thông Tin Cơ Bản</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <FormField
+                                        control={ form.control }
+                                        name="code"
+                                        render={ ( { field } ) => (
+                                            <FormItem>
+                                                <FormLabel>Mã Sản Phẩm *</FormLabel>
+                                                <FormControl>
+                                                    <Input disabled={ createProductMutation.isPending } placeholder="Nhập mã sản phẩm" { ...field } />
                                                 </FormControl>
-                                                { selectedValues.length > 0 && (
-                                                    <div className="text-xs text-muted-foreground">
-                                                        { selectedValues.length } tùy chọn đã chọn
-                                                    </div>
-                                                ) }
                                                 <FormMessage />
                                             </FormItem>
-                                        );
-                                    } }
-                                />
-                            </div>
+                                        ) }
+                                    />
+                                    <FormField
+                                        control={ form.control }
+                                        name="alternativeCode"
+                                        render={ ( { field } ) => (
+                                            <FormItem>
+                                                <FormLabel>Mã Thay Thế</FormLabel>
+                                                <FormControl>
+                                                    <Input disabled={ createProductMutation.isPending } placeholder="Nhập mã thay thế" { ...field } />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        ) }
+                                    />
+                                </div>
 
-                            <div className="flex items-center space-x-2">
                                 <FormField
                                     control={ form.control }
-                                    name="isAvailable"
+                                    name="name"
                                     render={ ( { field } ) => (
-                                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                        <FormItem>
+                                            <FormLabel>Tên Sản Phẩm *</FormLabel>
                                             <FormControl>
-                                                <Checkbox
-                                                    disabled={ createProductMutation.isPending }
-                                                    checked={ field.value }
-                                                    onCheckedChange={ field.onChange }
-                                                />
+                                                <Input disabled={ createProductMutation.isPending } placeholder="Nhập tên sản phẩm" { ...field } />
                                             </FormControl>
-                                            <div className="space-y-1 leading-none">
-                                                <FormLabel>Sản phẩm có sẵn</FormLabel>
-                                            </div>
+                                            <FormMessage />
                                         </FormItem>
                                     ) }
                                 />
-                            </div>
-                        </CardContent>
-                    </Card>
 
-                    {/* Product Images */ }
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center justify-between">
-                                Hình Ảnh Sản Phẩm
-                                <div>
-                                    <input
-                                        type="file"
-                                        multiple
-                                        accept="image/*"
-                                        onChange={ ( e ) => handleImageUpload( e ) }
-                                        className="hidden"
-                                        id="image-upload"
+                                <FormField
+                                    control={ form.control }
+                                    name="description"
+                                    render={ ( { field } ) => (
+                                        <FormItem>
+                                            <FormLabel>Mô Tả *</FormLabel>
+                                            <FormControl>
+                                                <Textarea
+                                                    disabled={ createProductMutation.isPending }
+                                                    placeholder="Nhập mô tả sản phẩm"
+                                                    className="min-h-[100px]"
+                                                    { ...field }
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    ) }
+                                />
+                                <FormField
+                                    control={ form.control }
+                                    name="note"
+                                    render={ ( { field } ) => (
+                                        <FormItem>
+                                            <FormLabel>Ghi chú</FormLabel>
+                                            <FormControl>
+                                                <Textarea
+                                                    disabled={ createProductMutation.isPending }
+                                                    placeholder="Nhập ghi chú cho sản phẩm"
+                                                    className="min-h-[100px]"
+                                                    { ...field }
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    ) }
+                                />
+                            </CardContent>
+                        </Card>
+
+                        {/* Pricing */ }
+                        <Card className='shadow-muted lg:col-span-2 2xl:col-span-6'>
+                            <CardHeader>
+                                <CardTitle>Giá Cả</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <FormField
+                                        control={ form.control }
+                                        name="price"
+                                        render={ ( { field } ) => (
+                                            <FormItem>
+                                                <FormLabel>Giá Bán *</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        disabled={ createProductMutation.isPending }
+                                                        type="number"
+                                                        placeholder="0"
+                                                        { ...field }
+                                                        onChange={ ( e ) => field.onChange( Number( e.target.value ) ) }
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        ) }
                                     />
+                                    <FormField
+                                        control={ form.control }
+                                        name="discountPrice"
+                                        render={ ( { field } ) => (
+                                            <FormItem>
+                                                <FormLabel>Giá Giảm</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        disabled={ createProductMutation.isPending }
+                                                        type="number"
+                                                        placeholder="0"
+                                                        { ...field }
+                                                        onChange={ ( e ) => field.onChange( Number( e.target.value ) ) }
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        ) }
+                                    />
+                                    <FormField
+                                        control={ form.control }
+                                        name="discountPercent"
+                                        render={ ( { field } ) => (
+                                            <FormItem>
+                                                <FormLabel>% Giảm Giá</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        disabled={ createProductMutation.isPending }
+                                                        type="number"
+                                                        placeholder="0"
+                                                        min="0"
+                                                        max="100"
+                                                        { ...field }
+                                                        onChange={ ( e ) => field.onChange( e.target.value ? Number( e.target.value ) : undefined ) }
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        ) }
+                                    />
+                                    <FormField
+                                        control={ form.control }
+                                        name="priceCOGS"
+                                        render={ ( { field } ) => (
+                                            <FormItem>
+                                                <FormLabel>Giá COGS</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        disabled={ createProductMutation.isPending }
+                                                        type="number"
+                                                        placeholder="0"
+                                                        min="0"
+                                                        { ...field }
+                                                        onChange={ ( e ) => field.onChange( e.target.value ? Number( e.target.value ) : undefined ) }
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        ) }
+                                    />
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        {/* Settings */ }
+                        <Card className='shadow-muted lg:col-span-2 2xl:col-span-6'>
+                            <CardHeader>
+                                <CardTitle>Cài Đặt</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <FormField
+                                        control={ form.control }
+                                        name="categoryId"
+                                        render={ ( { field } ) => (
+                                            <FormItem>
+                                                <FormLabel>Danh Mục *</FormLabel>
+                                                <Select disabled={ createProductMutation.isPending || isLoading } onValueChange={ field.onChange } defaultValue={ field.value }>
+                                                    <FormControl>
+                                                        <SelectTrigger>
+                                                            <SelectValue placeholder="Chọn danh mục" />
+                                                        </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent>
+                                                        {
+                                                            data?.data.data.items.map( ( category ) => (
+                                                                <SelectItem key={ category.id } value={ category.id }>
+                                                                    { category.name }
+                                                                </SelectItem>
+                                                            ) )
+                                                        }
+                                                        { data?.data.data.items.length === 0 && (
+                                                            <SelectItem disabled value="">
+                                                                Không có danh mục nào
+                                                            </SelectItem>
+                                                        )
+                                                        }
+                                                    </SelectContent>
+                                                </Select>
+                                                <FormMessage />
+                                            </FormItem>
+                                        ) }
+                                    />
+                                    <FormField
+                                        control={ form.control }
+                                        name="saleType"
+                                        render={ ( { field } ) => (
+                                            <FormItem>
+                                                <FormLabel>Loại Hình Bán *</FormLabel>
+                                                <Select disabled={ createProductMutation.isPending } onValueChange={ ( value ) => field.onChange( Number( value ) ) } defaultValue={ field.value?.toString() }>
+                                                    <FormControl>
+                                                        <SelectTrigger>
+                                                            <SelectValue placeholder="Chọn loại hình" />
+                                                        </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent>
+                                                        <SelectItem value="0">Hoàn thiện khi đặt</SelectItem>
+                                                        <SelectItem value="1">Sản phẩm bán sẵn</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                                <FormMessage />
+                                            </FormItem>
+                                        ) }
+                                    />
+                                    <FormField
+                                        control={ form.control }
+                                        name="isAvailable"
+                                        render={ ( { field } ) => (
+                                            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                                <div className="space-y-1 leading-none">
+                                                    <FormLabel>Sản phẩm có sẵn</FormLabel>
+                                                </div>
+                                                <FormControl>
+                                                    <Switch
+                                                        disabled={ createProductMutation.isPending }
+                                                        checked={ field.value }
+                                                        onCheckedChange={ field.onChange }
+                                                    />
+                                                </FormControl>
+                                            </FormItem>
+                                        ) }
+                                    />
+                                </div>
+                                <div className='my-4'>
+                                    <FormField
+                                        control={ form.control }
+                                        name="modifierGroupIds"
+                                        render={ ( { field } ) =>
+                                        {
+                                            const selectedValues = field.value || [];
+
+                                            const handleCheckboxChange = ( groupId: string, checked: boolean ) =>
+                                            {
+                                                const updatedValues = checked
+                                                    ? [ ...selectedValues, groupId ]
+                                                    : selectedValues.filter( ( id: string ) => id !== groupId );
+                                                field.onChange( updatedValues );
+                                            };
+
+                                            return (
+                                                <FormItem>
+                                                    <FormLabel>Tùy chọn sản phẩm</FormLabel>
+                                                    <FormControl>
+                                                        <div className="border rounded-md p-3 max-h-48 overflow-y-auto">
+                                                            { modifierGroupsData?.data.data.items.length === 0 ? (
+                                                                <p className="text-sm text-muted-foreground">Không có tùy chọn nào</p>
+                                                            ) : (
+                                                                <div className="space-y-2">
+                                                                    { modifierGroupsData?.data.data.items.map( ( group ) => (
+                                                                        <div key={ group.id } className="flex items-center space-x-2">
+                                                                            <Checkbox
+                                                                                id={ `modifier-${ group.id }` }
+                                                                                checked={ selectedValues.includes( group.id ) }
+                                                                                onCheckedChange={ ( checked ) =>
+                                                                                    handleCheckboxChange( group.id, checked as boolean )
+                                                                                }
+                                                                                disabled={ createProductMutation.isPending || isModifierGroupLoading }
+                                                                            />
+                                                                            <label
+                                                                                htmlFor={ `modifier-${ group.id }` }
+                                                                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                                                                            >
+                                                                                { group.name }
+                                                                            </label>
+                                                                        </div>
+                                                                    ) ) }
+                                                                </div>
+                                                            ) }
+                                                        </div>
+                                                    </FormControl>
+                                                    { selectedValues.length > 0 && (
+                                                        <div className="text-xs text-muted-foreground">
+                                                            { selectedValues.length } tùy chọn đã chọn
+                                                        </div>
+                                                    ) }
+                                                    <FormMessage />
+                                                </FormItem>
+                                            );
+                                        } }
+                                    />
+                                </div>
+
+                            </CardContent>
+                        </Card>
+
+
+
+                        {/* Product Variants */ }
+                        <Card className='shadow-muted lg:col-span-2 2xl:col-span-6'>
+                            <CardHeader>
+                                <CardTitle className="flex items-center justify-between">
+                                    Biến Thể Sản Phẩm
                                     <Button
                                         disabled={ createProductMutation.isPending }
                                         type="button"
                                         variant="outline"
-                                        onClick={ () => document.getElementById( 'image-upload' )?.click() }
+                                        onClick={ () => appendVariant( {
+                                            code: '',
+                                            name: '',
+                                            brandPrice: 0,
+                                        } ) }
                                     >
-                                        <Upload className="w-4 h-4 mr-2" />
-                                        Thêm Hình
+                                        <Plus className="w-4 h-4 mr-2" />
+                                        Thêm Biến Thể
                                     </Button>
-                                </div>
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            { imageFields.length > 0 ? (
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                    { imageFields.map( ( field, index ) => (
-                                        <div key={ field.id } className="relative">
-                                            <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                                                { imagePreview[ index ] && (
-                                                    <img
-                                                        src={ imagePreview[ index ] }
-                                                        alt={ `Preview ${ index }` }
-                                                        className="w-full h-full object-cover"
-                                                    />
-                                                ) }
-                                            </div>
-                                            <Button
-                                                disabled={ createProductMutation.isPending }
-                                                type="button"
-                                                variant="destructive"
-                                                size="sm"
-                                                className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0"
-                                                onClick={ () => removeImagePreview( index ) }
-                                            >
-                                                <X className="w-3 h-3" />
-                                            </Button>
-                                            <div className="mt-2 space-y-2">
-                                                <FormField
-                                                    control={ form.control }
-                                                    name={ `productImages.${ index }.isMainImage` }
-                                                    render={ ( { field } ) => (
-                                                        <FormItem className="flex flex-row items-start space-x-2 space-y-0">
-                                                            <FormControl>
-                                                                <Checkbox
-                                                                    disabled={ createProductMutation.isPending }
-                                                                    checked={ field.value }
-                                                                    onCheckedChange={ field.onChange }
-                                                                />
-                                                            </FormControl>
-                                                            <FormLabel className="text-xs">Ảnh chính</FormLabel>
-                                                        </FormItem>
-                                                    ) }
-                                                />
-                                                <FormField
-                                                    control={ form.control }
-                                                    name={ `productImages.${ index }.altText` }
-                                                    render={ ( { field } ) => (
-                                                        <FormItem>
-                                                            <FormControl>
-                                                                <Input
-                                                                    disabled={ createProductMutation.isPending }
-                                                                    placeholder="Alt text"
-                                                                    className="text-xs"
-                                                                    { ...field }
-                                                                />
-                                                            </FormControl>
-                                                        </FormItem>
-                                                    ) }
-                                                />
-                                            </div>
-                                        </div>
-                                    ) ) }
-                                </div>
-                            ) : (
-                                <div className="text-center py-12 text-muted-foreground">
-                                    <Upload className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                                    <p>Chưa có hình ảnh nào. Click "Thêm Hình" để tải lên.</p>
-                                </div>
-                            ) }
-                        </CardContent>
-                    </Card>
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                { variantFields.length > 0 ? (
+                                    <div className="space-y-4">
+                                        { variantFields.map( ( field, index ) => (
+                                            <Card key={ field.id } className="border border-dashed">
+                                                <CardContent className="pt-6">
+                                                    <div className="flex items-center justify-between mb-4">
+                                                        <Badge variant="secondary">Biến thể { index + 1 }</Badge>
+                                                        <Button
+                                                            disabled={ createProductMutation.isPending }
+                                                            type="button"
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            onClick={ () => removeVariant( index ) }
+                                                        >
+                                                            <Trash2 className="w-4 h-4" />
+                                                        </Button>
+                                                    </div>
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                        <FormField
+                                                            control={ form.control }
+                                                            name={ `productVariants.${ index }.code` }
+                                                            render={ ( { field } ) => (
+                                                                <FormItem>
+                                                                    <FormLabel>Mã Biến Thể *</FormLabel>
+                                                                    <FormControl>
+                                                                        <Input disabled={ createProductMutation.isPending } placeholder="Nhập mã biến thể" { ...field } />
+                                                                    </FormControl>
+                                                                    <FormMessage />
+                                                                </FormItem>
+                                                            ) }
+                                                        />
+                                                        <FormField
+                                                            control={ form.control }
+                                                            name={ `productVariants.${ index }.name` }
+                                                            render={ ( { field } ) => (
+                                                                <FormItem>
+                                                                    <FormLabel>Tên Biến Thể *</FormLabel>
+                                                                    <FormControl>
+                                                                        <Input disabled={ createProductMutation.isPending } placeholder="Nhập tên biến thể" { ...field } />
+                                                                    </FormControl>
+                                                                    <FormMessage />
+                                                                </FormItem>
+                                                            ) }
+                                                        />
+                                                        <FormField
+                                                            control={ form.control }
+                                                            name={ `productVariants.${ index }.brandPrice` }
+                                                            render={ ( { field } ) => (
+                                                                <FormItem>
+                                                                    <FormLabel>Giá Brand *</FormLabel>
+                                                                    <FormControl>
+                                                                        <Input
+                                                                            disabled={ createProductMutation.isPending }
+                                                                            type="number"
+                                                                            placeholder="0"
+                                                                            { ...field }
+                                                                            onChange={ ( e ) => field.onChange( Number( e.target.value ) ) }
+                                                                        />
+                                                                    </FormControl>
+                                                                    <FormMessage />
+                                                                </FormItem>
+                                                            ) }
+                                                        />
+                                                        <FormField
+                                                            control={ form.control }
+                                                            name={ `productVariants.${ index }.size` }
+                                                            render={ ( { field } ) => (
+                                                                <FormItem>
+                                                                    <FormLabel>Kích Thước</FormLabel>
+                                                                    <FormControl>
+                                                                        <Input disabled={ createProductMutation.isPending } placeholder="S, M, L, XL..." { ...field } />
+                                                                    </FormControl>
+                                                                    <FormMessage />
+                                                                </FormItem>
+                                                            ) }
+                                                        />
+                                                    </div>
+                                                </CardContent>
+                                            </Card>
+                                        ) ) }
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-8 text-muted-foreground">
+                                        <p>Chưa có biến thể nào. Click "Thêm Biến Thể" để tạo mới.</p>
+                                    </div>
+                                ) }
+                            </CardContent>
+                        </Card>
+                    </form>
 
-                    {/* Product Variants */ }
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center justify-between">
-                                Biến Thể Sản Phẩm
-                                <Button
-                                    disabled={ createProductMutation.isPending }
-                                    type="button"
-                                    variant="outline"
-                                    onClick={ () => appendVariant( {
-                                        code: '',
-                                        name: '',
-                                        brandPrice: 0,
-                                    } ) }
-                                >
-                                    <Plus className="w-4 h-4 mr-2" />
-                                    Thêm Biến Thể
-                                </Button>
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            { variantFields.length > 0 ? (
-                                <div className="space-y-4">
-                                    { variantFields.map( ( field, index ) => (
-                                        <Card key={ field.id } className="border border-dashed">
-                                            <CardContent className="pt-6">
-                                                <div className="flex items-center justify-between mb-4">
-                                                    <Badge variant="secondary">Biến thể { index + 1 }</Badge>
-                                                    <Button
-                                                        disabled={ createProductMutation.isPending }
-                                                        type="button"
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={ () => removeVariant( index ) }
-                                                    >
-                                                        <Trash2 className="w-4 h-4" />
-                                                    </Button>
-                                                </div>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <FormField
-                                                        control={ form.control }
-                                                        name={ `productVariants.${ index }.code` }
-                                                        render={ ( { field } ) => (
-                                                            <FormItem>
-                                                                <FormLabel>Mã Biến Thể *</FormLabel>
-                                                                <FormControl>
-                                                                    <Input disabled={ createProductMutation.isPending } placeholder="Nhập mã biến thể" { ...field } />
-                                                                </FormControl>
-                                                                <FormMessage />
-                                                            </FormItem>
-                                                        ) }
-                                                    />
-                                                    <FormField
-                                                        control={ form.control }
-                                                        name={ `productVariants.${ index }.name` }
-                                                        render={ ( { field } ) => (
-                                                            <FormItem>
-                                                                <FormLabel>Tên Biến Thể *</FormLabel>
-                                                                <FormControl>
-                                                                    <Input disabled={ createProductMutation.isPending } placeholder="Nhập tên biến thể" { ...field } />
-                                                                </FormControl>
-                                                                <FormMessage />
-                                                            </FormItem>
-                                                        ) }
-                                                    />
-                                                    <FormField
-                                                        control={ form.control }
-                                                        name={ `productVariants.${ index }.brandPrice` }
-                                                        render={ ( { field } ) => (
-                                                            <FormItem>
-                                                                <FormLabel>Giá Brand *</FormLabel>
-                                                                <FormControl>
-                                                                    <Input
-                                                                        disabled={ createProductMutation.isPending }
-                                                                        type="number"
-                                                                        placeholder="0"
-                                                                        { ...field }
-                                                                        onChange={ ( e ) => field.onChange( Number( e.target.value ) ) }
-                                                                    />
-                                                                </FormControl>
-                                                                <FormMessage />
-                                                            </FormItem>
-                                                        ) }
-                                                    />
-                                                    <FormField
-                                                        control={ form.control }
-                                                        name={ `productVariants.${ index }.size` }
-                                                        render={ ( { field } ) => (
-                                                            <FormItem>
-                                                                <FormLabel>Kích Thước</FormLabel>
-                                                                <FormControl>
-                                                                    <Input disabled={ createProductMutation.isPending } placeholder="S, M, L, XL..." { ...field } />
-                                                                </FormControl>
-                                                                <FormMessage />
-                                                            </FormItem>
-                                                        ) }
-                                                    />
-                                                </div>
-                                            </CardContent>
-                                        </Card>
-                                    ) ) }
-                                </div>
-                            ) : (
-                                <div className="text-center py-8 text-muted-foreground">
-                                    <p>Chưa có biến thể nào. Click "Thêm Biến Thể" để tạo mới.</p>
-                                </div>
-                            ) }
-                        </CardContent>
-                    </Card>
-
-                    {/* Submit Button */ }
-                    <div className="flex justify-end">
-                        <Button type="submit" disabled={ createProductMutation.isPending }>
-                            Tạo Sản Phẩm
-                        </Button>
-                    </div>
-                </form>
-            </Form>
-        </div>
+                </div>
+                <div className="flex justify-end h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 sticky bottom-0 bg-sidebar/90 z-10">
+                    <Button className='mr-8 py-5 px-10' type="submit" disabled={ createProductMutation.isPending }>
+                        Tạo
+                    </Button>
+                </div>
+            </div>
+        </Form>
     );
 };
 

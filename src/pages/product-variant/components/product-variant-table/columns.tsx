@@ -6,45 +6,32 @@ import { Copy, Edit, Eye, EyeOff, MoreHorizontal, Trash2 } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { copyToClipboard, formatPrice } from "@/lib/utils";
+import { Checkbox } from "@/components/ui/checkbox";
 
 
 export const columns: ColumnDef<TProductVariantResponse>[] = [
     {
-        accessorKey: "id",
-        header: () => (
-            <div className="text-center font-semibold text-muted-foreground">
-                STT
-            </div>
+        id: "select",
+        header: ( { table } ) => (
+            <Checkbox
+                color=""
+                checked={
+                    table.getIsAllPageRowsSelected() ||
+                    ( table.getIsSomePageRowsSelected() && "indeterminate" )
+                }
+                onCheckedChange={ ( value ) => table.toggleAllPageRowsSelected( !!value ) }
+                aria-label="Select all"
+            />
         ),
-        cell: ( info ) => (
-            <div className="text-center">
-                <Badge variant="outline" className="font-mono text-xs">
-                    { Number( info.row.id ) + 1 }
-                </Badge>
-            </div>
+        cell: ( { row } ) => (
+            <Checkbox
+                checked={ row.getIsSelected() }
+                onCheckedChange={ ( value ) => row.toggleSelected( !!value ) }
+                aria-label="Select row"
+            />
         ),
-        size: 80,
-    },
-    {
-        accessorKey: "name",
-        header: () => (
-            <div className="font-semibold">
-                Tên Sản Phẩm
-            </div>
-        ),
-        cell: ( info ) =>
-        {
-            const name = info.getValue() as string;
-            return (
-                <div className="max-w-[200px]">
-                    <div
-                        className="font-medium text-foreground truncate cursor-pointer hover:text-primary transition-colors"
-                    >
-                        { name }
-                    </div>
-                </div>
-            );
-        },
+        enableSorting: false,
+        enableHiding: false,
     },
     {
         accessorKey: "code",
@@ -69,6 +56,27 @@ export const columns: ColumnDef<TProductVariantResponse>[] = [
                     >
                         <Copy className="h-3 w-3" />
                     </Button>
+                </div>
+            );
+        },
+    },
+    {
+        accessorKey: "name",
+        header: () => (
+            <div className="font-semibold">
+                Tên Sản Phẩm
+            </div>
+        ),
+        cell: ( info ) =>
+        {
+            const name = info.getValue() as string;
+            return (
+                <div className="max-w-[200px]">
+                    <div
+                        className="font-medium text-foreground truncate cursor-pointer hover:text-primary transition-colors"
+                    >
+                        { name }
+                    </div>
                 </div>
             );
         },
