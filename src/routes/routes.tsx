@@ -29,6 +29,8 @@ const ProductCreatePage = Loadable( lazy( () => import( "@/pages/create-product"
 const ProductVariantPage = Loadable( lazy( () => import( "@/pages/product-variant" ) ) )
 const ModifierGroupPage = Loadable( lazy( () => import( "@/pages/modifier-group" ) ) )
 
+const Page404 = Loadable( lazy( () => import( "@/pages/page-404" ) ) )
+
 export const AppRoutes = () =>
     useRoutes( [
         {
@@ -105,4 +107,12 @@ export const AppRoutes = () =>
             ),
             children: [ { element: <Navigate to={ PATH_DASHBOARD.root } replace />, index: true } ],
         },
+        // Add the 404 route
+        {
+            path: '/404',
+            element: <Page404 />,
+        },
+        // Catch all unmatched routes
+        { path: '*', element: <Navigate to="/404" replace /> },
+
     ], )

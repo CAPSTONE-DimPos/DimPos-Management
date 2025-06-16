@@ -1,7 +1,3 @@
-"use client"
-
-import { type LucideIcon } from "lucide-react"
-
 import
 {
   SidebarGroup,
@@ -11,7 +7,7 @@ import
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 export function NavMain ( {
   content,
@@ -21,13 +17,15 @@ export function NavMain ( {
     items: {
       title: string
       url: string
-      icon?: LucideIcon
+      icon?: any
       isActive?: boolean
     }[]
   }
 } )
 {
   const { open, toggleSidebar } = useSidebar()
+  const pathname = useLocation().pathname;
+  console.log( "NavMain: ", pathname );
   return (
     <SidebarGroup>
       <SidebarGroupLabel className="text-sm mb-1">{ content.mainTitle }</SidebarGroupLabel>

@@ -26,5 +26,8 @@ export const PATH_DASHBOARD = {
     createProduct: path(ROOTS_DASHBOARD, '/product/new'),
     variant: path(ROOTS_DASHBOARD, '/product-variant'),
     modifier: path(ROOTS_DASHBOARD, '/modifier-group'),
+    menu: path(ROOTS_DASHBOARD, '/menu'),
+    discount: path(ROOTS_DASHBOARD, '/discount'),
+    importProduct: path(ROOTS_DASHBOARD, '/import-product'),
   },
 }

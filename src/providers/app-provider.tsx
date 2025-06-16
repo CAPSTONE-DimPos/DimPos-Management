@@ -1,9 +1,9 @@
-import { ThemeProvider } from "@/providers/theme-provider"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import ReduxProvider from "./redux-provider"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster as Sonner } from '../components/ui/sonner';
 import { Toaster } from '../components/ui/toaster';
 import AuthProvider from "./auth-provider";
+import FontProvider from "./font-provider";
+import ReduxProvider from "./redux-provider";
 
 
 const queryClient = new QueryClient()
@@ -16,7 +16,7 @@ type Props = {
 const AppProvider = ( { children }: Props ) =>
 {
     return (
-        <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+        <FontProvider>
             <QueryClientProvider client={ queryClient }>
                 <ReduxProvider>
                     <AuthProvider>
@@ -35,7 +35,7 @@ const AppProvider = ( { children }: Props ) =>
                     <Toaster />
                 </ReduxProvider>
             </QueryClientProvider>
-        </ThemeProvider>
+        </FontProvider>
     )
 }
 

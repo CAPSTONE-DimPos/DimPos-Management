@@ -1,5 +1,9 @@
+import LoginFormIllustration1 from "@/assets/illustration/login-form-illustration-1"
+import LoginFormIllustration2 from "@/assets/illustration/login-form-illustration-2"
+import LoginFormIllustration3 from "@/assets/illustration/login-form-illustration-3"
+import LoginFormIllustration4 from "@/assets/illustration/login-form-illustration-4"
+import DimposLogo from "@/assets/logo/dimpos-logo"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import
 {
   Form,
@@ -18,8 +22,10 @@ import { LoginSchema, type TLoginRequest } from "@/schema/auth.schema"
 import { RoleSchema } from "@/schema/role.schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { jwtDecode } from "jwt-decode"
+import { useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { useDispatch } from "react-redux"
+
 
 export function LoginForm ( {
   className,
@@ -36,7 +42,7 @@ export function LoginForm ( {
       password: "",
     },
   } );
-
+  // console.log( "Is successful login mutation:", loginMutation.isSuccess );
   const onSubmit = async ( data: TLoginRequest ) =>
   {
     if ( loginMutation.isPending ) return;
@@ -67,83 +73,90 @@ export function LoginForm ( {
     }
   };
 
+  const RandomIllustration = useMemo( () =>
+  {
+    const illustrations = [
+      LoginFormIllustration1,
+      LoginFormIllustration2,
+      LoginFormIllustration3,
+      LoginFormIllustration4,
+    ];
+    const randomIndex = Math.floor( Math.random() * illustrations.length );
+    return illustrations[ randomIndex ];
+  }, [] );
+
   return (
-    <div className={ cn( "flex flex-col gap-6", className ) } { ...props }>
-      <Card className="overflow-hidden p-0">
-        <CardContent className="grid p-0 md:grid-cols-2">
-          {/* The Form component wraps everything and provides context */ }
-          <Form { ...form }>
-            <form className="p-6 md:p-8" onSubmit={ form.handleSubmit( onSubmit ) } noValidate>
-              <div className="flex flex-col gap-6">
-                <div className="flex flex-col items-center text-center">
-                  <h1 className="text-2xl font-bold">Chào mừng bạn quay lại DimPos</h1>
-                  <p className="text-muted-foreground text-balance">
-                    Đăng nhập để tiếp tục sử dụng
-                  </p>
+    <div>
+
+      <div className={ cn( "flex flex-col gap-6", className ) } { ...props }>
+        <div className="overflow-hidden p-0">
+          <div className="grid p-0 md:grid-cols-2 gap-25">
+            {/* The Form component wraps everything and provides context */ }
+            <Form { ...form }>
+              <form className="p-6 md:p-8" onSubmit={ form.handleSubmit( onSubmit ) } noValidate>
+                <div className="flex flex-col gap-6">
+                  <DimposLogo className="size-18" />
+                  <div className="flex flex-col items-start text-left">
+                    <p className="text-4xl font-bold">
+                      Đăng nhập
+                    </p>
+                  </div>
+
+                  {/* Username/Email field using FormField for full integration */ }
+                  <FormField
+                    control={ form.control }
+                    name="username"
+                    render={ ( { field } ) => (
+                      <FormItem>
+                        <FormLabel>Tên đăng nhập</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder="Nhập tên đăng nhập"
+                            disabled={ loginMutation.isPending }
+                            { ...field }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    ) }
+                  />
+
+                  <FormField
+                    control={ form.control }
+                    name="password"
+                    render={ ( { field } ) => (
+                      <FormItem>
+                        <FormLabel>Mật khẩu</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="Nhập mật khẩu"
+                            disabled={ loginMutation.isPending }
+                            { ...field }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    ) }
+                  />
+
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={ loginMutation.isPending }
+                    size="lg"
+                  >
+                    { loginMutation.isPending ? "Đang đăng nhập..." : "Đăng nhập" }
+                  </Button>
                 </div>
+              </form>
+            </Form>
 
-                {/* Username/Email field using FormField for full integration */ }
-                <FormField
-                  control={ form.control }
-                  name="username"
-                  render={ ( { field } ) => (
-                    <FormItem>
-                      <FormLabel>Tên đăng nhập</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="email"
-                          placeholder="Nhập tên đăng nhập"
-                          disabled={ loginMutation.isPending }
-                          { ...field }
-                        />
-                      </FormControl>
-                      {/* FormMessage automatically displays validation errors */ }
-                      <FormMessage />
-                    </FormItem>
-                  ) }
-                />
-
-                {/* Password field with the same pattern */ }
-                <FormField
-                  control={ form.control }
-                  name="password"
-                  render={ ( { field } ) => (
-                    <FormItem>
-                      <FormLabel>Mật khẩu</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="password"
-                          placeholder="Nhập mật khẩu"
-                          disabled={ loginMutation.isPending }
-                          { ...field }
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  ) }
-                />
-
-                {/* Submit button with loading state */ }
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={ loginMutation.isPending }
-                >
-                  { loginMutation.isPending ? "Đang đăng nhập..." : "Đăng nhập" }
-                </Button>
-              </div>
-            </form>
-          </Form>
-
-          <div className="bg-muted relative hidden md:block">
-            <img
-              src="/logo.png"
-              alt="Image"
-              className="absolute inset-0 h-full w-full object-cover"
-            />
+            <RandomIllustration className="size-100" />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

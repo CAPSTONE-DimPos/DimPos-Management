@@ -1,0 +1,17 @@
+export {default as GeneralAppIcon} from './icons/general-app-icon';
+export {default as ProductIcon} from './icons/product-icon';
+export {default as MenuIcon} from './icons/menu-icon';
+export {default as DiscountIcon} from './icons/discount-icon';
+export {default as BoxAddIcon} from './icons/box-add-icon';
+export {default as HomeIcon} from './icons/home-icon';
+export {default as ShopIcon} from './icons/shop-icon';
+export {default as UsersIcon} from './icons/users-icon';
+export {default as ReceiptIcon} from './icons/receipt-icon';
+export {default as CollapseIcon} from './icons/collapse-icon';
+export {default as NotificationIcon} from './icons/notification-icon';
+export {default as DimposIcon} from './logo/dimpos-logo';
+export {default as LoginFormIllustration1} from './illustration/login-form-illustration-1';
+export {default as LoginFormIllustration2} from './illustration/login-form-illustration-2';
+export {default as LoginFormIllustration3} from './illustration/login-form-illustration-3';
+export {default as LoginFormIllustration4} from './illustration/login-form-illustration-4';
+export {default as PageNotFoundIllustration} from './illustration/page-not-found-illustration';
