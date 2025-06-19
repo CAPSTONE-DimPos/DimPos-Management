@@ -1,5 +1,5 @@
 import { productApi } from "@/apis/product.api";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 
 interface UseProductParams
 {
@@ -23,7 +23,7 @@ export const useProduct = () =>
             name = params.name || "",
         } = params;
 
-        return useQuery( {
+        return useSuspenseQuery( {
             queryKey: [ 'product-variants', {
                 page,
                 size,
@@ -52,7 +52,7 @@ export const useProduct = () =>
             name = params.name || "",
         } = params;
 
-        return useQuery( {
+        return useSuspenseQuery( {
             queryKey: [ 'products', {
                 page,
                 size,
@@ -70,6 +70,14 @@ export const useProduct = () =>
         } )
     }
 
+    const getProductById = ( id: string ) =>
+    {
+        return useSuspenseQuery( {
+            queryKey: [ 'product', id ],
+            queryFn: () => productApi.getProductById( id ),
+        } )
+    }
+
     const getModifierGroups = ( params: UseProductParams = {} ) =>
     {
         const {
@@ -79,7 +87,7 @@ export const useProduct = () =>
             isAsc = params.isAsc || true,
         } = params;
 
-        return useQuery( {
+        return useSuspenseQuery( {
             queryKey: [ 'modifier-groups', {
                 page,
                 size,
@@ -106,6 +114,7 @@ export const useProduct = () =>
 
     return {
         getProducts,
+        getProductById,
         getProductVariants,
         getModifierGroups,
         createProductMutation,

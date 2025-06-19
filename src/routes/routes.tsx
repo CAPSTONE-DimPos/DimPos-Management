@@ -26,6 +26,7 @@ const CategoryPage = Loadable( lazy( () => import( "@/pages/category" ) ) )
 
 const ProductPage = Loadable( lazy( () => import( "@/pages/product" ) ) )
 const ProductCreatePage = Loadable( lazy( () => import( "@/pages/create-product" ) ) )
+const ProductEditPage = Loadable( lazy( () => import( "@/pages/edit-product" ) ) )
 const ProductVariantPage = Loadable( lazy( () => import( "@/pages/product-variant" ) ) )
 const ModifierGroupPage = Loadable( lazy( () => import( "@/pages/modifier-group" ) ) )
 
@@ -87,6 +88,10 @@ export const AppRoutes = () =>
                 {
                     path: 'product/new',
                     element: <ProductCreatePage />,
+                },
+                {
+                    path: 'product/:id',
+                    element: <ProductEditPage />,
                 },
                 {
                     path: 'product-variant',

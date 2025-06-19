@@ -1,38 +1,16 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { copyToClipboard } from "@/lib/utils";
+import { PATH_DASHBOARD } from "@/routes/path";
 import type { TProductResponse } from "@/schema/product.schema";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 import type { ColumnDef } from "@tanstack/react-table";
-import { Copy, Edit, Eye, EyeOff, MoreHorizontal, Trash2 } from "lucide-react";
+import { Copy, Eye, EyeOff } from "lucide-react";
+import { Link } from "react-router-dom";
 
 
 export const columns: ColumnDef<TProductResponse>[] = [
-    {
-        id: "select",
-        header: ( { table } ) => (
-            <Checkbox
-                color=""
-                checked={
-                    table.getIsAllPageRowsSelected() ||
-                    ( table.getIsSomePageRowsSelected() && "indeterminate" )
-                }
-                onCheckedChange={ ( value ) => table.toggleAllPageRowsSelected( !!value ) }
-                aria-label="Select all"
-            />
-        ),
-        cell: ( { row } ) => (
-            <Checkbox
-                checked={ row.getIsSelected() }
-                onCheckedChange={ ( value ) => row.toggleSelected( !!value ) }
-                aria-label="Select row"
-            />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
     {
         accessorKey: "code",
         header: () => (
@@ -221,70 +199,20 @@ export const columns: ColumnDef<TProductResponse>[] = [
 
             return (
                 <div className="flex justify-center">
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <TooltipProvider>
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            className="h-8 w-8 p-0 hover:bg-muted"
-                                        >
-                                            <span className="sr-only">Thao tác</span>
-                                            <MoreHorizontal className="h-4 w-4" />
-                                        </Button>
-                                    </TooltipTrigger>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <Link to={ PATH_DASHBOARD.product.editProduct( product.id ) }>
+                                <TooltipTrigger >
+                                    <Eye className="h-4 w-4 hover:cursor-pointer" />
                                     <TooltipContent>
-                                        Thêm thao tác
+                                        <div className="text-sm">
+                                            Xem chi tiết
+                                        </div>
                                     </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-48">
-                            <DropdownMenuLabel className="text-xs text-muted-foreground">
-                                Thao tác cho "{ product.name }"
-                            </DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-
-                            {/* Edit action with visual hierarchy */ }
-                            <DropdownMenuItem
-                                className="cursor-pointer hover:bg-blue-50 focus:bg-blue-50"
-                                onClick={ () =>
-                                {
-                                    // Handle edit action here
-                                    console.log( 'Edit product:', product.id );
-                                } }
-                            >
-                                <Edit className="mr-2 h-4 w-4 text-blue-600" />
-                                <span className="text-blue-700">Chỉnh sửa</span>
-                            </DropdownMenuItem>
-
-                            {/* Copy code action for quick reference */ }
-                            <DropdownMenuItem
-                                className="cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
-                                onClick={ () => copyToClipboard( product.code, "Mã danh mục" ) }
-                            >
-                                <Copy className="mr-2 h-4 w-4 text-gray-600" />
-                                <span className="text-gray-700">Sao chép mã</span>
-                            </DropdownMenuItem>
-
-                            <DropdownMenuSeparator />
-
-                            {/* Delete action with warning colors */ }
-                            <DropdownMenuItem
-                                className="cursor-pointer hover:bg-red-50 focus:bg-red-50"
-                                onClick={ () =>
-                                {
-                                    // Handle delete action here - should show confirmation dialog
-                                    console.log( 'Delete product:', product.id );
-                                } }
-                            >
-                                <Trash2 className="mr-2 h-4 w-4 text-red-600" />
-                                <span className="text-red-700">Xóa sản phẩm</span>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                                </TooltipTrigger>
+                            </Link>
+                        </Tooltip>
+                    </TooltipProvider>
                 </div>
             );
         },

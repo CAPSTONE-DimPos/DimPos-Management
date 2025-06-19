@@ -113,11 +113,38 @@ export const CreateProductSchema = z.object({
     saleType: z.number().int({message: "Loại hình bán hàng của sản phẩm không được bỏ trống"}),
     note: z.string().optional(),
     categoryId: z.string().uuid(),
-    modifierGroupIds: z.array(z.string().uuid()),
-    productVariants: z.array(CreateProductVariantSchema).nullable(),
     productImages: z.array(CreateProductImageSchema).nullable(),
 })
 
+
+export const UpdateProductSchema = z.object({
+    code: z.string({message: "Mã của sản phẩm không được bỏ trống"})
+        .min(1, {message: "Mã của sản phẩm phải có ít nhất 1 ký tự"})
+        .max(50, {message: "Mã của sản phẩm không được vượt quá 50 ký tự  "}),
+    alternativeCode: z.string().max(100, {message: "Mã thay thế của sản phẩm không được vượt quá 100 ký tự"}),
+    name: z.string({message: "Tên của sản phẩm không được bỏ trống"})
+        .min(1, {message: "Tên của sản phẩm phải có ít nhất 1 ký tự"})
+        .max(200, {message: "Tên của sản phẩm không được vượt quá 200 ký tự"}),
+    price: z.number().min(0, {message: "Giá của sản phẩm không được bỏ trống"}),
+    discountPrice: z.number().optional(),
+    discountPercent: z.number().optional(),
+    priceCOGS: z.number().optional(),
+    description: z.string({message: "Mô tả của sản phẩm không được bỏ trống"})
+        .min(1, {message: "Mô tả của sản phẩm phải có ít nhất 1 ký tự"})
+        .max(1000, {message: "Mô tả của sản phẩm không được vượt quá 1000 ký tự"}),
+    isAvailable: z.boolean({message: "Trạng thái khả dụng của sản phẩm không được bỏ trống"}),
+    displayOrder: z.number().int().optional(),
+    saleType: z.number().int({message: "Loại hình bán hàng của sản phẩm không được bỏ trống"}),
+    note: z.string().optional(),
+    categoryId: z.string().uuid(),
+    productImages: z.array(ProductImageSchema).nullable(),
+    newProductImages: z.array(CreateProductImageSchema).nullable(),
+})
+
+export const UpdateProductModifierOptionSchema = z.object({
+    productId: z.string().uuid(),
+    modifierGroupIds: z.array(z.string().uuid()).optional(),
+})
 
 
 
@@ -127,3 +154,6 @@ export type TProductResponse = z.infer<typeof ProductSchema>;
 export type TModifierOptionResponse = z.infer<typeof ModifierOptionSchema>;
 
 export type TProductRequest = z.infer<typeof CreateProductSchema>;
+export type TUpdateProductRequest = z.infer<typeof UpdateProductSchema>;
+export type TProductVariantRequest = z.infer<typeof ProductVariantSchema>;
+export type TProductModifierOptionRequest = z.infer<typeof UpdateProductModifierOptionSchema>;

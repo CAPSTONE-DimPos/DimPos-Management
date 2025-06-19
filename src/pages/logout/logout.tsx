@@ -1,5 +1,5 @@
 import type { RootState } from "@/redux/store";
-import { logout } from "@/redux/User/user-slice";
+import { logout } from "@/redux/user/user-slice";
 import { PATH_AUTH } from "@/routes/path";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"

@@ -6,6 +6,9 @@ import { API_SUFFIX } from "./util.api";
 const getProducts = async (params?: any) =>
     await apiRequest.catalog.get<BaseResponse<PaginationResponse<TProductResponse>>>(API_SUFFIX.PRODUCT_API, { params });
 
+const getProductById = async (id: string) =>
+    await apiRequest.catalog.get<BaseResponse<TProductResponse>>(`${API_SUFFIX.PRODUCT_API}/${id}`);
+
 const getProductVariants = async (params?: any) => 
     await apiRequest.catalog.get<BaseResponse<PaginationResponse<TProductVariantResponse>>>(API_SUFFIX.PRODUCT_VARIANT_API, { params});
 const getModifierGroups = async (params?: any) =>
@@ -18,5 +21,6 @@ export const productApi = {
     getProducts,
     getProductVariants,
     getModifierGroups,
-    createProductApi
+    createProductApi,
+    getProductById,
 };

@@ -148,7 +148,7 @@ export function DataTable<TData, TValue> ( {
     onSettings,
 }: DataTableProps<TData, TValue> )
 {
-    const [ rowSelection, setRowSelection ] = useState( {} )
+    // const [ rowSelection, setRowSelection ] = useState( {} )
 
     const [ inputValues, setInputValues ] = useState<Record<string, string>>( () =>
         Object.fromEntries( searchValues.map( f => [ f.id, String( f.value ?? "" ) ] ) )
@@ -198,7 +198,7 @@ export function DataTable<TData, TValue> ( {
             pagination: paginationState,
             columnFilters: searchState,
             sorting: sortingState,
-            rowSelection,
+            // rowSelection,
         },
         onPaginationChange: handlePaginationChange,
         onColumnFiltersChange: handleColumnFiltersChange,
@@ -207,7 +207,7 @@ export function DataTable<TData, TValue> ( {
         getPaginationRowModel: getPaginationRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
-        onRowSelectionChange: setRowSelection,
+        // onRowSelectionChange: setRowSelection,
         manualPagination: true,
         manualFiltering: true,
         manualSorting: true,
@@ -302,7 +302,7 @@ export function DataTable<TData, TValue> ( {
                 </div>
             </div>
 
-            <div className="w-full sm:w-auto h-[calc(5vh)] md:h-[calc(10dvh)] bg-table-header rounded-2xl p-4 items-center flex justify-between">
+            {/* <div className="w-full sm:w-auto h-[calc(5vh)] md:h-[calc(10dvh)] bg-table-header rounded-2xl p-4 items-center flex justify-between">
                 <div className="flex-1 items-center">
                     <span className="text-black text-sm font-semibold">
                         { table.getFilteredSelectedRowModel().rows.length } kết quả được chọn { " " }
@@ -319,7 +319,7 @@ export function DataTable<TData, TValue> ( {
                 >
                     Xóa
                 </Button>
-            </div>
+            </div> */}
 
 
             {/* Table Container with improved styling */ }
@@ -395,9 +395,8 @@ export function DataTable<TData, TValue> ( {
 
                 {/* Enhanced Pagination Section */ }
                 <div className="flex flex-col items-center justify-end gap-4 border-t px-4 py-4 sm:flex-row">
-
                     {/* Page Size Selector */ }
-                    <div className="flex items-center gap-6">
+                    <div className="flex flex-col items-center gap-6 justify-end sm:flex-row">
                         <div className="flex items-center gap-2">
                             <p className="whitespace-nowrap text-sm font-medium">
                                 Số hàng mỗi trang:

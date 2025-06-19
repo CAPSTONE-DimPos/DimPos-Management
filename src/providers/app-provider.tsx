@@ -4,6 +4,7 @@ import { Toaster } from '../components/ui/toaster';
 import AuthProvider from "./auth-provider";
 import FontProvider from "./font-provider";
 import ReduxProvider from "./redux-provider";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 
 const queryClient = new QueryClient()
@@ -34,6 +35,7 @@ const AppProvider = ( { children }: Props ) =>
                     />
                     <Toaster />
                 </ReduxProvider>
+                <ReactQueryDevtools initialIsOpen={ true } />
             </QueryClientProvider>
         </FontProvider>
     )

@@ -33,6 +33,7 @@ const ProductTable = () =>
         isAsc: isAsc,
         name: filter.find( f => f.id === "name" )?.value as string || "",
     } );
+    console.log( "ProductTable data:", data?.data.data.items, " isLoading:", isLoading );
 
     if ( isError && error )
     {

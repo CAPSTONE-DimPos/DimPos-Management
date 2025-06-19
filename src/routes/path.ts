@@ -24,6 +24,7 @@ export const PATH_DASHBOARD = {
   product: {
     root: path(ROOTS_DASHBOARD, '/product'),
     createProduct: path(ROOTS_DASHBOARD, '/product/new'),
+    editProduct: (id: string) => path(ROOTS_DASHBOARD, `/product/${id}`),
     variant: path(ROOTS_DASHBOARD, '/product-variant'),
     modifier: path(ROOTS_DASHBOARD, '/modifier-group'),
     menu: path(ROOTS_DASHBOARD, '/menu'),
