@@ -10,8 +10,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { useCategory } from '@/hooks/use-category';
 import { useProduct } from '@/hooks/use-product';
 import { handleApiError } from '@/lib/error';
-import { handleChangeModalState } from '@/redux/modal/modal-slice';
+import { handleChangeModalState, handleSetCreatedId } from '@/redux/modal/modal-slice';
 import type { RootState } from '@/redux/store';
+import { PATH_DASHBOARD } from '@/routes/path';
 import { CreateProductSchema, type TProductRequest } from '@/schema/product.schema';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload, X } from 'lucide-react';
@@ -23,7 +24,7 @@ import { toast } from 'sonner';
 
 const CreateProductPage = () =>
 {
-    const { isOpen } = useSelector( ( state: RootState ) => state.modal );
+    const { isOpen, createdId } = useSelector( ( state: RootState ) => state.modal );
     const dispatch = useDispatch();
 
     const navigation = useNavigate();
@@ -153,14 +154,14 @@ const CreateProductPage = () =>
                 // Append the actual file
                 if ( imageData.image )
                 {
-                    formData.append( `ProductImages[${ index }].Image`, imageData.image );
+                    formData.append( `ProductImages[${ index }].[Image]`, imageData.image );
                 }
 
-                formData.append( `ProductImages[${ index }].IsMainImage`, imageData.isMainImage.toString() );
+                formData.append( `ProductImages[${ index }].[IsMainImage]`, imageData.isMainImage.toString() );
 
                 if ( imageData.altText )
                 {
-                    formData.append( `ProductImages[${ index }].AltText`, imageData.altText );
+                    formData.append( `ProductImages[${ index }].[AltText]`, imageData.altText );
                 }
             } );
         }
@@ -168,11 +169,10 @@ const CreateProductPage = () =>
         console.log( "Submitting form data:", formData );
         try
         {
-            await createProductMutation.mutateAsync( formData );
-            if ( createProductMutation.isSuccess )
-            {
-                dispatch( handleChangeModalState( true ) );
-            }
+            const result = await createProductMutation.mutateAsync( formData );
+            console.log( "Product created successfully!" );
+            dispatch( handleSetCreatedId( result.data.data.id ) );
+            dispatch( handleChangeModalState( true ) );
         } catch ( error )
         {
             handleApiError( error );
@@ -187,7 +187,14 @@ const CreateProductPage = () =>
                 onOpenChange={ ( open ) => dispatch( handleChangeModalState( open ) ) }
                 title="Tạo sản phẩm mới thành công"
                 actionLabel="Xem sản phẩm"
-                onAction={ () => navigation( -1 ) }
+                onAction={ () =>
+                {
+                    if ( createdId )
+                    {
+                        dispatch( handleChangeModalState( false ) );
+                        navigation( PATH_DASHBOARD.product.editProduct( createdId ) )
+                    }
+                } }
             />
             <form className='relative h-[calc(100vh-5.5rem)]' onSubmit={ form.handleSubmit( onSubmit ) } noValidate>
                 <div className="container px-10 pb-6">
@@ -196,9 +203,9 @@ const CreateProductPage = () =>
                     </div>
 
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4" >
+                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4" >
                         {/* Basic Information */ }
-                        <Card className='shadow-muted lg:col-span-2 2xl:col-span-2'>
+                        <Card className='shadow-muted lg:col-span-2 xl:col-span-2'>
                             <CardHeader className='grid grid-cols-1 md:grid-cols-2 items-center gap-4'>
                                 <CardTitle>Thông Tin Cơ Bản</CardTitle>
                                 <FormField
@@ -359,7 +366,7 @@ const CreateProductPage = () =>
                                 </div>
                             </CardContent>
                         </Card>
-                        <div className='grid lg:col-span-2 2xl:col-span-1 gap-4'>
+                        <div className='grid lg:col-span-2 xl:col-span-1 gap-4'>
                             {/* Product Images */ }
                             <Card className='shadow-muted'>
                                 <CardHeader>

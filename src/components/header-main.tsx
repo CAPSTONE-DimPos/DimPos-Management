@@ -31,7 +31,7 @@ const HeaderMain = () =>
                                             size="sm"
                                             onClick={ () =>
                                             {
-                                                navigate( -1 )  // Navigate to the previous page
+                                                navigate( '/' + pathname.replace( /^\//, '' ).split( '/' ).slice( 0, 2 ).join( '/' ) )  // Navigate to the previous page
                                             } }
                                             className="gap-1 px-2"
                                         >
