@@ -1,29 +1,27 @@
-import AppAreaChart from '@/components/app-area-chart';
-import AppBarChart from '@/components/app-bar-chart';
-import AppPieChart from '@/components/app-pie-chart';
-import CardList from '@/components/card-list';
-import TodoList from '@/components/todo-list';
+import KPICard from "./components/kpi-card";
+import ProductCategoryCard from "./components/product-category-card";
+import RecentTransactionCard from "./components/recent-transaction-card";
+import RevenueChart from "./components/revenue-chart";
+import TopStoresCard from "./components/top-stores-card";
 
 
 const GeneralAppPage = () =>
 {
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4">
-            <div className="bg-primary-foreground p-4 rounded-lg lg:col-span-2 xl:col-span-1 2xl:col-span-2">
-                <AppBarChart />
+        <div className="min-h-screen p-4 md:p-6 lg:p-8">
+            <h1 className="text-2xl font-semibold mb-6">Tổng quan</h1>
+            <KPICard />
+
+            {/* Main Content Grid */ }
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <RevenueChart />
+                <RecentTransactionCard />
             </div>
-            <div className="bg-primary-foreground p-4 rounded-lg">
-                <CardList title="Latest Transactions" />
-            </div>
-            <div className="bg-primary-foreground p-4 rounded-lg">
-                <AppPieChart />
-            </div>
-            <div className="bg-primary-foreground p-4 rounded-lg"><TodoList /></div>
-            <div className="bg-primary-foreground p-4 rounded-lg lg:col-span-2 xl:col-span-1 2xl:col-span-2">
-                <AppAreaChart />
-            </div>
-            <div className="bg-primary-foreground p-4 rounded-lg">
-                <CardList title="Popular Content" />
+
+            {/* Bottom Section */ }
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <ProductCategoryCard />
+                <TopStoresCard />
             </div>
         </div>
     )
