@@ -54,9 +54,9 @@ const data = {
         icon: ProductIcon,
       },
       {
-        title: "Danh Mục Sản Phẩm",
+        title: "Quản lý Danh mục",
         url: PATH_DASHBOARD.category.root,
-        icon: ProductIcon,
+        icon: MenuIcon,
       },
       {
         title: "Quản lý Menu",

@@ -24,7 +24,7 @@ import
     Folder,
     FolderOpen,
     MoreHorizontal,
-    Trash2
+    // Trash2
 } from "lucide-react";
 
 // Enhanced sortable header component that provides visual feedback for all sorting states
@@ -248,10 +248,9 @@ export const columns: ColumnDef<TCategoryResponse>[] = [
                                 <Copy className="mr-2 h-4 w-4 text-gray-600" />
                                 <span className="text-gray-700">Sao chép mã</span>
                             </DropdownMenuItem>
+<>
+                           {/* <DropdownMenuSeparator />
 
-                            <DropdownMenuSeparator />
-
-                            {/* Delete action with warning colors */ }
                             <DropdownMenuItem
                                 className="cursor-pointer hover:bg-red-50 focus:bg-red-50"
                                 onClick={ () =>
@@ -262,7 +261,8 @@ export const columns: ColumnDef<TCategoryResponse>[] = [
                             >
                                 <Trash2 className="mr-2 h-4 w-4 text-red-600" />
                                 <span className="text-red-700">Xóa danh mục</span>
-                            </DropdownMenuItem>
+                            </DropdownMenuItem> */ }
+</>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>

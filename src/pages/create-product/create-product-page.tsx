@@ -14,7 +14,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useProduct } from '@/hooks/use-product';
 import { handleApiError } from '@/lib/error';
 import { useCategory } from '@/hooks/use-category';
-import { toast } from 'sonner';
+import { toast } from 'sonner'; 
 import { useNavigate } from 'react-router-dom';
 
 const CreateProductPage = () =>

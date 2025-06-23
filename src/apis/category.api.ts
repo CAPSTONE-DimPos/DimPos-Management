@@ -9,9 +9,14 @@ const getCategoryById = async (id: string) =>
     await apiRequest.catalog.get<BaseResponse<TCategoryResponse>>(`${API_SUFFIX.CATEGORY_API}/${id}`);
 const createCategory = async (request: FormData) => 
     await apiRequest.catalog.post<BaseResponse<TCategoryResponse>>(API_SUFFIX.CATEGORY_API, request);
-
+const updateCategory = async (id: string, request: FormData) =>
+  await apiRequest.catalog.put<BaseResponse<TCategoryResponse>>(
+    `${API_SUFFIX.CATEGORY_API}/${id}`,
+    request
+  );
 export const categoryApi = {
     getCategories,
     getCategoryById,
     createCategory,
+     updateCategory,
 };

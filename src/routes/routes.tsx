@@ -8,36 +8,36 @@ import AuthGuard from "@/guards/auth-guard";
 import Logout from "@/pages/logout/logout";
 import { PATH_AUTH, PATH_DASHBOARD } from "./path";
 
-const Loadable = ( Component: ElementType ) => ( props: any ) =>
-{
+const Loadable = (Component: ElementType) => (props: any) => {
     return (
-        <Suspense fallback={ <LoadingScreen /> }>
-            <Component { ...props } />
+        <Suspense fallback={<LoadingScreen />}>
+            <Component {...props} />
         </Suspense>
     );
 };
 //
-const LoginPage = Loadable( lazy( () => import( "@/pages/login/login-page" ) ) )
+const LoginPage = Loadable(lazy(() => import("@/pages/login/login-page")))
 
-const GeneralAppPage = Loadable( lazy( () => import( "@/pages/general-app" ) ) )
-const GeneralEcommercePage = Loadable( lazy( () => import( "@/pages/general-ecommerce" ) ) )
+const GeneralAppPage = Loadable(lazy(() => import("@/pages/general-app")))
+const GeneralEcommercePage = Loadable(lazy(() => import("@/pages/general-ecommerce")))
 
-const CategoryPage = Loadable( lazy( () => import( "@/pages/category" ) ) )
+const CategoryPage = Loadable(lazy(() => import("@/pages/category")))
+const CategoryCreatePage = Loadable(lazy(() => import("@/pages/category/create")));
 
-const ProductPage = Loadable( lazy( () => import( "@/pages/product" ) ) )
-const ProductCreatePage = Loadable( lazy( () => import( "@/pages/create-product" ) ) )
-const ProductVariantPage = Loadable( lazy( () => import( "@/pages/product-variant" ) ) )
-const ModifierGroupPage = Loadable( lazy( () => import( "@/pages/modifier-group" ) ) )
+const ProductPage = Loadable(lazy(() => import("@/pages/product")))
+const ProductCreatePage = Loadable(lazy(() => import("@/pages/create-product")))
+const ProductVariantPage = Loadable(lazy(() => import("@/pages/product-variant")))
+const ModifierGroupPage = Loadable(lazy(() => import("@/pages/modifier-group")))
 
-const Page404 = Loadable( lazy( () => import( "@/pages/page-404" ) ) )
+const Page404 = Loadable(lazy(() => import("@/pages/page-404")))
 
 export const AppRoutes = () =>
-    useRoutes( [
+    useRoutes([
         {
             path: PATH_AUTH.root,
             children: [
                 {
-                    element: <Navigate to={ PATH_AUTH.login } replace />,
+                    element: <Navigate to={PATH_AUTH.login} replace />,
                     index: true,
                 },
                 {
@@ -64,7 +64,7 @@ export const AppRoutes = () =>
             ),
             children: [
                 {
-                    element: <Navigate to={ PATH_DASHBOARD.general.app } replace />,
+                    element: <Navigate to={PATH_DASHBOARD.general.app} replace />,
                     index: true,
                 },
                 {
@@ -79,6 +79,10 @@ export const AppRoutes = () =>
                 {
                     path: 'category',
                     element: <CategoryPage />,
+                },
+                {
+                    path: 'category/new',
+                    element: <CategoryCreatePage />,
                 },
                 {
                     path: 'product',
@@ -105,7 +109,7 @@ export const AppRoutes = () =>
                     <DashBoardLayout />
                 </AuthGuard>
             ),
-            children: [ { element: <Navigate to={ PATH_DASHBOARD.root } replace />, index: true } ],
+            children: [{ element: <Navigate to={PATH_DASHBOARD.root} replace />, index: true }],
         },
         // Add the 404 route
         {
@@ -115,4 +119,4 @@ export const AppRoutes = () =>
         // Catch all unmatched routes
         { path: '*', element: <Navigate to="/404" replace /> },
 
-    ], )
+    ],)
