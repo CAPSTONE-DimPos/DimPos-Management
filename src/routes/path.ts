@@ -20,6 +20,7 @@ export const PATH_DASHBOARD = {
   },
   category: {
     root: path(ROOTS_DASHBOARD, '/category'),
+    create: path(ROOTS_DASHBOARD, '/category/new'),
   },
   product: {
     root: path(ROOTS_DASHBOARD, '/product'),
