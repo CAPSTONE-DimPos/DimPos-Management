@@ -65,13 +65,13 @@ const data = {
         icon: MenuIcon,
       },
       {
-        title: "Quản lý Menu",
+        title: "Quản lý Thực đơn",
         url: PATH_DASHBOARD.product.menu,
         icon: MenuIcon,
       },
       {
         title: "Quản lý Khuyến mãi",
-        url: PATH_DASHBOARD.product.discount,
+        url: PATH_DASHBOARD.promotion.root,
         icon: DiscountIcon,
       },
       {
@@ -86,22 +86,22 @@ const data = {
     items: [
       {
         title: "Về thương hiệu",
-        url: PATH_DASHBOARD.product.root,
+        url: PATH_DASHBOARD.brand.root,
         icon: HomeIcon,
       },
       {
         title: "Quản lý Cửa hàng",
-        url: PATH_DASHBOARD.product.variant,
+        url: PATH_DASHBOARD.store.root,
         icon: ShopIcon,
       },
       {
         title: "Quản lý Vai trò",
-        url: PATH_DASHBOARD.product.modifier,
+        url: PATH_DASHBOARD.role.root,
         icon: UsersIcon,
       },
       {
         title: "Quản lý Hóa đơn",
-        url: PATH_DASHBOARD.category.root,
+        url: PATH_DASHBOARD.invoice.root,
         icon: ReceiptIcon,
       },
     ]

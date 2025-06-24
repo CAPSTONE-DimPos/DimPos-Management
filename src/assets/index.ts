@@ -19,3 +19,4 @@ export {default as LoginFormIllustration2} from './illustration/login-form-illus
 export {default as LoginFormIllustration3} from './illustration/login-form-illustration-3';
 export {default as LoginFormIllustration4} from './illustration/login-form-illustration-4';
 export {default as PageNotFoundIllustration} from './illustration/page-not-found-illustration';
+export {default as Loading} from './loading/loading';

@@ -43,6 +43,7 @@ const userSlice = createSlice( {
                 apiRequest.catalog.defaults.headers.common.Authorization = `Bearer ${ accessToken }`;
                 apiRequest.identity.defaults.headers.common.Authorization = `Bearer ${ accessToken }`;
                 apiRequest.menu.defaults.headers.common.Authorization = `Bearer ${ accessToken }`;
+                apiRequest.brand.defaults.headers.common.Authorization = `Bearer ${ accessToken }`;
             }
         },
         logout ( state )
@@ -54,6 +55,7 @@ const userSlice = createSlice( {
             apiRequest.catalog.defaults.headers.common.Authorization = null;
             apiRequest.identity.defaults.headers.common.Authorization = null;
             apiRequest.menu.defaults.headers.common.Authorization = null;
+            apiRequest.brand.defaults.headers.common.Authorization = null;
             localStorage.removeItem( "user" );
         }
     },

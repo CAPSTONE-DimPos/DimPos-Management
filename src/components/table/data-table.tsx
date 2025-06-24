@@ -52,6 +52,7 @@ interface SearchStateProps extends ColumnFilter
 
 interface DataTableProps<TData, TValue>
 {
+    isShort?: boolean;
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
     totalItems: number;
@@ -78,6 +79,8 @@ interface DataTableProps<TData, TValue>
     showSettings?: boolean;
     onSettings?: () => void;
     title?: string;
+    rowSelection?: Record<string, boolean>;
+    onRowSelectionChange?: ( selection: Record<string, boolean> ) => void;
 }
 
 // Skeleton component for loading state
@@ -121,6 +124,7 @@ function TableSkeleton<TData, TValue> ( { columns, pageSize }: { columns: Column
 }
 
 export function DataTable<TData, TValue> ( {
+    isShort = false,
     columns,
     data,
     totalItems,
@@ -146,9 +150,10 @@ export function DataTable<TData, TValue> ( {
     onRefresh,
     showSettings = true,
     onSettings,
+    rowSelection = {},
+    onRowSelectionChange,
 }: DataTableProps<TData, TValue> )
 {
-    // const [ rowSelection, setRowSelection ] = useState( {} )
 
     const [ inputValues, setInputValues ] = useState<Record<string, string>>( () =>
         Object.fromEntries( searchValues.map( f => [ f.id, String( f.value ?? "" ) ] ) )
@@ -190,7 +195,17 @@ export function DataTable<TData, TValue> ( {
         }
     }
 
+    const handleRowSelectionChange = ( updater: Record<string, boolean> | ( ( old: Record<string, boolean> ) => Record<string, boolean> ) ) =>
+    {
+        const next = typeof updater === "function" ? updater( rowSelection ) : updater;
+        if ( onRowSelectionChange )
+        {
+            onRowSelectionChange( next );
+        }
+    };
+
     const table = useReactTable( {
+        getRowId: ( row ) => ( row as any ).id,
         data,
         columns,
         pageCount: pageCount,
@@ -198,7 +213,7 @@ export function DataTable<TData, TValue> ( {
             pagination: paginationState,
             columnFilters: searchState,
             sorting: sortingState,
-            // rowSelection,
+            rowSelection,
         },
         onPaginationChange: handlePaginationChange,
         onColumnFiltersChange: handleColumnFiltersChange,
@@ -207,7 +222,7 @@ export function DataTable<TData, TValue> ( {
         getPaginationRowModel: getPaginationRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
-        // onRowSelectionChange: setRowSelection,
+        onRowSelectionChange: handleRowSelectionChange,
         manualPagination: true,
         manualFiltering: true,
         manualSorting: true,
@@ -248,7 +263,21 @@ export function DataTable<TData, TValue> ( {
                                         className="py-5 rounded-lg"
                                         disabled={ isLoading }
                                     />
-                                    <SearchIcon className="absolute right-6 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+                                    <Button
+                                        variant="ghost"
+                                        className="absolute right-3 top-1/2 h-8 w-8 -translate-y-1/2 rounded-r-lg"
+                                        onClick={ () =>
+                                        {
+                                            const newFilters: ColumnFiltersState = searchValues.map( ( s ) => ( {
+                                                id: s.id,
+                                                value: inputValues[ s.id ] ?? "",
+                                            } ) );
+                                            onSearchChange?.( newFilters );
+                                        } }
+                                        disabled={ isLoading }
+                                    >
+                                        <SearchIcon className="h-4 w-4" />
+                                    </Button>
                                 </div>
                             );
                         } ) }
@@ -324,7 +353,7 @@ export function DataTable<TData, TValue> ( {
 
             {/* Table Container with improved styling */ }
             <div className="rounded-2xl border bg-card">
-                <ScrollArea className="h-[calc(80vh-280px)] md:h-[calc(90dvh-250px)] rounded-tr-2xl rounded-tl-2xl">
+                <ScrollArea className={ cn( isShort ? "h-[calc(50vh)] md:h-[calc(45dvh)]" : "h-[calc(80vh-280px)] md:h-[calc(90dvh-250px)]", "rounded-tr-2xl rounded-tl-2xl" ) }>
                     {/* Conditionally render skeleton or actual table based on loading state */ }
                     { isLoading ? (
                         <TableSkeleton columns={ columns } pageSize={ pageSize } />

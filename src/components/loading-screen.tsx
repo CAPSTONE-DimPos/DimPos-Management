@@ -1,3 +1,4 @@
+import Loading from "@/assets/loading/loading"
 
 const LoadingScreen = () =>
 {
@@ -7,11 +8,7 @@ const LoadingScreen = () =>
                 <div className="h-full bg-primary animate-progress-bar" />
             </div>
             <div className="flex items-center justify-center min-h-[calc(100vh-10rem)] animate-pulse">
-                <img
-                    src={ "/loading.svg" } // adjust if needed based on your setup
-                    alt="Loading animation"
-                    className="w-30 h-30"
-                />
+                <Loading className="w-60 h-60" />
             </div>
         </div>
     )

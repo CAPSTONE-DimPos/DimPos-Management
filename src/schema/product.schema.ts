@@ -43,6 +43,7 @@ export const ProductVariantSchema = z.object({
     size: z.string().optional(),
     isMenuDisplay: z.boolean().optional(),
     status: z.number().int().optional(),
+    isSelected: z.boolean().optional(),
 })
 
 export const ModifierOptionSchema = z.object({

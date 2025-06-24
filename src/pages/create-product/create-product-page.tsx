@@ -50,7 +50,7 @@ const CreateProductPage = () =>
             name: '',
             description: '',
             isAvailable: true,
-            saleType: 0,
+            saleType: undefined,
             note: '',
             categoryId: '',
             productImages: [],

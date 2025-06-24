@@ -1,3 +1,5 @@
+import { memo } from "react"
+
 const CreateSuccessIllustration = ( { className = "", ...props } ) =>
 {
     return (
@@ -90,4 +92,4 @@ const CreateSuccessIllustration = ( { className = "", ...props } ) =>
     )
 }
 
-export default CreateSuccessIllustration
+export default memo( CreateSuccessIllustration )
