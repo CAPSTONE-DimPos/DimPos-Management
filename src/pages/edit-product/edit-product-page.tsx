@@ -18,8 +18,8 @@ const EditProductPage = () =>
         handleApiError( error );
     }
     return (
-        <div className='container px-10 h-[calc(100vh-6.5rem)]'>
-            <div className="my-3">
+        <div>
+            <div className="mb-6">
                 <h1 className="text-2xl font-semibold">{ data?.data.data.name }</h1>
             </div>
             <Tabs defaultValue="overview">

@@ -65,8 +65,10 @@ const request =(apiUrl : string) : AxiosInstance => {
 const catalog = request(envConfig.VITE_API_CATALOG_URL);
 const identity = request(envConfig.VITE_API_IDENTITY_URL);
 const menu = request(envConfig.VITE_API_MENU_URL);
+const brand = request(envConfig.VITE_API_BRAND_URL);
 export const apiRequest = {
     catalog,
     identity,
     menu,
+    brand,
 }

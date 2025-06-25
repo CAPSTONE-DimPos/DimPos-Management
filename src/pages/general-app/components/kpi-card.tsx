@@ -10,7 +10,7 @@ type Props = {}
 const KPICard = ( _: Props ) =>
 {
     return (
-        <Card className="w-full shadow-sm border-none bg-white mb-6 gap-3">
+        <Card className="w-full shadow-none border-none bg-white mb-6 gap-3">
             {/* Main Header Section */ }
             <CardHeader>
                 <h2 className="text-xl font-semibold text-gray-900">

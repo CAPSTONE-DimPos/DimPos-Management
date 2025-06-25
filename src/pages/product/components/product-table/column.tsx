@@ -220,27 +220,3 @@ export const columns: ColumnDef<TProductResponse>[] = [
     },
 
 ];
-
-// Optional: Export additional configuration for the table
-export const tableConfig = {
-    // Enable sorting for specific columns
-    enableSorting: true,
-    sortableColumns: [ 'name', 'code', 'price' ],
-
-    // Default column sizing
-    defaultColumnSizing: {
-        id: 80,
-        name: 200,
-        code: 150,
-        alternativeCode: 150,
-        price: 120,
-        isMenuDisplay: 140,
-        status: 140,
-    },
-
-    // Pagination settings
-    pagination: {
-        pageSize: 10,
-        pageSizeOptions: [ 10, 20, 50, 100 ],
-    }
-};

@@ -14,7 +14,7 @@ const ProductCategoryCard = ( _: Props ) =>
         { name: 'Bánh bao', value: 20, color: '#f59e0b' }
     ];
     return (
-        <Card className="lg:col-span-1 bg-white shadow-sm gap-3">
+        <Card className="lg:col-span-1 bg-white shadow-none border-none gap-3">
             <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                     <CardTitle className="text-lg font-semibold">Danh mục sản phẩm</CardTitle>

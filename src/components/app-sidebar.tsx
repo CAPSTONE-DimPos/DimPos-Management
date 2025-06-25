@@ -23,6 +23,8 @@ import
 } from "@/components/ui/sidebar"
 import { cn } from "@/lib/utils"
 import { PATH_DASHBOARD } from "@/routes/path"
+import NoteIcon from "@/assets/icons/note-icon"
+import DocumentFilterIcon from "@/assets/icons/document-filter-icon"
 
 // This is sample data.
 const data = {
@@ -50,14 +52,9 @@ const data = {
         icon: ProductIcon,
       },
       {
-        title: "Quản Lý Sản Phẩm",
-        url: PATH_DASHBOARD.product.variant,
-        icon: ProductIcon,
-      },
-      {
         title: "Tùy Chọn Sản Phẩm",
         url: PATH_DASHBOARD.product.modifier,
-        icon: ProductIcon,
+        icon: DocumentFilterIcon,
       },
       {
         title: "Quản lý Danh mục",
@@ -65,13 +62,13 @@ const data = {
         icon: MenuIcon,
       },
       {
-        title: "Quản lý Menu",
+        title: "Quản lý Thực đơn",
         url: PATH_DASHBOARD.product.menu,
-        icon: MenuIcon,
+        icon: NoteIcon,
       },
       {
         title: "Quản lý Khuyến mãi",
-        url: PATH_DASHBOARD.product.discount,
+        url: PATH_DASHBOARD.promotion.root,
         icon: DiscountIcon,
       },
       {
@@ -86,22 +83,22 @@ const data = {
     items: [
       {
         title: "Về thương hiệu",
-        url: PATH_DASHBOARD.product.root,
+        url: PATH_DASHBOARD.brand.root,
         icon: HomeIcon,
       },
       {
         title: "Quản lý Cửa hàng",
-        url: PATH_DASHBOARD.product.variant,
+        url: PATH_DASHBOARD.store.root,
         icon: ShopIcon,
       },
       {
         title: "Quản lý Vai trò",
-        url: PATH_DASHBOARD.product.modifier,
+        url: PATH_DASHBOARD.role.root,
         icon: UsersIcon,
       },
       {
         title: "Quản lý Hóa đơn",
-        url: PATH_DASHBOARD.category.root,
+        url: PATH_DASHBOARD.invoice.root,
         icon: ReceiptIcon,
       },
     ]

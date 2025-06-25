@@ -1,4 +1,3 @@
-import LoginPage from "@/pages/login";
 import type { RootState } from "@/redux/store";
 import { useState, type ReactNode } from "react";
 import { useSelector } from "react-redux";
@@ -11,11 +10,8 @@ type AuthGuardProps = {
 export default function AuthGuard ( { children }: AuthGuardProps )
 {
     const { isAuthenticated } = useSelector( ( state: RootState ) => state.user );
-
     const { pathname } = useLocation();
-
     const [ requestedLocation, setRequestedLocation ] = useState<string | null>( null );
-
 
     if ( !isAuthenticated )
     {
@@ -23,11 +19,7 @@ export default function AuthGuard ( { children }: AuthGuardProps )
         {
             setRequestedLocation( pathname );
         }
-        if ( pathname === "/" )
-        {
-            return <Navigate to="/auth/login" />;
-        }
-        return <LoginPage />;
+        return <Navigate to="/auth/login" replace />;
     }
 
     if ( requestedLocation && pathname !== requestedLocation )

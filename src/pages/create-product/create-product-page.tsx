@@ -50,7 +50,7 @@ const CreateProductPage = () =>
             name: '',
             description: '',
             isAvailable: true,
-            saleType: 0,
+            saleType: undefined,
             note: '',
             categoryId: '',
             productImages: [],
@@ -196,9 +196,9 @@ const CreateProductPage = () =>
                     }
                 } }
             />
-            <form className='relative h-[calc(100vh-5.5rem)]' onSubmit={ form.handleSubmit( onSubmit ) } noValidate>
-                <div className="container px-10 pb-6">
-                    <div className="my-6">
+            <form className='relative' onSubmit={ form.handleSubmit( onSubmit ) } noValidate>
+                <div>
+                    <div className="mb-6">
                         <h1 className="text-2xl font-semibold">Tạo Sản Phẩm Mới</h1>
                     </div>
 

@@ -18,7 +18,7 @@ export const useQueryParams = ( {
     defaultFilter = [], // Now we can specify multiple search parameters
 }: UseQueryParamsOptions = {} ) =>
 {
-    console.log( "defaultFilter", defaultFilter );
+    // console.log( "defaultFilter", defaultFilter );
     const [ searchParams, setSearchParams ] = useSearchParams();
 
     // --- Get values from URL with fallback defaults ---
@@ -88,6 +88,12 @@ export const useQueryParams = ( {
         updateParams( { page: "1", ...updates } );
     };
 
+    const resetParams = () =>
+    {
+        //clear all search params
+        setSearchParams( {} );
+    }
+
 
 
     return {
@@ -105,6 +111,8 @@ export const useQueryParams = ( {
         // Filtering
         filter,
         setFilter,
+
+        resetParams,
 
     };
 };

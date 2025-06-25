@@ -7,9 +7,9 @@ import { CirclePlusIcon } from "lucide-react"
 const ProductPage = () =>
 {
     return (
-        <div className="px-8 py-4">
-            <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold">Quản lý Sản phẩm</h1>
+        <div>
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-2xl font-semibold">Quản lý Sản phẩm</h1>
                 <Link to={ PATH_DASHBOARD.product.createProduct }>
                     <Button>
                         <CirclePlusIcon className="h-6 w-6" />
