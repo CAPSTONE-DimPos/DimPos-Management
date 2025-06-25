@@ -28,6 +28,9 @@ const userSlice = createSlice( {
                 apiRequest.catalog.defaults.headers.common.Authorization = `Bearer ${ action.payload?.accessToken }`;
                 apiRequest.identity.defaults.headers.common.Authorization = `Bearer ${ action.payload?.accessToken }`;
                 apiRequest.menu.defaults.headers.common.Authorization = `Bearer ${ action.payload?.accessToken }`;
+                apiRequest.brand.defaults.headers.common.Authorization = `Bearer ${ action.payload?.accessToken }`;
+                apiRequest.store.defaults.headers.common.Authorization = `Bearer ${ action.payload?.accessToken }`;
+                apiRequest.promotion.defaults.headers.common.Authorization = `Bearer ${ action.payload?.accessToken }`;
             }
             localStorage.setItem( "user", JSON.stringify( action.payload ) );
         },
@@ -44,6 +47,8 @@ const userSlice = createSlice( {
                 apiRequest.identity.defaults.headers.common.Authorization = `Bearer ${ accessToken }`;
                 apiRequest.menu.defaults.headers.common.Authorization = `Bearer ${ accessToken }`;
                 apiRequest.brand.defaults.headers.common.Authorization = `Bearer ${ accessToken }`;
+                apiRequest.store.defaults.headers.common.Authorization = `Bearer ${ accessToken }`;
+                apiRequest.promotion.defaults.headers.common.Authorization = `Bearer ${ accessToken }`;
             }
         },
         logout ( state )
@@ -56,6 +61,8 @@ const userSlice = createSlice( {
             apiRequest.identity.defaults.headers.common.Authorization = null;
             apiRequest.menu.defaults.headers.common.Authorization = null;
             apiRequest.brand.defaults.headers.common.Authorization = null;
+            apiRequest.store.defaults.headers.common.Authorization = null;
+            apiRequest.promotion.defaults.headers.common.Authorization = null;
             localStorage.removeItem( "user" );
         }
     },
