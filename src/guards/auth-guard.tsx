@@ -19,7 +19,11 @@ export default function AuthGuard ( { children }: AuthGuardProps )
         {
             setRequestedLocation( pathname );
         }
-        return <Navigate to="/auth/login" replace />;
+        if ( pathname === "/" )
+        {
+            return <Navigate to="/auth/login" />;
+        }
+        // return <LoginPage />;
     }
 
     if ( requestedLocation && pathname !== requestedLocation )

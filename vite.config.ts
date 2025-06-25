@@ -10,8 +10,8 @@ export default defineConfig({
     react(), 
     tailwindcss(),
     visualizer({
-      filename: './dist/stats.html', // 👈 Output file
-      open: true,                    // 👈 Auto open in browser after build
+      filename: './dist/stats.html',
+      open: true,
       gzipSize: true,
       brotliSize: true,
     }),
