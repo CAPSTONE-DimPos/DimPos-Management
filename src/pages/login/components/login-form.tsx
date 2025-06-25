@@ -87,7 +87,6 @@ export function LoginForm ( {
 
   return (
     <div>
-
       <div className={ cn( "flex flex-col gap-6", className ) } { ...props }>
         <div className="overflow-hidden p-0">
           <div className="grid p-0 md:grid-cols-2 gap-25">
