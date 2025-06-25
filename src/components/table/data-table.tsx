@@ -80,7 +80,10 @@ interface DataTableProps<TData, TValue>
     onSettings?: () => void;
     title?: string;
     rowSelection?: Record<string, boolean>;
-    onRowSelectionChange?: ( selection: Record<string, boolean> ) => void;
+    onRowSelectionChange?: (
+        newSelection: Record<string, boolean>,
+        oldSelection: Record<string, boolean>
+    ) => void;
 }
 
 // Skeleton component for loading state
@@ -150,10 +153,11 @@ export function DataTable<TData, TValue> ( {
     onRefresh,
     showSettings = true,
     onSettings,
-    rowSelection = {},
+    rowSelection,
     onRowSelectionChange,
 }: DataTableProps<TData, TValue> )
 {
+    const [ rowSelectionState, setRowSelectionState ] = useState( {} );
 
     const [ inputValues, setInputValues ] = useState<Record<string, string>>( () =>
         Object.fromEntries( searchValues.map( f => [ f.id, String( f.value ?? "" ) ] ) )
@@ -197,10 +201,13 @@ export function DataTable<TData, TValue> ( {
 
     const handleRowSelectionChange = ( updater: Record<string, boolean> | ( ( old: Record<string, boolean> ) => Record<string, boolean> ) ) =>
     {
-        const next = typeof updater === "function" ? updater( rowSelection ) : updater;
+        const oldSelection = rowSelection; // Lưu state cũ
+        const newSelection = typeof updater === "function" ? updater( rowSelection! ) : updater;
+
         if ( onRowSelectionChange )
         {
-            onRowSelectionChange( next );
+            // Trả về cả new và old state
+            onRowSelectionChange( newSelection, oldSelection! );
         }
     };
 
@@ -213,7 +220,7 @@ export function DataTable<TData, TValue> ( {
             pagination: paginationState,
             columnFilters: searchState,
             sorting: sortingState,
-            rowSelection,
+            rowSelection: rowSelection ?? rowSelectionState,
         },
         onPaginationChange: handlePaginationChange,
         onColumnFiltersChange: handleColumnFiltersChange,
@@ -222,7 +229,7 @@ export function DataTable<TData, TValue> ( {
         getPaginationRowModel: getPaginationRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
-        onRowSelectionChange: handleRowSelectionChange,
+        onRowSelectionChange: ( onRowSelectionChange && handleRowSelectionChange ) || setRowSelectionState,
         manualPagination: true,
         manualFiltering: true,
         manualSorting: true,

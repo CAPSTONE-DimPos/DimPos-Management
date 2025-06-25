@@ -1,4 +1,5 @@
 import NotificationIcon from "@/assets/icons/notification-icon"
+import DimposLogo from "@/assets/logo/dimpos-logo"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Separator } from "@/components/ui/separator"
@@ -70,7 +71,7 @@ const HeaderMain = () =>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" className="rounded-full bg-white">
-                                <img src="/logo.png" alt="Toggle theme" className="h-8 w-8" />
+                                <DimposLogo className="size-5" />
                                 <span className="sr-only">Toggle theme</span>
                             </Button>
                         </DropdownMenuTrigger>

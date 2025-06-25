@@ -5,7 +5,7 @@ type Props = {}
 const AvatarCard = ( _: Props ) =>
 {
     return (
-        <Card className="lg:col-span-1 bg-white shadow-sm gap-3">
+        <Card className="lg:col-span-1 bg-white shadow-none border-none gap-3">
             <CardHeader >
                 <CardTitle className='text-lg font-semibold'>
                     Ảnh đại diện

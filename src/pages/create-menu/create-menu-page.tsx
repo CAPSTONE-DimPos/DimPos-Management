@@ -38,9 +38,9 @@ const CreateMenuPage = ( _: Props ) =>
 
     return (
         <Form { ...form }>
-            <form className='relative h-[calc(100vh-5.5rem)]' onSubmit={ form.handleSubmit( onSubmit ) } noValidate>
-                <div className="container px-10 pb-6">
-                    <div className="my-6">
+            <form className='relative' onSubmit={ form.handleSubmit( onSubmit ) } noValidate>
+                <div>
+                    <div className="mb-6">
                         <h1 className="text-2xl font-semibold">Tạo Thực đơn</h1>
                     </div>
                     <Card className='shadow-muted lg:col-span-2 xl:col-span-2'>

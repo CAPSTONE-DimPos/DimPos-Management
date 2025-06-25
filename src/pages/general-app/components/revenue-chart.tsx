@@ -25,7 +25,7 @@ const RevenueChart = ( _: Props ) =>
     ];
 
     return (
-        <Card className="lg:col-span-2 bg-white shadow-sm">
+        <Card className="lg:col-span-2 bg-white shadow-none border-none">
             <CardHeader className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className='col-span-2'>
                     <CardTitle className="text-lg font-semibold">Thống kê thu nhập</CardTitle>

@@ -17,7 +17,7 @@ const Loadable = ( Component: ElementType ) => ( props: any ) =>
     );
 };
 //
-const LoginPage = Loadable( lazy( () => import( "@/pages/login/login-page" ) ) )
+const LoginPage = Loadable( lazy( () => import( "@/pages/login" ) ) )
 
 const GeneralAppPage = Loadable( lazy( () => import( "@/pages/general-app" ) ) )
 const InventoryReportPage = Loadable( lazy( () => import( "@/pages/inventory-report/inventory-report-page" ) ) )

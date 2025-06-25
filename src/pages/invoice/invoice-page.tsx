@@ -6,8 +6,8 @@ type Props = {}
 const InvoicePage = ( _: Props ) =>
 {
     return (
-        <div className="px-8 py-4">
-            <div className="flex justify-between items-center mb-4">
+        <div>
+            <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold">Quản lý hoá đơn</h1>
             </div>
             <div className="flex flex-col gap-4">

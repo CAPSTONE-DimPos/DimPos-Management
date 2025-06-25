@@ -23,6 +23,8 @@ import
 } from "@/components/ui/sidebar"
 import { cn } from "@/lib/utils"
 import { PATH_DASHBOARD } from "@/routes/path"
+import NoteIcon from "@/assets/icons/note-icon"
+import DocumentFilterIcon from "@/assets/icons/document-filter-icon"
 
 // This is sample data.
 const data = {
@@ -50,14 +52,9 @@ const data = {
         icon: ProductIcon,
       },
       {
-        title: "Quản Lý Sản Phẩm",
-        url: PATH_DASHBOARD.product.variant,
-        icon: ProductIcon,
-      },
-      {
         title: "Tùy Chọn Sản Phẩm",
         url: PATH_DASHBOARD.product.modifier,
-        icon: ProductIcon,
+        icon: DocumentFilterIcon,
       },
       {
         title: "Quản lý Danh mục",
@@ -67,7 +64,7 @@ const data = {
       {
         title: "Quản lý Thực đơn",
         url: PATH_DASHBOARD.product.menu,
-        icon: MenuIcon,
+        icon: NoteIcon,
       },
       {
         title: "Quản lý Khuyến mãi",

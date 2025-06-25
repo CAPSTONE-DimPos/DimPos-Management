@@ -1,6 +1,5 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import
 {
     DropdownMenu,
@@ -25,7 +24,6 @@ import
     Folder,
     FolderOpen,
     MoreHorizontal,
-    // Trash2
 } from "lucide-react";
 
 // Enhanced sortable header component that provides visual feedback for all sorting states
@@ -53,29 +51,6 @@ const SortableHeader = ( { column, children }: { column: any, children: React.Re
 };
 
 export const columns: ColumnDef<TCategoryResponse>[] = [
-    {
-        id: "select",
-        header: ( { table } ) => (
-            <Checkbox
-                color=""
-                checked={
-                    table.getIsAllPageRowsSelected() ||
-                    ( table.getIsSomePageRowsSelected() && "indeterminate" )
-                }
-                onCheckedChange={ ( value ) => table.toggleAllPageRowsSelected( !!value ) }
-                aria-label="Select all"
-            />
-        ),
-        cell: ( { row } ) => (
-            <Checkbox
-                checked={ row.getIsSelected() }
-                onCheckedChange={ ( value ) => row.toggleSelected( !!value ) }
-                aria-label="Select row"
-            />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
     {
         accessorKey: "displayOrder",
         header: () => (
@@ -272,8 +247,8 @@ export const columns: ColumnDef<TCategoryResponse>[] = [
                                 <Copy className="mr-2 h-4 w-4 text-gray-600" />
                                 <span className="text-gray-700">Sao chép mã</span>
                             </DropdownMenuItem>
-<>
-                           {/* <DropdownMenuSeparator />
+                            <>
+                                {/* <DropdownMenuSeparator />
 
                             <DropdownMenuItem
                                 className="cursor-pointer hover:bg-red-50 focus:bg-red-50"
@@ -286,7 +261,7 @@ export const columns: ColumnDef<TCategoryResponse>[] = [
                                 <Trash2 className="mr-2 h-4 w-4 text-red-600" />
                                 <span className="text-red-700">Xóa danh mục</span>
                             </DropdownMenuItem> */ }
-</>
+                            </>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>

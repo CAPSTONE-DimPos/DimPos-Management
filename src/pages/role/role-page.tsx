@@ -7,15 +7,15 @@ type Props = {}
 const RolePage = ( _: Props ) =>
 {
     return (
-        <div className="px-8 py-4">
-            <div className="flex justify-between items-center mb-4">
+        <div>
+            <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold">Danh sách Vai trò</h1>
                 <Button>
                     <CirclePlusIcon className="h-6 w-6" />
                     Tạo mới vai trò
                 </Button>
             </div>
-            <Card className="bg-white shadow-sm gap-3">
+            <Card className="bg-white shadow-none border-none gap-3">
                 <CardHeader>
                     <div>
                         <CardTitle className="text-lg font-semibold">Quản lý vai trò</CardTitle>

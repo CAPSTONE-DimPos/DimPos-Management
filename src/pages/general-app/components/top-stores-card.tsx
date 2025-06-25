@@ -14,7 +14,7 @@ const TopStoresCard = ( _: Props ) =>
     { rank: 5, name: 'Thọ Phát City', percentage: 26 }
   ];
   return (
-    <Card className="lg:col-span-2 bg-white shadow-sm gap-3">
+    <Card className="lg:col-span-2 bg-white shadow-none border-none gap-3">
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
           <CardTitle className="text-lg font-semibold">Top 5 cửa hàng</CardTitle>

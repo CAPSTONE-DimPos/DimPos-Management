@@ -7,8 +7,8 @@ type Props = {}
 const StorePage = ( _: Props ) =>
 {
     return (
-        <div className="px-8 py-4">
-            <div className="flex justify-between items-center mb-4">
+        <div>
+            <div className="flex justify-between items-center  mb-6">
                 <h1 className="text-2xl font-bold">Danh sách Cửa hàng</h1>
                 <Button>
                     <CirclePlusIcon className="h-6 w-6" />

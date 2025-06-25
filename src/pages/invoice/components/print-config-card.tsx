@@ -7,7 +7,7 @@ type Props = {}
 const PrintConfigCard = ( _: Props ) =>
 {
     return (
-        <Card className="bg-white shadow-sm gap-3">
+        <Card className="bg-white shadow-none border-none gap-3">
             <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                     <CardTitle className="text-lg font-semibold">Cấu hình in ấn</CardTitle>

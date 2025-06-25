@@ -31,7 +31,7 @@ export const UpdateProductSchema = z.object({
 })
 export const UpdateBrandProductSchema = z.object({
     brandMenuId: z.string().uuid(),
-    productList: z.array(UpdateProductSchema),
+    productVariantIds: z.array(z.string().uuid()).optional(),
 })
 
 

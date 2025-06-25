@@ -1,11 +1,19 @@
+import { Button } from "@/components/ui/button"
+import { UploadCloudIcon } from "lucide-react"
 
 type Props = {}
 
 const InventoryReportPage = ( _: Props ) =>
 {
     return (
-        <div className="min-h-screen p-4 md:p-6 lg:p-8">
-            <h1 className="text-2xl font-semibold mb-6">Báo cáo kho</h1>
+        <div>
+            <div className="flex items-center justify-between mb-6">
+                <h1 className="text-2xl font-semibold">Báo cáo kho</h1>
+                <Button variant="outline">
+                    <UploadCloudIcon className="mr-2" />
+                    Xuất dữ liệu
+                </Button>
+            </div>
         </div>
     )
 }

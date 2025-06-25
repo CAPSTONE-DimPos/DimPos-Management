@@ -3,12 +3,13 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { useMenu } from "@/hooks/use-menu";
 import { useQueryParams } from "@/hooks/use-query-params";
 import { handleApiError } from "@/lib/error";
-import { columns } from "./column";
+import { columns } from "./product/column";
 import { useForm } from "react-hook-form";
 import { UpdateBrandProductSchema, type TUpdateBrandProduct } from "@/schema/menu.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
+import { useRowSelection } from "@/hooks/use-row-selection";
 
 type Props = {
     brandMenuId: string;
@@ -18,8 +19,7 @@ type Props = {
 
 const ProductMenu = ( { brandMenuId, productVariantIds }: Props ) =>
 {
-    console.log( "ProductMenu brandMenuId:", brandMenuId );
-    console.log( "ProductMenu productVariantIds:", productVariantIds );
+    const { handleRowSelectionChange: handleSelection } = useRowSelection();
     const {
         currentPage,
         pageSize,
@@ -58,11 +58,7 @@ const ProductMenu = ( { brandMenuId, productVariantIds }: Props ) =>
         resolver: zodResolver( UpdateBrandProductSchema ),
         defaultValues: {
             brandMenuId: brandMenuId,
-            productList: [ ...items.map( item => ( {
-                id: item.id,
-                isSelected: item.isSelected || false,
-            } )
-            ) ],
+            productVariantIds: productVariantIds,
         }
     } )
 
@@ -72,9 +68,27 @@ const ProductMenu = ( { brandMenuId, productVariantIds }: Props ) =>
         console.log( "onSubmit data:", data );
     }
 
-    // const [ rowSelection, setRowSelection ] = useState<Record<string, boolean>>(
+    const onSelectionChange = (
+        selected: string[],
+        deselected: string[]
+    ) =>
+    {
+        const currentIds = form.getValues( "productVariantIds" ) as string[];
 
-    // );
+        let updatedIds = [ ...currentIds ];
+        selected.forEach( id =>
+        {
+            if ( !updatedIds.includes( id ) )
+            {
+                updatedIds.push( id );
+            }
+        } );
+
+        updatedIds = updatedIds.filter( id => !deselected.includes( id ) );
+
+        form.setValue( "productVariantIds", updatedIds );
+        console.log( "Selection changed - Added:", selected, "Removed:", deselected );
+    }
 
     return (
         <Form { ...form }>
@@ -100,8 +114,16 @@ const ProductMenu = ( { brandMenuId, productVariantIds }: Props ) =>
                             {
                                 setSort( newSort[ 0 ].id, !newSort[ 0 ].desc );
                             } }
-                        // rowSelection={ rowSelection }
-                        // onRowSelectionChange={ setRowSelection }
+                            rowSelection={
+                                items.reduce<Record<string, boolean>>( ( acc, item ) =>
+                                {
+                                    acc[ item.id ] = ( form.watch( "productVariantIds" ) as string[] ).includes( item.id );
+                                    return acc;
+                                }, {} )
+                            }
+                            onRowSelectionChange={ ( newSelection ) =>
+                                handleSelection( newSelection, onSelectionChange )
+                            }
                         />
                     </CardContent>
                     <CardFooter className="flex justify-end">
