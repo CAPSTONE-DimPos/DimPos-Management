@@ -12,13 +12,13 @@ import
 import { copyToClipboard } from "@/lib/utils";
 import type { TCategoryResponse } from "@/schema/category.schema";
 import type { ColumnDef } from "@tanstack/react-table";
+import { useNavigate } from "react-router-dom";
 import
 {
     ArrowDown,
     ArrowUp,
     ArrowUpDown,
     Copy,
-    Edit,
     Eye,
     EyeOff,
     Folder,
@@ -55,7 +55,7 @@ export const columns: ColumnDef<TCategoryResponse>[] = [
         accessorKey: "displayOrder",
         header: () => (
             <div className="text-center font-semibold text-muted-foreground">
-                STT
+                TT hiển thị
             </div>
         ),
         cell: ( info ) => (
@@ -196,79 +196,54 @@ export const columns: ColumnDef<TCategoryResponse>[] = [
             );
         },
     },
-    {
-        id: "actions",
-        header: () => (
-            <div className="text-center font-semibold">
-                Thao Tác
-            </div>
-        ),
-        cell: ( { row } ) =>
-        {
-            const category = row.original;
+{
+    id: "actions",
+    header: () => <div className="text-center font-semibold">Thao Tác</div>,
+    cell: ({ row }) => {
+      const category = row.original;
+      const navigate = useNavigate();
 
-            return (
-                <div className="flex justify-center">
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button
-                                variant="ghost"
-                                className="h-8 w-8 p-0 hover:bg-muted"
-                                title="Xem thêm thao tác"
-                            >
-                                <span className="sr-only">Mở menu thao tác</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-48">
-                            <DropdownMenuLabel className="text-xs text-muted-foreground">
-                                Thao tác cho "{ category.name }"
-                            </DropdownMenuLabel>
-                            <DropdownMenuSeparator />
+      return (
+        <div className="flex justify-center">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="h-8 w-8 p-0 hover:bg-muted"
+                title="Xem thêm thao tác"
+              >
+                <span className="sr-only">Mở menu thao tác</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuLabel className="text-xs text-muted-foreground">
+                Thao tác cho "{category.name}"
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {/* Xem chi tiết thay cho Chỉnh sửa */}
+              <DropdownMenuItem
+                className="cursor-pointer hover:bg-blue-50 focus:bg-blue-50"
+                onClick={() => navigate(`/dashboard/category/${category.id}`)}
+              >
+                <Eye className="mr-2 h-4 w-4 text-blue-600" />
+                <span className="text-blue-700">Xem chi tiết</span>
+              </DropdownMenuItem>
 
-                            {/* Edit action with visual hierarchy */ }
-                            <DropdownMenuItem
-                                className="cursor-pointer hover:bg-blue-50 focus:bg-blue-50"
-                                onClick={ () =>
-                                {
-                                    // Handle edit action here
-                                    console.log( 'Edit category:', category.id );
-                                } }
-                            >
-                                <Edit className="mr-2 h-4 w-4 text-blue-600" />
-                                <span className="text-blue-700">Chỉnh sửa</span>
-                            </DropdownMenuItem>
-
-                            {/* Copy code action for quick reference */ }
-                            <DropdownMenuItem
-                                className="cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
-                                onClick={ () => copyToClipboard( category.code, "Mã danh mục" ) }
-                            >
-                                <Copy className="mr-2 h-4 w-4 text-gray-600" />
-                                <span className="text-gray-700">Sao chép mã</span>
-                            </DropdownMenuItem>
-                            <>
-                                {/* <DropdownMenuSeparator />
-
-                            <DropdownMenuItem
-                                className="cursor-pointer hover:bg-red-50 focus:bg-red-50"
-                                onClick={ () =>
-                                {
-                                    // Handle delete action here - should show confirmation dialog
-                                    console.log( 'Delete category:', category.id );
-                                } }
-                            >
-                                <Trash2 className="mr-2 h-4 w-4 text-red-600" />
-                                <span className="text-red-700">Xóa danh mục</span>
-                            </DropdownMenuItem> */ }
-                            </>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </div>
-            );
-        },
-        size: 80, // Fixed width for consistent layout
+              <DropdownMenuItem
+                className="cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
+                onClick={() => copyToClipboard(category.code, "Mã danh mục")}
+              >
+                <Copy className="mr-2 h-4 w-4 text-gray-600" />
+                <span className="text-gray-700">Sao chép mã</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      );
     },
+    size: 80,
+  },
 ];
 
 // Enhanced table configuration with category-specific optimizations

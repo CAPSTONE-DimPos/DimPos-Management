@@ -7,6 +7,7 @@ import GuestGuard from '../guards/guest-guard';
 import AuthGuard from "@/guards/auth-guard";
 import Logout from "@/pages/logout/logout";
 import { PATH_AUTH, PATH_DASHBOARD } from "./path";
+// import CreateModifierGroupPage from "@/pages/create-modifier-group";
 
 const Loadable = ( Component: ElementType ) => ( props: any ) =>
 {
@@ -23,15 +24,15 @@ const GeneralAppPage = Loadable( lazy( () => import( "@/pages/general-app" ) ) )
 const InventoryReportPage = Loadable( lazy( () => import( "@/pages/inventory-report/inventory-report-page" ) ) )
 const GeneralEcommercePage = Loadable( lazy( () => import( "@/pages/general-ecommerce" ) ) )
 
-const CategoryPage = Loadable( lazy( () => import( "@/pages/category" ) ) )
-const CategoryCreatePage = Loadable( lazy( () => import( "@/pages/category/create" ) ) );
-
 // Product routes
-const ProductPage = Loadable( lazy( () => import( "@/pages/product" ) ) )
-const ProductCreatePage = Loadable( lazy( () => import( "@/pages/create-product" ) ) )
-const ProductEditPage = Loadable( lazy( () => import( "@/pages/edit-product" ) ) )
-const ProductVariantPage = Loadable( lazy( () => import( "@/pages/product-variant" ) ) )
-const ModifierGroupPage = Loadable( lazy( () => import( "@/pages/modifier-group" ) ) )
+const CategoryPage = Loadable(lazy(() => import("@/pages/category")))
+const CategoryCreatePage = Loadable(lazy(() => import("@/pages/category/create")));
+const CategoryEditPage = Loadable(lazy(() => import("@/pages/category/edit")));
+const ProductPage = Loadable(lazy(() => import("@/pages/product")))
+const ProductCreatePage = Loadable(lazy(() => import("@/pages/create-product")))
+const ProductEditPage = Loadable(lazy(() => import("@/pages/edit-product")))
+const ProductVariantPage = Loadable(lazy(() => import("@/pages/product-variant")))
+const ModifierGroupPage = Loadable(lazy(() => import("@/pages/modifier-group")))
 
 // Menu routes
 const MenuPage = Loadable( lazy( () => import( "@/pages/menu" ) ) )
@@ -114,6 +115,10 @@ export const AppRoutes = () =>
                 {
                     path: 'product/new',
                     element: <ProductCreatePage />,
+                },
+                {
+                    path: 'category/:id',
+                    element: <CategoryEditPage />,
                 },
                 {
                     path: 'product/:id',
