@@ -7,6 +7,7 @@ import GuestGuard from '../guards/guest-guard';
 import AuthGuard from "@/guards/auth-guard";
 import Logout from "@/pages/logout/logout";
 import { PATH_AUTH, PATH_DASHBOARD } from "./path";
+// import CreateModifierGroupPage from "@/pages/create-modifier-group";
 
 const Loadable = (Component: ElementType) => (props: any) => {
     return (
@@ -23,12 +24,12 @@ const GeneralEcommercePage = Loadable(lazy(() => import("@/pages/general-ecommer
 
 const CategoryPage = Loadable(lazy(() => import("@/pages/category")))
 const CategoryCreatePage = Loadable(lazy(() => import("@/pages/category/create")));
-
-const ProductPage = Loadable( lazy( () => import( "@/pages/product" ) ) )
-const ProductCreatePage = Loadable( lazy( () => import( "@/pages/create-product" ) ) )
-const ProductEditPage = Loadable( lazy( () => import( "@/pages/edit-product" ) ) )
-const ProductVariantPage = Loadable( lazy( () => import( "@/pages/product-variant" ) ) )
-const ModifierGroupPage = Loadable( lazy( () => import( "@/pages/modifier-group" ) ) )
+const CategoryEditPage = Loadable(lazy(() => import("@/pages/category/edit")));
+const ProductPage = Loadable(lazy(() => import("@/pages/product")))
+const ProductCreatePage = Loadable(lazy(() => import("@/pages/create-product")))
+const ProductEditPage = Loadable(lazy(() => import("@/pages/edit-product")))
+const ProductVariantPage = Loadable(lazy(() => import("@/pages/product-variant")))
+const ModifierGroupPage = Loadable(lazy(() => import("@/pages/modifier-group")))
 
 
 const Page404 = Loadable(lazy(() => import("@/pages/page-404")))
@@ -95,6 +96,10 @@ export const AppRoutes = () =>
                     element: <ProductCreatePage />,
                 },
                 {
+                    path: 'category/:id',
+                    element: <CategoryEditPage />,
+                },
+                {
                     path: 'product/:id',
                     element: <ProductEditPage />,
                 },
@@ -105,7 +110,11 @@ export const AppRoutes = () =>
                 {
                     path: 'modifier-group',
                     element: <ModifierGroupPage />,
-                }
+                },
+                // {
+                //     path: 'modifier-group/new',
+                //     element: <CreateModifierGroupPage />,
+                // }
             ],
         },
         {

@@ -21,6 +21,7 @@ export const PATH_DASHBOARD = {
   category: {
     root: path(ROOTS_DASHBOARD, '/category'),
     create: path(ROOTS_DASHBOARD, '/category/new'),
+    edit: (id: string) => path(ROOTS_DASHBOARD, `/category/${id}`),
   },
   product: {
     root: path(ROOTS_DASHBOARD, '/product'),
@@ -28,6 +29,7 @@ export const PATH_DASHBOARD = {
     editProduct: (id: string) => path(ROOTS_DASHBOARD, `/product/${id}`),
     variant: path(ROOTS_DASHBOARD, '/product-variant'),
     modifier: path(ROOTS_DASHBOARD, '/modifier-group'),
+    // createModifier: path(ROOTS_DASHBOARD, '/modifier-group/new'),
     menu: path(ROOTS_DASHBOARD, '/menu'),
     discount: path(ROOTS_DASHBOARD, '/discount'),
     importProduct: path(ROOTS_DASHBOARD, '/import-product'),

@@ -11,6 +11,20 @@ export const CategoryResponseSchema = z.object({
   displayOrder: z.number().int().min(0, { message: "Thứ tự hiển thị phải là số nguyên không âm" }),
   pictureUrl: z.string().url().optional(),
   hasChildCategory: z.boolean().default(false),
+  parentCategory: z
+    .object({
+      id: z.string().uuid(),
+      name: z.string(),
+      code: z.string(),
+      description: z.string().optional(),
+      type: z.number(),
+      displayOrder: z.number(),
+      pictureUrl: z.string().nullable().optional(),
+      hasChildCategory: z.boolean(),
+      status: z.number(),
+    })
+    .nullable()
+    .optional(),
   status: z.number().int().min(0),
 });
 
@@ -38,7 +52,6 @@ export const CreateCategorySchema = z.object({
   displayOrder: z.number()
     .int({ message: "Thứ tự hiển thị phải là số nguyên" })
     .min(0, { message: "Thứ tự hiển thị phải là số dương hoặc bằng 0" })
-    .nullable()
     .optional(),
 
   parentId: z.string()

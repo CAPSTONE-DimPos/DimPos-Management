@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   Card, CardHeader, CardTitle, CardContent,
@@ -14,21 +15,37 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
-import { CreateCategorySchema, type TCreateCategoryRequest } from "@/schema/category.schema";
+import {
+  CreateCategorySchema,
+  type TCreateCategoryRequest,
+  type TCategoryResponse,
+} from "@/schema/category.schema";
 import { useMutation } from "@tanstack/react-query";
 import { categoryApi } from "@/apis/category.api";
 import { handleApiError } from "@/lib/error";
+import { PATH_DASHBOARD } from '@/routes/path';
 import { useCategory } from "@/hooks/use-category";
-import type { TCategoryResponse } from "@/schema/category.schema";
+import type { RootState } from '@/redux/store';
+import { handleChangeModalState, handleSetCreatedId } from '@/redux/modal/modal-slice';
 
 const CreateCategoryPage = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [selectedType, setSelectedType] = useState<number>(1);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { isOpen, createdId } = useSelector((state: RootState) => state.modal);
+
   const { getParentCategories } = useCategory();
   const { data: parentCategoriesResponse } = getParentCategories();
-
   const parentCategories: TCategoryResponse[] = parentCategoriesResponse?.data?.data?.items ?? [];
 
   const {
@@ -69,14 +86,11 @@ const CreateCategoryPage = () => {
     setValue("image", file);
   };
 
-
   const handleRemoveImage = () => {
     setImagePreview(null);
     setValue("image", undefined);
     const input = document.getElementById("upload-image") as HTMLInputElement | null;
-    if (input) {
-      input.value = "";
-    }
+    if (input) input.value = "";
   };
 
   const onSubmit = async (data: TCreateCategoryRequest) => {
@@ -93,15 +107,15 @@ const CreateCategoryPage = () => {
     }
 
     try {
-      await createCategoryMutation.mutateAsync(formData);
+      const result = await createCategoryMutation.mutateAsync(formData);
+      dispatch(handleSetCreatedId(result.data.data.id));
+      dispatch(handleChangeModalState(true));
       toast.success("Tạo danh mục thành công!");
-      navigate(-1);
     } catch (error) {
       handleApiError(error);
     }
   };
 
-  // Watch type để điều chỉnh parentId requirement
   const watchType = watch("type");
 
   useEffect(() => {
@@ -124,25 +138,16 @@ const CreateCategoryPage = () => {
                 Hình Ảnh
                 <div className="flex gap-2">
                   <Button type="button" variant="outline" onClick={() => document.getElementById("upload-image")?.click()}>
-                    <Upload className="w-4 h-4 mr-2" />
-                    Tải lên
+                    <Upload className="w-4 h-4 mr-2" /> Tải lên
                   </Button>
                   {imagePreview && (
-                    <Button type="button" variant="destructive" onClick={handleRemoveImage}>
-                      Xóa
-                    </Button>
+                    <Button type="button" variant="destructive" onClick={handleRemoveImage}>Xóa</Button>
                   )}
                 </div>
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <input
-                type="file"
-                id="upload-image"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="hidden"
-              />
+              <input type="file" id="upload-image" accept="image/*" onChange={handleImageChange} className="hidden" />
               {imagePreview ? (
                 <img src={imagePreview} alt="Preview" className="w-full h-auto rounded-lg" />
               ) : (
@@ -159,9 +164,20 @@ const CreateCategoryPage = () => {
         {/* Thông tin chính */}
         <div className="lg:col-span-3 space-y-6">
           <Card>
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Thông Tin Danh Mục</CardTitle>
+              <div className="flex items-center space-x-2">
+                <span className="text-sm font-medium">Hoạt động</span>
+                <Controller
+                  control={control}
+                  name="status"
+                  render={({ field }) => (
+                    <Switch checked={field.value === 0} onCheckedChange={(checked) => field.onChange(checked ? 0 : 1)} />
+                  )}
+                />
+              </div>
             </CardHeader>
+
             <CardContent className="space-y-4">
               <div>
                 <label className="block text-sm font-medium">Mã Danh mục *</label>
@@ -187,10 +203,7 @@ const CreateCategoryPage = () => {
                   control={control}
                   name="type"
                   render={({ field }) => (
-                    <Select
-                      value={String(field.value)}
-                      onValueChange={(val) => field.onChange(Number(val))}
-                    >
+                    <Select value={String(field.value)} onValueChange={(val) => field.onChange(Number(val))}>
                       <SelectTrigger>
                         <SelectValue placeholder="Chọn loại" />
                       </SelectTrigger>
@@ -218,7 +231,7 @@ const CreateCategoryPage = () => {
                         <SelectContent>
                           {parentCategories.map((cat) => (
                             <SelectItem key={cat.id} value={cat.id}>
-                              {cat.name}
+                              {`${cat.code} - ${cat.name}`}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -230,28 +243,8 @@ const CreateCategoryPage = () => {
               )}
 
               <div>
-                <label className="block text-sm font-medium">Trạng Thái</label>
-                <Controller
-                  control={control}
-                  name="status"
-                  render={({ field }) => (
-                    <Select value={String(field.value)} onValueChange={(val) => field.onChange(Number(val))}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Chọn trạng thái" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="0">Hoạt động</SelectItem>
-                        <SelectItem value="1">Ngưng hoạt động</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-                {errors.status && <p className="text-sm text-red-500">{errors.status.message}</p>}
-              </div>
-
-              <div>
                 <label className="block text-sm font-medium">Thứ tự hiển thị</label>
-                <Input type="number" {...register("displayOrder")} />
+                <Input type="number" {...register("displayOrder" as const)} />
                 {errors.displayOrder && <p className="text-sm text-red-500">{errors.displayOrder.message}</p>}
               </div>
             </CardContent>
@@ -264,6 +257,29 @@ const CreateCategoryPage = () => {
           </div>
         </div>
       </form>
+
+      {/* Dialog xác nhận thành công */}
+      <Dialog open={isOpen} onOpenChange={(open) => dispatch(handleChangeModalState(open))}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Tạo danh mục thành công</DialogTitle>
+          </DialogHeader>
+          <p>Bạn có muốn chuyển đến trang chỉnh sửa danh mục vừa tạo không?</p>
+          <DialogFooter className="mt-4 flex justify-end gap-2">
+            <Button variant="outline" onClick={() => dispatch(handleChangeModalState(false))}>Ở lại</Button>
+            <Button
+              onClick={() => {
+                if (createdId) {
+                  dispatch(handleChangeModalState(false));
+                  navigate(PATH_DASHBOARD.category.edit(createdId));
+                }
+              }}
+            >
+              Xem danh mục
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
