@@ -24,7 +24,6 @@ import
     Folder,
     FolderOpen,
     MoreHorizontal,
-    // Trash2
 } from "lucide-react";
 
 // Enhanced sortable header component that provides visual feedback for all sorting states
@@ -52,7 +51,6 @@ const SortableHeader = ( { column, children }: { column: any, children: React.Re
 };
 
 export const columns: ColumnDef<TCategoryResponse>[] = [
-    
     {
         accessorKey: "displayOrder",
         header: () => (
@@ -223,7 +221,6 @@ export const columns: ColumnDef<TCategoryResponse>[] = [
                 Thao tác cho "{category.name}"
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-
               {/* Xem chi tiết thay cho Chỉnh sửa */}
               <DropdownMenuItem
                 className="cursor-pointer hover:bg-blue-50 focus:bg-blue-50"

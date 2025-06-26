@@ -17,7 +17,7 @@ const RecentTransactionCard = ( _: Props ) =>
         { id: 6, type: 'payment', description: 'Thanh toán thành công', date: '14/12/2025', amount: 60500000, status: 'success' }
     ];
     return (
-        <Card className="bg-white shadow-sm" >
+        <Card className="bg-white shadow-none border-none" >
             <CardHeader>
                 <CardTitle className="text-lg font-semibold">Giao dịch gần đây</CardTitle>
                 <CardDescription className="text-sm text-gray-500">

@@ -31,7 +31,26 @@ export const PATH_DASHBOARD = {
     modifier: path(ROOTS_DASHBOARD, '/modifier-group'),
     // createModifier: path(ROOTS_DASHBOARD, '/modifier-group/new'),
     menu: path(ROOTS_DASHBOARD, '/menu'),
+    createMenu: path(ROOTS_DASHBOARD, '/menu/new'),
+    editMenu: (id: string) => path(ROOTS_DASHBOARD, `/menu/${id}`),
     discount: path(ROOTS_DASHBOARD, '/discount'),
     importProduct: path(ROOTS_DASHBOARD, '/import-product'),
   },
+
+  promotion: {
+    root: path(ROOTS_DASHBOARD, '/promotion'),
+  },
+
+  brand: {
+    root: path(ROOTS_DASHBOARD, '/brand'),
+  },
+  store: {
+    root: path(ROOTS_DASHBOARD, '/store'),
+  },
+  role: {
+    root: path(ROOTS_DASHBOARD, '/role'),
+  },
+  invoice: {
+    root: path(ROOTS_DASHBOARD, '/invoice'),
+  }
 }

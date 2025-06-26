@@ -8,7 +8,7 @@ import TopStoresCard from "./components/top-stores-card";
 const GeneralAppPage = () =>
 {
     return (
-        <div className="min-h-screen p-4 md:p-6 lg:p-8">
+        <div>
             <h1 className="text-2xl font-semibold mb-6">Tổng quan</h1>
             <KPICard />
 

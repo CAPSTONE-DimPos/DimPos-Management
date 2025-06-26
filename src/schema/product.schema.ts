@@ -44,6 +44,7 @@ export const ProductVariantSchema = z.object({
   isMenuDisplay: z.boolean().optional(),
   status: z.number().int().optional(),
 });
+
 export const ModifierOptionSchema = z.object({
   id: z.string({ message: "ID không hợp lệ" }).uuid({ message: "ID phải là UUID hợp lệ" }),
   name: z.string({ message: "Tên tùy chọn không hợp lệ" })

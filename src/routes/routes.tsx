@@ -9,19 +9,22 @@ import Logout from "@/pages/logout/logout";
 import { PATH_AUTH, PATH_DASHBOARD } from "./path";
 // import CreateModifierGroupPage from "@/pages/create-modifier-group";
 
-const Loadable = (Component: ElementType) => (props: any) => {
+const Loadable = ( Component: ElementType ) => ( props: any ) =>
+{
     return (
-        <Suspense fallback={<LoadingScreen />}>
-            <Component {...props} />
+        <Suspense fallback={ <LoadingScreen /> }>
+            <Component { ...props } />
         </Suspense>
     );
 };
 //
-const LoginPage = Loadable(lazy(() => import("@/pages/login/login-page")))
+const LoginPage = Loadable( lazy( () => import( "@/pages/login" ) ) )
 
-const GeneralAppPage = Loadable(lazy(() => import("@/pages/general-app")))
-const GeneralEcommercePage = Loadable(lazy(() => import("@/pages/general-ecommerce")))
+const GeneralAppPage = Loadable( lazy( () => import( "@/pages/general-app" ) ) )
+const InventoryReportPage = Loadable( lazy( () => import( "@/pages/inventory-report/inventory-report-page" ) ) )
+const GeneralEcommercePage = Loadable( lazy( () => import( "@/pages/general-ecommerce" ) ) )
 
+// Product routes
 const CategoryPage = Loadable(lazy(() => import("@/pages/category")))
 const CategoryCreatePage = Loadable(lazy(() => import("@/pages/category/create")));
 const CategoryEditPage = Loadable(lazy(() => import("@/pages/category/edit")));
@@ -31,16 +34,28 @@ const ProductEditPage = Loadable(lazy(() => import("@/pages/edit-product")))
 const ProductVariantPage = Loadable(lazy(() => import("@/pages/product-variant")))
 const ModifierGroupPage = Loadable(lazy(() => import("@/pages/modifier-group")))
 
+// Menu routes
+const MenuPage = Loadable( lazy( () => import( "@/pages/menu" ) ) )
+const MenuCreatePage = Loadable( lazy( () => import( "@/pages/create-menu" ) ) )
+const MenuEditPage = Loadable( lazy( () => import( "@/pages/edit-menu" ) ) )
 
-const Page404 = Loadable(lazy(() => import("@/pages/page-404")))
+const PromotionPage = Loadable( lazy( () => import( "@/pages/promotion" ) ) )
+
+const BrandPage = Loadable( lazy( () => import( "@/pages/brand" ) ) )
+const StorePage = Loadable( lazy( () => import( "@/pages/store" ) ) )
+const RolePage = Loadable( lazy( () => import( "@/pages/role" ) ) )
+const InvoicePage = Loadable( lazy( () => import( "@/pages/invoice" ) ) )
+
+
+const Page404 = Loadable( lazy( () => import( "@/pages/page-404" ) ) )
 
 export const AppRoutes = () =>
-    useRoutes([
+    useRoutes( [
         {
             path: PATH_AUTH.root,
             children: [
                 {
-                    element: <Navigate to={PATH_AUTH.login} replace />,
+                    element: <Navigate to={ PATH_AUTH.login } replace />,
                     index: true,
                 },
                 {
@@ -67,12 +82,16 @@ export const AppRoutes = () =>
             ),
             children: [
                 {
-                    element: <Navigate to={PATH_DASHBOARD.general.app} replace />,
+                    element: <Navigate to={ PATH_DASHBOARD.general.app } replace />,
                     index: true,
                 },
                 {
                     path: "app",
                     element: <GeneralAppPage />,
+                },
+                {
+                    path: "inventory-report",
+                    element: <InventoryReportPage />,
                 },
                 {
                     path: 'ecommerce',
@@ -87,6 +106,8 @@ export const AppRoutes = () =>
                     path: 'category/new',
                     element: <CategoryCreatePage />,
                 },
+
+                // Product routes
                 {
                     path: 'product',
                     element: <ProductPage />,
@@ -111,10 +132,41 @@ export const AppRoutes = () =>
                     path: 'modifier-group',
                     element: <ModifierGroupPage />,
                 },
-                // {
-                //     path: 'modifier-group/new',
-                //     element: <CreateModifierGroupPage />,
-                // }
+                {
+                    path: 'promotion',
+                    element: <PromotionPage />,
+                },
+
+                // Menu routes
+                {
+                    path: 'menu',
+                    element: <MenuPage />,
+                },
+                {
+                    path: 'menu/new',
+                    element: <MenuCreatePage />,
+                },
+                {
+                    path: 'menu/:id',
+                    element: <MenuEditPage />,
+                },
+
+                {
+                    path: 'brand',
+                    element: <BrandPage />,
+                },
+                {
+                    path: 'store',
+                    element: <StorePage />,
+                },
+                {
+                    path: 'role',
+                    element: <RolePage />,
+                },
+                {
+                    path: 'invoice',
+                    element: <InvoicePage />,
+                }
             ],
         },
         {
@@ -124,7 +176,7 @@ export const AppRoutes = () =>
                     <DashBoardLayout />
                 </AuthGuard>
             ),
-            children: [{ element: <Navigate to={PATH_DASHBOARD.root} replace />, index: true }],
+            children: [ { element: <Navigate to={ PATH_DASHBOARD.root } replace />, index: true } ],
         },
         // Add the 404 route
         {
@@ -134,4 +186,4 @@ export const AppRoutes = () =>
         // Catch all unmatched routes
         { path: '*', element: <Navigate to="/404" replace /> },
 
-    ],)
+    ], )

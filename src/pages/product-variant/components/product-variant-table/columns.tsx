@@ -1,38 +1,14 @@
-import type { TProductVariantResponse } from "@/schema/product.schema";
-import type { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Copy, Edit, Eye, EyeOff, MoreHorizontal, Trash2 } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { copyToClipboard, formatPrice } from "@/lib/utils";
-import { Checkbox } from "@/components/ui/checkbox";
+import type { TProductVariantResponse } from "@/schema/product.schema";
+import type { ColumnDef } from "@tanstack/react-table";
+import { Copy, Edit, Eye, EyeOff, MoreHorizontal, Trash2 } from "lucide-react";
 
 
 export const columns: ColumnDef<TProductVariantResponse>[] = [
-    {
-        id: "select",
-        header: ( { table } ) => (
-            <Checkbox
-                color=""
-                checked={
-                    table.getIsAllPageRowsSelected() ||
-                    ( table.getIsSomePageRowsSelected() && "indeterminate" )
-                }
-                onCheckedChange={ ( value ) => table.toggleAllPageRowsSelected( !!value ) }
-                aria-label="Select all"
-            />
-        ),
-        cell: ( { row } ) => (
-            <Checkbox
-                checked={ row.getIsSelected() }
-                onCheckedChange={ ( value ) => row.toggleSelected( !!value ) }
-                aria-label="Select row"
-            />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
     {
         accessorKey: "code",
         header: () => (

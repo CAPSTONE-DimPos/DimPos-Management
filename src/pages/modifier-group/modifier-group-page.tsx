@@ -10,15 +10,16 @@ const ModifierGroupPage = () => {
     const { getModifierGroups } = useProduct();
     const { refetch } = getModifierGroups();
     return (
-        <div className="p-4">
-            <div className="flex items-center justify-between mb-4">
-                <h1 className="text-2xl font-semibold">Quản lý Tùy Chọn</h1>
+        <div>
+            <div className="flex items-center justify-between mb-6">
+                <h1 className="text-2xl font-semibold">Quản lý Tùy chọn</h1>
+                {/* <Link to={ PATH_DASHBOARD.category.create }> */ }
                 <Button onClick={() => setOpen(true)}>
                     <CirclePlus className="mr-2 h-5 w-5" />
                     Tạo tùy chọn
                 </Button>
+                {/* </Link> */ }
             </div>
-
             <ModifierGroupTable />
 
             <ModifierGroupModal
