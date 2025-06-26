@@ -16,24 +16,24 @@ import { PATH_DASHBOARD } from '@/routes/path';
 import { CreateProductSchema, type TProductRequest } from '@/schema/product.schema';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload, X } from 'lucide-react';
-import React, { useState } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
+    import React, { useState } from 'react';
+    import { useFieldArray, useForm } from 'react-hook-form';
+    import { useDispatch, useSelector } from 'react-redux';
+    import { useNavigate } from 'react-router-dom';
+    import { toast } from 'sonner';
 
-const CreateProductPage = () =>
-{
-    const { isOpen, createdId } = useSelector( ( state: RootState ) => state.modal );
-    const dispatch = useDispatch();
+    const CreateProductPage = () =>
+    {
+        const { isOpen, createdId } = useSelector( ( state: RootState ) => state.modal );
+        const dispatch = useDispatch();
 
-    const navigation = useNavigate();
-    const { createProductMutation } = useProduct();
-    const { getCategories } = useCategory();
-    const { data, error: cateError, isError: isCateError, isLoading } = getCategories( {
-        size: 10000,
-        page: 1,
-    } );
+        const navigation = useNavigate();
+        const { createProductMutation } = useProduct();
+        const { getCategories } = useCategory();
+        const { data, error: cateError, isError: isCateError, isLoading } = getCategories( {
+            size: 10000,
+            page: 1,
+        } );
 
     if ( cateError && isCateError )
     {
