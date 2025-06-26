@@ -9,7 +9,12 @@ import { UpdateBrandProductSchema, type TUpdateBrandProduct } from "@/schema/men
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { useRowSelection } from "@/hooks/use-row-selection";
+import ConfirmDialog from "@/components/dialog/confirm-dialog";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/redux/store";
+import { handleChangeModalState } from "@/redux/modal/modal-slice";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 type Props = {
     brandMenuId: string;
@@ -19,7 +24,9 @@ type Props = {
 
 const ProductMenu = ( { brandMenuId, productVariantIds }: Props ) =>
 {
-    const { handleRowSelectionChange: handleSelection } = useRowSelection();
+    const queryClient = useQueryClient();
+    const { isOpen } = useSelector( ( state: RootState ) => state.modal );
+    const dispatch = useDispatch();
     const {
         currentPage,
         pageSize,
@@ -31,7 +38,7 @@ const ProductMenu = ( { brandMenuId, productVariantIds }: Props ) =>
     } = useQueryParams( {
         defaultSortBy: "name",
     } );
-    const { getProductsByBrandMenuId } = useMenu()
+    const { getProductsByBrandMenuId, updateProductsByBrandMenuId } = useMenu()
     const { data: productsData, isLoading: productsLoading, isError: isProductsError, error: productsError } =
         getProductsByBrandMenuId(
             brandMenuId,
@@ -63,20 +70,43 @@ const ProductMenu = ( { brandMenuId, productVariantIds }: Props ) =>
     } )
 
 
-    const onSubmit = ( data: TUpdateBrandProduct ) =>
+    const onSubmit = async ( data: TUpdateBrandProduct ) =>
     {
-        console.log( "onSubmit data:", data );
+        try
+        {
+            await updateProductsByBrandMenuId.mutateAsync( data )
+            queryClient.invalidateQueries( { queryKey: [ 'brandMenuProducts', brandMenuId ] } );
+            toast.success( "Cập nhật sản phẩm trong thực đơn thành công!" );
+        } catch ( error )
+        {
+            handleApiError( error );
+        }
     }
 
-    const onSelectionChange = (
-        selected: string[],
-        deselected: string[]
+    const handleRowSelectionChange = (
+        newSelection: Record<string, boolean>,
+        oldSelection: Record<string, boolean>
     ) =>
     {
-        const currentIds = form.getValues( "productVariantIds" ) as string[];
+        const currentProductVariantIds = form.getValues( "productVariantIds" ) as string[];
 
-        let updatedIds = [ ...currentIds ];
-        selected.forEach( id =>
+        // Tìm những row được selected và deselected
+        const newlySelected = Object.entries( newSelection )
+            .filter( ( [ rowId, isSelected ] ) => isSelected && !oldSelection[ rowId ] )
+            .map( ( [ rowId ] ) => rowId );
+
+        const newlyDeselected = Object.entries( oldSelection )
+            .filter( ( [ rowId, wasSelected ] ) => wasSelected && !newSelection[ rowId ] )
+            .map( ( [ rowId ] ) => rowId );
+
+        console.log( "Newly selected:", newlySelected );
+        console.log( "Newly deselected:", newlyDeselected );
+
+        // Cập nhật form value
+        let updatedIds = [ ...currentProductVariantIds ];
+
+        // Thêm những item được select
+        newlySelected.forEach( id =>
         {
             if ( !updatedIds.includes( id ) )
             {
@@ -84,16 +114,33 @@ const ProductMenu = ( { brandMenuId, productVariantIds }: Props ) =>
             }
         } );
 
-        updatedIds = updatedIds.filter( id => !deselected.includes( id ) );
+        // Xóa những item được deselect
+        updatedIds = updatedIds.filter( id => !newlyDeselected.includes( id ) );
 
+        // Set form value
         form.setValue( "productVariantIds", updatedIds );
-        console.log( "Selection changed - Added:", selected, "Removed:", deselected );
+
+        console.log( "Updated productVariantIds:", updatedIds );
+    }
+
+    const handleConfirmSubmit = () =>
+    {
+        // Trigger form submission programmatically
+        form.handleSubmit( onSubmit )();
     }
 
     return (
         <Form { ...form }>
             <form onSubmit={ form.handleSubmit( onSubmit ) }>
-                <Card className='border-none shadow-none gap-3 my-4'>
+                <ConfirmDialog
+                    open={ isOpen }
+                    onOpenChange={ ( open ) => dispatch( handleChangeModalState( open ) ) }
+                    title="Xác nhận cập nhật sản phẩm trong thực đơn"
+                    description="Bạn có chắc chắn muốn cập nhật sản phẩm trong thực đơn này không?"
+                    actionLabel="Xác nhận"
+                    onAction={ handleConfirmSubmit } // Pass the submit handler
+                />
+                <Card className='border-none shadow-none bg-white gap-3 my-4'>
                     <CardHeader>
                         <CardTitle>
                             Sản phẩm trong thực đơn
@@ -121,13 +168,11 @@ const ProductMenu = ( { brandMenuId, productVariantIds }: Props ) =>
                                     return acc;
                                 }, {} )
                             }
-                            onRowSelectionChange={ ( newSelection ) =>
-                                handleSelection( newSelection, onSelectionChange )
-                            }
+                            onRowSelectionChange={ handleRowSelectionChange }
                         />
                     </CardContent>
                     <CardFooter className="flex justify-end">
-                        <Button type="submit" >
+                        <Button type="button" onClick={ () => dispatch( handleChangeModalState( true ) ) }>
                             Cập nhật
                         </Button>
                     </CardFooter>

@@ -1,7 +1,6 @@
 import CreateSuccessIllustration from '@/assets/illustration/create-success-illustration'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogFooter, DialogHeader } from '@/components/ui/dialog'
-import { DialogClose, DialogTitle } from '@radix-ui/react-dialog'
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 type Props = {
     open: boolean

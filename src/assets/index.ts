@@ -1,3 +1,4 @@
+import CreateSuccessIllustration from '@/assets/illustration/create-success-illustration';
 export {default as GeneralAppIcon} from './icons/general-app-icon';
 export {default as ProductIcon} from './icons/product-icon';
 export {default as MenuIcon} from './icons/menu-icon';
@@ -21,4 +22,6 @@ export {default as LoginFormIllustration2} from './illustration/login-form-illus
 export {default as LoginFormIllustration3} from './illustration/login-form-illustration-3';
 export {default as LoginFormIllustration4} from './illustration/login-form-illustration-4';
 export {default as PageNotFoundIllustration} from './illustration/page-not-found-illustration';
+export {default as ConfirmIllustration} from './illustration/confirm-illustration';
+export {default as CreateSuccessIllustration} from './illustration/create-success-illustration';
 export {default as Loading} from './loading/loading';

@@ -43,7 +43,7 @@ const CreateMenuPage = ( _: Props ) =>
                     <div className="mb-6">
                         <h1 className="text-2xl font-semibold">Tạo Thực đơn</h1>
                     </div>
-                    <Card className='shadow-muted lg:col-span-2 xl:col-span-2'>
+                    <Card className='shadow-none border-none bg-white lg:col-span-2 xl:col-span-2'>
                         <CardHeader className='grid grid-cols-1 md:grid-cols-2 items-center gap-4'>
                             <CardTitle>Thông Tin Cơ Bản</CardTitle>
                         </CardHeader>

@@ -18,7 +18,7 @@ type Props = {
 const OverviewMenu = ( { initialData, isLoading }: Props ) =>
 {
     return (
-        <Card className='border-none shadow-none lg:col-span-2 xl:col-span-2 gap-3 my-4'>
+        <Card className='border-none shadow-none bg-white lg:col-span-2 xl:col-span-2 gap-3 my-4'>
             <CardHeader className='grid grid-cols-1 md:grid-cols-2 items-center gap-4'>
                 <CardTitle>Thông Tin Cơ Bản</CardTitle>
                 <div className="flex justify-end">

@@ -6,7 +6,8 @@ import { Navigate, useRoutes } from "react-router-dom";
 import GuestGuard from '../guards/guest-guard';
 import AuthGuard from "@/guards/auth-guard";
 import Logout from "@/pages/logout/logout";
-import { PATH_AUTH, PATH_DASHBOARD } from "./path";
+import { PATH_ADMIN_DASHBOARD, PATH_AUTH, PATH_BRAND_DASHBOARD, PATH_STORE_DASHBOARD } from "./path";
+import RoleBasedGuard from "@/guards/role-based-guard";
 // import CreateModifierGroupPage from "@/pages/create-modifier-group";
 
 const Loadable = ( Component: ElementType ) => ( props: any ) =>
@@ -25,14 +26,14 @@ const InventoryReportPage = Loadable( lazy( () => import( "@/pages/inventory-rep
 const GeneralEcommercePage = Loadable( lazy( () => import( "@/pages/general-ecommerce" ) ) )
 
 // Product routes
-const CategoryPage = Loadable(lazy(() => import("@/pages/category")))
-const CategoryCreatePage = Loadable(lazy(() => import("@/pages/category/create")));
-const CategoryEditPage = Loadable(lazy(() => import("@/pages/category/edit")));
-const ProductPage = Loadable(lazy(() => import("@/pages/product")))
-const ProductCreatePage = Loadable(lazy(() => import("@/pages/create-product")))
-const ProductEditPage = Loadable(lazy(() => import("@/pages/edit-product")))
-const ProductVariantPage = Loadable(lazy(() => import("@/pages/product-variant")))
-const ModifierGroupPage = Loadable(lazy(() => import("@/pages/modifier-group")))
+const CategoryPage = Loadable( lazy( () => import( "@/pages/category" ) ) )
+const CategoryCreatePage = Loadable( lazy( () => import( "@/pages/category/create" ) ) );
+const CategoryEditPage = Loadable( lazy( () => import( "@/pages/category/edit" ) ) );
+const ProductPage = Loadable( lazy( () => import( "@/pages/product" ) ) )
+const ProductCreatePage = Loadable( lazy( () => import( "@/pages/create-product" ) ) )
+const ProductEditPage = Loadable( lazy( () => import( "@/pages/edit-product" ) ) )
+const ProductVariantPage = Loadable( lazy( () => import( "@/pages/product-variant" ) ) )
+const ModifierGroupPage = Loadable( lazy( () => import( "@/pages/modifier-group" ) ) )
 
 // Menu routes
 const MenuPage = Loadable( lazy( () => import( "@/pages/menu" ) ) )
@@ -50,140 +51,183 @@ const InvoicePage = Loadable( lazy( () => import( "@/pages/invoice" ) ) )
 const Page404 = Loadable( lazy( () => import( "@/pages/page-404" ) ) )
 
 export const AppRoutes = () =>
-    useRoutes( [
-        {
-            path: PATH_AUTH.root,
-            children: [
-                {
-                    element: <Navigate to={ PATH_AUTH.login } replace />,
-                    index: true,
-                },
-                {
-                    path: "login",
-                    element: (
-                        <GuestGuard>
-                            <LoginPage />
-                        </GuestGuard>
-                    ),
-                },
-                {
-                    path: "logout",
-                    element: <Logout />,
-                }
+    useRoutes(
+        [
+            {
+                path: PATH_AUTH.root,
+                children: [
+                    {
+                        element: <Navigate to={ PATH_AUTH.login } replace />,
+                        index: true,
+                    },
+                    {
+                        path: "login",
+                        element: (
+                            <GuestGuard>
+                                <LoginPage />
+                            </GuestGuard>
+                        ),
+                    },
+                    {
+                        path: "logout",
+                        element: <Logout />,
+                    }
 
-            ]
-        },
-        {
-            path: PATH_DASHBOARD.root,
-            element: (
-                <AuthGuard>
-                    <DashBoardLayout />
-                </AuthGuard>
-            ),
-            children: [
-                {
-                    element: <Navigate to={ PATH_DASHBOARD.general.app } replace />,
-                    index: true,
-                },
-                {
-                    path: "app",
-                    element: <GeneralAppPage />,
-                },
-                {
-                    path: "inventory-report",
-                    element: <InventoryReportPage />,
-                },
-                {
-                    path: 'ecommerce',
-                    element: <GeneralEcommercePage />,
-                },
+                ]
+            },
+            // Brand Admin Dashboard routes
+            {
+                path: PATH_BRAND_DASHBOARD.root,
+                element: (
+                    <RoleBasedGuard role="BrandAdmin">
+                        <DashBoardLayout />
+                    </RoleBasedGuard>
+                ),
+                children: [
+                    {
+                        element: <Navigate to={ PATH_BRAND_DASHBOARD.general.app } replace />,
+                        index: true,
+                    },
+                    {
+                        path: "app",
+                        element: <GeneralAppPage />,
+                    },
+                    {
+                        path: "inventory-report",
+                        element: <InventoryReportPage />,
+                    },
+                    {
+                        path: 'ecommerce',
+                        element: <GeneralEcommercePage />,
+                    },
 
-                {
-                    path: 'category',
-                    element: <CategoryPage />,
-                },
-                {
-                    path: 'category/new',
-                    element: <CategoryCreatePage />,
-                },
+                    {
+                        path: 'category',
+                        element: <CategoryPage />,
+                    },
+                    {
+                        path: 'category/new',
+                        element: <CategoryCreatePage />,
+                    },
 
-                // Product routes
-                {
-                    path: 'product',
-                    element: <ProductPage />,
-                },
-                {
-                    path: 'product/new',
-                    element: <ProductCreatePage />,
-                },
-                {
-                    path: 'category/:id',
-                    element: <CategoryEditPage />,
-                },
-                {
-                    path: 'product/:id',
-                    element: <ProductEditPage />,
-                },
-                {
-                    path: 'product-variant',
-                    element: <ProductVariantPage />,
-                },
-                {
-                    path: 'modifier-group',
-                    element: <ModifierGroupPage />,
-                },
-                {
-                    path: 'promotion',
-                    element: <PromotionPage />,
-                },
+                    // Product routes
+                    {
+                        path: 'product',
+                        element: <ProductPage />,
+                    },
+                    {
+                        path: 'product/new',
+                        element: <ProductCreatePage />,
+                    },
+                    {
+                        path: 'category/:id',
+                        element: <CategoryEditPage />,
+                    },
+                    {
+                        path: 'product/:id',
+                        element: <ProductEditPage />,
+                    },
+                    {
+                        path: 'product-variant',
+                        element: <ProductVariantPage />,
+                    },
+                    {
+                        path: 'modifier-group',
+                        element: <ModifierGroupPage />,
+                    },
+                    {
+                        path: 'promotion',
+                        element: <PromotionPage />,
+                    },
 
-                // Menu routes
-                {
-                    path: 'menu',
-                    element: <MenuPage />,
-                },
-                {
-                    path: 'menu/new',
-                    element: <MenuCreatePage />,
-                },
-                {
-                    path: 'menu/:id',
-                    element: <MenuEditPage />,
-                },
+                    // Menu routes
+                    {
+                        path: 'menu',
+                        element: <MenuPage />,
+                    },
+                    {
+                        path: 'menu/new',
+                        element: <MenuCreatePage />,
+                    },
+                    {
+                        path: 'menu/:id',
+                        element: <MenuEditPage />,
+                    },
 
-                {
-                    path: 'brand',
-                    element: <BrandPage />,
-                },
-                {
-                    path: 'store',
-                    element: <StorePage />,
-                },
-                {
-                    path: 'role',
-                    element: <RolePage />,
-                },
-                {
-                    path: 'invoice',
-                    element: <InvoicePage />,
-                }
-            ],
-        },
-        {
-            path: '/',
-            element: (
-                <AuthGuard>
-                    <DashBoardLayout />
-                </AuthGuard>
-            ),
-            children: [ { element: <Navigate to={ PATH_DASHBOARD.root } replace />, index: true } ],
-        },
-        // Add the 404 route
-        {
-            path: '/404',
-            element: <Page404 />,
-        },
-        // Catch all unmatched routes
-        { path: '*', element: <Navigate to="/404" replace /> },
+                    {
+                        path: 'brand',
+                        element: <BrandPage />,
+                    },
+                    {
+                        path: 'store',
+                        element: <StorePage />,
+                    },
+                    {
+                        path: 'role',
+                        element: <RolePage />,
+                    },
+                    {
+                        path: 'invoice',
+                        element: <InvoicePage />,
+                    }
+                ],
+            },
+            // System Admin Dashboard routes
+            {
 
-    ], )
+                path: PATH_ADMIN_DASHBOARD.root,
+                element: (
+                    <RoleBasedGuard role="SystemAdmin">
+                        <DashBoardLayout />
+                    </RoleBasedGuard>
+                ),
+                children: [
+                    {
+                        element: <Navigate to={ PATH_ADMIN_DASHBOARD.general.app } replace />,
+                        index: true,
+                    },
+                    {
+                        path: "app",
+                        element: <GeneralAppPage />,
+                    },
+                ],
+            },
+            // Store Admin Dashboard routes
+            {
+
+                path: PATH_STORE_DASHBOARD.root,
+                element: (
+                    <RoleBasedGuard role="StoreAdmin">
+                        <DashBoardLayout />
+                    </RoleBasedGuard>
+                ),
+                children: [
+                    {
+                        element: <Navigate to={ PATH_STORE_DASHBOARD.general.app } replace />,
+                        index: true,
+                    },
+                    {
+                        path: "app",
+                        element: <GeneralAppPage />,
+                    },
+                ],
+            },
+            {
+                path: '/',
+                element: (
+                    <AuthGuard>
+                        <DashBoardLayout />
+                    </AuthGuard>
+                ),
+                children: [ { element: <Navigate to={ PATH_BRAND_DASHBOARD.root } replace />, index: true } ],
+            },
+            // Add the 404 route
+            {
+                path: '/404',
+                element: <Page404 />,
+            },
+            // Catch all unmatched routes
+            { path: '*', element: <Navigate to="/404" replace /> },
+
+        ],
+    )

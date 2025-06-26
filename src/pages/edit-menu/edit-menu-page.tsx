@@ -60,6 +60,7 @@ const EditMenuPage = () =>
                 <TabsContent value="store">
                     <StoreMenu
                         brandMenuId={ id as string }
+                        storeIds={ menuData?.data.data.stores?.map( ( s: any ) => s.id ) || [] }
                     />
                 </TabsContent>
             </Tabs>
