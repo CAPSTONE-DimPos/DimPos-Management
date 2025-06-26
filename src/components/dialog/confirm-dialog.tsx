@@ -1,4 +1,4 @@
-import CreateSuccessIllustration from '@/assets/illustration/create-success-illustration'
+import LoginFormIllustration2 from '@/assets/illustration/login-form-illustration-2'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
@@ -10,11 +10,11 @@ type Props = {
     onAction?: () => void
 }
 
-const SuccessDialog = ( {
+const ConfirmDialog = ( {
     open,
     onOpenChange,
-    title = "Tạo sản phẩm mới thành công",
-    actionLabel = "Xem sản phẩm",
+    title = "Xác nhận hành động",
+    actionLabel = "Xác nhận",
     onAction
 }: Props ) =>
 {
@@ -27,7 +27,7 @@ const SuccessDialog = ( {
                     </DialogTitle>
                 </DialogHeader>
                 <div className="flex justify-center">
-                    <CreateSuccessIllustration className="size-60" />
+                    <LoginFormIllustration2 className="size-60" />
                 </div>
                 <DialogFooter className="flex-col sm:flex-row sm:justify-between gap-2">
                     <DialogClose asChild>
@@ -49,4 +49,4 @@ const SuccessDialog = ( {
     )
 }
 
-export default SuccessDialog
+export default ConfirmDialog

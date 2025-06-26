@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { useRowSelection } from "@/hooks/use-row-selection";
+import ConfirmDialog from "@/components/dialog/confirm-dialog";
 
 type Props = {
     brandMenuId: string;
@@ -31,7 +32,7 @@ const ProductMenu = ( { brandMenuId, productVariantIds }: Props ) =>
     } = useQueryParams( {
         defaultSortBy: "name",
     } );
-    const { getProductsByBrandMenuId } = useMenu()
+    const { getProductsByBrandMenuId, updateProductsByBrandMenuId } = useMenu()
     const { data: productsData, isLoading: productsLoading, isError: isProductsError, error: productsError } =
         getProductsByBrandMenuId(
             brandMenuId,
@@ -63,9 +64,16 @@ const ProductMenu = ( { brandMenuId, productVariantIds }: Props ) =>
     } )
 
 
-    const onSubmit = ( data: TUpdateBrandProduct ) =>
+    const onSubmit = async ( data: TUpdateBrandProduct ) =>
     {
-        console.log( "onSubmit data:", data );
+        try
+        {
+            const result = updateProductsByBrandMenuId.mutateAsync( data )
+
+        } catch ( error )
+        {
+            handleApiError( error );
+        }
     }
 
     const onSelectionChange = (
@@ -93,6 +101,9 @@ const ProductMenu = ( { brandMenuId, productVariantIds }: Props ) =>
     return (
         <Form { ...form }>
             <form onSubmit={ form.handleSubmit( onSubmit ) }>
+                {/* <ConfirmDialog
+
+                /> */}
                 <Card className='border-none shadow-none gap-3 my-4'>
                     <CardHeader>
                         <CardTitle>
@@ -127,7 +138,7 @@ const ProductMenu = ( { brandMenuId, productVariantIds }: Props ) =>
                         />
                     </CardContent>
                     <CardFooter className="flex justify-end">
-                        <Button type="submit" >
+                        <Button>
                             Cập nhật
                         </Button>
                     </CardFooter>
