@@ -271,6 +271,7 @@ export function DataTable<TData, TValue> ( {
                                         disabled={ isLoading }
                                     />
                                     <Button
+                                        type="button"
                                         variant="ghost"
                                         className="absolute right-3 top-1/2 h-8 w-8 -translate-y-1/2 rounded-r-lg"
                                         onClick={ () =>
@@ -315,6 +316,7 @@ export function DataTable<TData, TValue> ( {
                 <div className="flex items-center gap-2">
                     { showRefresh && onRefresh && (
                         <Button
+                            type="button"
                             variant="outline"
                             size="sm"
                             onClick={ onRefresh }
@@ -326,6 +328,7 @@ export function DataTable<TData, TValue> ( {
                     ) }
                     { showSettings && onSettings && (
                         <Button
+                            type="button"
                             variant="outline"
                             size="sm"
                             onClick={ onSettings }
@@ -482,6 +485,7 @@ export function DataTable<TData, TValue> ( {
                         <div className="flex items-center gap-2">
                             {/* Previous Arrow */ }
                             <Button
+                                type="button"
                                 aria-label="Trang trước"
                                 variant="ghost"
                                 className="h-8 w-8 p-0"
@@ -520,6 +524,7 @@ export function DataTable<TData, TValue> ( {
                                 {
                                     pages.push(
                                         <Button
+                                            type="button"
                                             key={ 1 }
                                             variant={ 1 === current ? "default" : "outline" }
                                             className="h-6 w-6 p-0"
@@ -546,6 +551,7 @@ export function DataTable<TData, TValue> ( {
                                 {
                                     pages.push(
                                         <Button
+                                            type="button"
                                             key={ i }
                                             variant={ i === current ? "default" : "outline" }
                                             className="h-6 w-6 p-0"
@@ -572,6 +578,7 @@ export function DataTable<TData, TValue> ( {
 
                                     pages.push(
                                         <Button
+                                            type="button"
                                             key={ totalPages }
                                             variant={ totalPages === current ? "default" : "outline" }
                                             className="h-6 w-6 p-0"
@@ -588,6 +595,7 @@ export function DataTable<TData, TValue> ( {
 
                             {/* Next Arrow */ }
                             <Button
+                                type="button"
                                 aria-label="Trang sau"
                                 variant="ghost"
                                 className="h-8 w-8 p-0"

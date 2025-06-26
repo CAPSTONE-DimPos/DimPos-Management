@@ -276,7 +276,7 @@ const EditProductForm = ( { initialData }: Props ) =>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
                         {/* Basic Information */ }
-                        <Card className='shadow-muted lg:col-span-2 2xl:col-span-2'>
+                        <Card className='shadow-none border-none bg-white lg:col-span-2 2xl:col-span-2'>
                             <CardHeader className='grid grid-cols-1 md:grid-cols-2 items-center gap-4'>
                                 <CardTitle>Thông Tin Cơ Bản</CardTitle>
                                 <FormField
@@ -436,7 +436,7 @@ const EditProductForm = ( { initialData }: Props ) =>
 
                         <div className='grid lg:col-span-2 2xl:col-span-1 gap-4'>
                             {/* Product Images */ }
-                            <Card className='shadow-muted'>
+                            <Card className='shadow-none border-none bg-white'>
                                 <CardHeader>
                                     <CardTitle className="flex items-center justify-between">
                                         Ảnh Sản Phẩm ({ totalImages }/4)
@@ -617,7 +617,7 @@ const EditProductForm = ( { initialData }: Props ) =>
                             </Card>
 
                             {/* Pricing */ }
-                            <Card className='shadow-muted'>
+                            <Card className='shadow-none border-none bg-white'>
                                 <CardHeader>
                                     <CardTitle>Giá Cả</CardTitle>
                                 </CardHeader>

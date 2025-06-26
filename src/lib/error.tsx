@@ -64,11 +64,16 @@ export const handleApiError = ( error: any ): BaseResponse<any> | null =>
     }
 
     // Show toast notification with the error message
-    toast(
-        <div className="flex flex-col">
-            <span className="font-medium text-red-600">{ handledError.message }</span>
-            <span className="text-sm text-muted-foreground">{ handledError.data }</span>
-        </div>
+    toast.error(
+        handledError.message || "Đã xảy ra lỗi không xác định.",
+        {
+            duration: 5000,
+            description:
+                <span className="text-xs font-medium text-red-500">
+                    { handledError.data ? handledError.data : "Vui lòng thử lại sau." }
+                </span>,
+            position: "top-right",
+        }
     )
 
     return handledError;

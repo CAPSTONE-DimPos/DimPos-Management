@@ -1,15 +1,20 @@
 import { DataTable } from "@/components/table/data-table";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form } from "@/components/ui/form";
 import { useMenu } from "@/hooks/use-menu";
 import { useQueryParams } from "@/hooks/use-query-params";
 import { handleApiError } from "@/lib/error";
-import { columns } from "./store/column";
-import { useForm } from "react-hook-form";
 import { UpdateBrandStoreSchema, type TUpdateBrandStore } from "@/schema/menu.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRowSelection } from "@/hooks/use-row-selection";
-import { Form } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { columns } from "./store/column";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/redux/store";
+import { handleChangeModalState } from "@/redux/modal/modal-slice";
+import ConfirmDialog from "@/components/dialog/confirm-dialog";
 
 type Props = {
     brandMenuId: string;
@@ -18,8 +23,10 @@ type Props = {
 
 const StoreMenu = ( { brandMenuId, storeIds }: Props ) =>
 {
-    const { handleRowSelectionChange: handleSelection } = useRowSelection();
-    const { getStoresByBrandMenuId } = useMenu();
+    const queryClient = useQueryClient();
+    const dispatch = useDispatch();
+    const { getStoresByBrandMenuId, updateStoresByBrandMenuId } = useMenu();
+    const { isOpen } = useSelector( ( state: RootState ) => state.modal );
     const {
         currentPage,
         pageSize,
@@ -57,20 +64,46 @@ const StoreMenu = ( { brandMenuId, storeIds }: Props ) =>
             storeIds: storeIds,
         }
     } )
-    const onSubmit = ( data: TUpdateBrandStore ) =>
+    const onSubmit = async ( data: TUpdateBrandStore ) =>
     {
         console.log( "onSubmit data:", data );
+        try
+        {
+            await updateStoresByBrandMenuId.mutateAsync( data );
+            queryClient.invalidateQueries( { queryKey: [ 'brandMenuProducts', brandMenuId ] } );
+            toast.success( "Cập nhật sản phẩm trong thực đơn thành công!" );
+        } catch ( error )
+        {
+            console.error( "Error updating store menu:", error );
+            handleApiError( error );
+        }
     }
 
-    const onSelectionChange = (
-        selected: string[],
-        deselected: string[]
+
+    const handleRowSelectionChange = (
+        newSelection: Record<string, boolean>,
+        oldSelection: Record<string, boolean>
     ) =>
     {
-        const currentIds = form.getValues( "storeIds" ) as string[];
+        const currentStoreIds = form.getValues( "storeIds" ) as string[];
 
-        let updatedIds = [ ...currentIds ];
-        selected.forEach( id =>
+        // Tìm những row được selected và deselected
+        const newlySelected = Object.entries( newSelection )
+            .filter( ( [ rowId, isSelected ] ) => isSelected && !oldSelection[ rowId ] )
+            .map( ( [ rowId ] ) => rowId );
+
+        const newlyDeselected = Object.entries( oldSelection )
+            .filter( ( [ rowId, wasSelected ] ) => wasSelected && !newSelection[ rowId ] )
+            .map( ( [ rowId ] ) => rowId );
+
+        console.log( "Newly selected:", newlySelected );
+        console.log( "Newly deselected:", newlyDeselected );
+
+        // Cập nhật form value
+        let updatedIds = [ ...currentStoreIds ];
+
+        // Thêm những item được select
+        newlySelected.forEach( id =>
         {
             if ( !updatedIds.includes( id ) )
             {
@@ -78,15 +111,33 @@ const StoreMenu = ( { brandMenuId, storeIds }: Props ) =>
             }
         } );
 
-        updatedIds = updatedIds.filter( id => !deselected.includes( id ) );
+        // Xóa những item được deselect
+        updatedIds = updatedIds.filter( id => !newlyDeselected.includes( id ) );
 
+        // Set form value
         form.setValue( "storeIds", updatedIds );
-        console.log( "Selection changed - Added:", selected, "Removed:", deselected );
+
+        console.log( "Updated storeIds:", updatedIds );
     }
+
+    const handleConfirmSubmit = () =>
+    {
+        // Trigger form submission programmatically
+        form.handleSubmit( onSubmit )();
+    }
+
     return (
         <Form { ...form }>
             <form onSubmit={ form.handleSubmit( onSubmit ) }>
-                <Card className='border-none shadow-none gap-3 my-4'>
+                <ConfirmDialog
+                    open={ isOpen }
+                    onOpenChange={ ( open ) => dispatch( handleChangeModalState( open ) ) }
+                    title="Xác nhận cập nhật các cửa hàng sử dụng thực đơn"
+                    description="Bạn có chắc chắn muốn cập nhật các cửa hàng sử dụng thực đơn này không?"
+                    actionLabel="Xác nhận"
+                    onAction={ handleConfirmSubmit } // Pass the submit handler
+                />
+                <Card className='border-none shadow-none bg-white gap-3 my-4'>
                     <CardHeader>
                         <CardTitle>
                             Danh sách cửa hàng áp dụng
@@ -114,13 +165,11 @@ const StoreMenu = ( { brandMenuId, storeIds }: Props ) =>
                                     return acc;
                                 }, {} )
                             }
-                            onRowSelectionChange={ ( newSelection ) =>
-                                handleSelection( newSelection, onSelectionChange )
-                            }
+                            onRowSelectionChange={ handleRowSelectionChange }
                         />
                     </CardContent>
                     <CardFooter className="flex justify-end">
-                        <Button type="submit" >
+                        <Button type="button" onClick={ () => dispatch( handleChangeModalState( true ) ) }>
                             Cập nhật
                         </Button>
                     </CardFooter>

@@ -14,7 +14,7 @@ const VariantsProductSection = ( { initialData }: Props ) =>
 
 
     return (
-        <Card className='shadow-muted lg:col-span-2 2xl:col-span-6 mb-6'>
+        <Card className='shadow-none border-none bg-white lg:col-span-2 2xl:col-span-6 mb-6'>
             <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                     Biến Thể Sản Phẩm

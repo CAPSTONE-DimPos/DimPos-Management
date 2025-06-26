@@ -1,11 +1,12 @@
-import LoginFormIllustration2 from '@/assets/illustration/login-form-illustration-2'
+import ConfirmIllustration from '@/assets/illustration/confirm-illustration'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 type Props = {
     open: boolean
     onOpenChange: ( open: boolean ) => void
     title?: string
+    description?: string
     actionLabel?: string
     onAction?: () => void
 }
@@ -14,35 +15,50 @@ const ConfirmDialog = ( {
     open,
     onOpenChange,
     title = "Xác nhận hành động",
+    description = "Bạn có chắc chắn muốn thực hiện hành động này?",
     actionLabel = "Xác nhận",
-    onAction
+    onAction,
 }: Props ) =>
 {
+    const handleConfirm = () =>
+    {
+        // Execute the action if provided
+        if ( onAction )
+        {
+            onAction();
+        }
+        // Close the dialog
+        onOpenChange( false );
+    }
     return (
         <Dialog open={ open } onOpenChange={ onOpenChange }>
-            <DialogContent className="sm:max-w-[400px] rounded-3xl [&>button]:hidden">
+            <DialogContent className="sm:max-w-[600px] rounded-3xl">
                 <DialogHeader>
-                    <DialogTitle className='text-center text-2xl font-semibold'>
+                    <DialogTitle className='text-2xl font-semibold'>
                         { title }
                     </DialogTitle>
+                    <DialogDescription className='text-sm font-normal text-foreground'>
+                        { description }
+                    </DialogDescription>
                 </DialogHeader>
                 <div className="flex justify-center">
-                    <LoginFormIllustration2 className="size-60" />
+                    <ConfirmIllustration className="size-60" />
                 </div>
-                <DialogFooter className="flex-col sm:flex-row sm:justify-between gap-2">
+                <DialogFooter className="flex-col sm:flex-row sm:justify-end gap-2">
                     <DialogClose asChild>
-                        <Button variant="outline" className="w-full sm:w-2/5 text-sidebar-label">
-                            Đóng
+                        <Button variant="outline" className="text-sidebar-label">
+                            Hủy
                         </Button>
                     </DialogClose>
-                    { onAction && (
-                        <Button
-                            onClick={ onAction }
-                            className="w-full sm:w-3/5"
-                        >
-                            { actionLabel }
-                        </Button>
-                    ) }
+                    {/* <DialogClose asChild> */ }
+                    <Button
+                        type='button'
+                        onClick={ handleConfirm }
+                    >
+                        { actionLabel }
+                    </Button>
+                    {/* </DialogClose> */ }
+
                 </DialogFooter>
             </DialogContent>
         </Dialog>

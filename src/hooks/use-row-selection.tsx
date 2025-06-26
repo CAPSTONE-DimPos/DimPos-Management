@@ -6,12 +6,14 @@ export const useRowSelection = () =>
 {
     const previousSelectionRef = useRef<Record<string, boolean>>( {} );
 
-    const handleRowSelectionChange = useCallback( (
+    const handleRowSelectionChange = (
         newSelection: Record<string, boolean>,
         onSelectionChange: ( selected: string[], deselected: string[] ) => void
     ) =>
     {
+        console.log( "Row selection changed:", newSelection );
         const oldSelection = previousSelectionRef.current;
+        console.log( "Old selection:", oldSelection );
 
         const newlySelected = Object.entries( newSelection )
             .filter( ( [ rowId, isSelected ] ) => isSelected && !oldSelection[ rowId ] )
@@ -27,7 +29,7 @@ export const useRowSelection = () =>
         {
             onSelectionChange( newlySelected, newlyDeselected );
         }
-    }, [] );
+    };
 
     const resetSelection = useCallback( () =>
     {

@@ -1,5 +1,5 @@
 import { brandMenuApi } from "@/apis/menu.api";
-import type { TUpdateBrandProduct } from "@/schema/menu.schema";
+import type { TUpdateBrandProduct, TUpdateBrandStore } from "@/schema/menu.schema";
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 
 interface UseMenuParams
@@ -76,11 +76,16 @@ export const useMenu = () =>
             data.brandMenuId,
             { productVariantIds: data.productVariantIds || [] }
         ),
-        onSuccess: ( data ) =>
-        {
-            queryClient.invalidateQueries( { queryKey: [ 'brandMenuProducts', data.data.data.id ] } )
-        }
     } )
+
+    const updateStoresByBrandMenuId = useMutation( {
+        mutationFn: ( data: TUpdateBrandStore ) => brandMenuApi.updateStoresByBrandMenuId(
+            data.brandMenuId,
+            { storeIds: data.storeIds || [] }
+        ),
+    } )
+
+
 
     const getStoresByBrandMenuId = ( id: string, params: UseMenuParams = {} ) =>
     {
@@ -123,5 +128,6 @@ export const useMenu = () =>
         getProductsByBrandMenuId,
         getStoresByBrandMenuId,
         updateProductsByBrandMenuId,
+        updateStoresByBrandMenuId,
     }
 }

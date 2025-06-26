@@ -16,24 +16,24 @@ import { PATH_DASHBOARD } from '@/routes/path';
 import { CreateProductSchema, type TProductRequest } from '@/schema/product.schema';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload, X } from 'lucide-react';
-    import React, { useState } from 'react';
-    import { useFieldArray, useForm } from 'react-hook-form';
-    import { useDispatch, useSelector } from 'react-redux';
-    import { useNavigate } from 'react-router-dom';
-    import { toast } from 'sonner';
+import React, { useState } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
-    const CreateProductPage = () =>
-    {
-        const { isOpen, createdId } = useSelector( ( state: RootState ) => state.modal );
-        const dispatch = useDispatch();
+const CreateProductPage = () =>
+{
+    const { isOpen, createdId } = useSelector( ( state: RootState ) => state.modal );
+    const dispatch = useDispatch();
 
-        const navigation = useNavigate();
-        const { createProductMutation } = useProduct();
-        const { getCategories } = useCategory();
-        const { data, error: cateError, isError: isCateError, isLoading } = getCategories( {
-            size: 10000,
-            page: 1,
-        } );
+    const navigation = useNavigate();
+    const { createProductMutation } = useProduct();
+    const { getCategories } = useCategory();
+    const { data, error: cateError, isError: isCateError, isLoading } = getCategories( {
+        size: 10000,
+        page: 1,
+    } );
 
     if ( cateError && isCateError )
     {
@@ -205,7 +205,7 @@ import { Upload, X } from 'lucide-react';
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4" >
                         {/* Basic Information */ }
-                        <Card className='shadow-muted lg:col-span-2 xl:col-span-2'>
+                        <Card className='shadow-none border-none bg-white lg:col-span-2 xl:col-span-2'>
                             <CardHeader className='grid grid-cols-1 md:grid-cols-2 items-center gap-4'>
                                 <CardTitle>Thông Tin Cơ Bản</CardTitle>
                                 <FormField
@@ -368,7 +368,7 @@ import { Upload, X } from 'lucide-react';
                         </Card>
                         <div className='grid lg:col-span-2 xl:col-span-1 gap-4'>
                             {/* Product Images */ }
-                            <Card className='shadow-muted'>
+                            <Card className='shadow-none bg-white border-none'>
                                 <CardHeader>
                                     <CardTitle className="flex items-center justify-between">
                                         Ảnh Sản Phẩm
@@ -464,7 +464,7 @@ import { Upload, X } from 'lucide-react';
 
 
                             {/* Pricing */ }
-                            <Card className='shadow-muted'>
+                            <Card className='shadow-none bg-white border-none'>
                                 <CardHeader>
                                     <CardTitle>Giá Cả</CardTitle>
                                 </CardHeader>
