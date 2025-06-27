@@ -1,4 +1,3 @@
-import CreateSuccessIllustration from '@/assets/illustration/create-success-illustration';
 export {default as GeneralAppIcon} from './icons/general-app-icon';
 export {default as ProductIcon} from './icons/product-icon';
 export {default as MenuIcon} from './icons/menu-icon';
