@@ -12,7 +12,7 @@ import { useProduct } from '@/hooks/use-product';
 import { handleApiError } from '@/lib/error';
 import { handleChangeModalState, handleSetCreatedId } from '@/redux/modal/modal-slice';
 import type { RootState } from '@/redux/store';
-import { PATH_DASHBOARD } from '@/routes/path';
+import { PATH_BRAND_DASHBOARD } from '@/routes/path';
 import { CreateProductSchema, type TProductRequest } from '@/schema/product.schema';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload, X } from 'lucide-react';
@@ -192,7 +192,7 @@ const CreateProductPage = () =>
                     if ( createdId )
                     {
                         dispatch( handleChangeModalState( false ) );
-                        navigation( PATH_DASHBOARD.product.editProduct( createdId ) )
+                        navigation( PATH_BRAND_DASHBOARD.product.editProduct( createdId ) )
                     }
                 } }
             />
