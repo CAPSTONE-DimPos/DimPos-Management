@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { PATH_DASHBOARD } from "@/routes/path";
+import { PATH_BRAND_DASHBOARD } from "@/routes/path";
 import type { TBrandMenu } from "@/schema/menu.schema";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
@@ -109,7 +109,7 @@ export const columns: ColumnDef<TBrandMenu>[] = [
                 <div className="flex justify-center">
                     <TooltipProvider>
                         <Tooltip>
-                            <Link to={ PATH_DASHBOARD.product.editMenu( menu.id ) }>
+                            <Link to={ PATH_BRAND_DASHBOARD.product.editMenu( menu.id ) }>
                                 <TooltipTrigger >
                                     <Eye className="h-4 w-4 hover:cursor-pointer" />
                                     <TooltipContent>

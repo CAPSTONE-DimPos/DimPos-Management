@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { copyToClipboard } from "@/lib/utils";
-import { PATH_DASHBOARD } from "@/routes/path";
+import { PATH_BRAND_DASHBOARD } from "@/routes/path";
 import type { TProductResponse } from "@/schema/product.schema";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -201,7 +201,7 @@ export const columns: ColumnDef<TProductResponse>[] = [
                 <div className="flex justify-center">
                     <TooltipProvider>
                         <Tooltip>
-                            <Link to={ PATH_DASHBOARD.product.editProduct( product.id ) }>
+                            <Link to={ PATH_BRAND_DASHBOARD.product.editProduct( product.id ) }>
                                 <TooltipTrigger >
                                     <Eye className="h-4 w-4 hover:cursor-pointer" />
                                     <TooltipContent>
