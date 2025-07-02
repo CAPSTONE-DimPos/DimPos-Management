@@ -12,14 +12,14 @@ const KPICard = ( _: Props ) =>
     return (
         <Card className="w-full shadow-none border-none bg-white mb-6 gap-3">
             {/* Main Header Section */ }
-            <CardHeader>
+            {/* <CardHeader>
                 <h2 className="text-xl font-semibold text-gray-900">
                     Doanh thu trong ngày
                 </h2>
                 <p className="text-sm text-gray-500">
                     Tổng doanh thu trong ngày của tất cả các cửa hàng
                 </p>
-            </CardHeader>
+            </CardHeader> */}
 
             {/* KPI Cards Grid */ }
             <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4">
@@ -33,7 +33,7 @@ const KPICard = ( _: Props ) =>
                             { formatPrice( 23000000 ) }
                         </div>
                         <div className="text-sm text-gray-600">
-                            Tổng doanh thu
+                            Doanh thu thực
                         </div>
                         <div className="text-xs text-orange-500 flex items-center gap-1">
                             <TrendingUp className="w-3 h-3" />
@@ -71,7 +71,7 @@ const KPICard = ( _: Props ) =>
                             122
                         </div>
                         <div className="text-sm text-gray-600">
-                            Sản phẩm đã bán
+                            Bình quan hóa đơn
                         </div>
                         <div className="text-xs text-blue-500 flex items-center gap-1">
                             <TrendingUp className="w-3 h-3" />

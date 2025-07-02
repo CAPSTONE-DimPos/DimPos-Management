@@ -38,9 +38,36 @@ export const PATH_BRAND_DASHBOARD = {
     discount: path(ROOTS_BRAND_DASHBOARD, '/discount'),
     importProduct: path(ROOTS_BRAND_DASHBOARD, '/import-product'),
   },
+  combo: {
+    root: path(ROOTS_BRAND_DASHBOARD, '/combo'),
+  },
+
+  ingredient: {
+    root: path(ROOTS_BRAND_DASHBOARD, '/ingredient'),
+  },
+  tax: {
+    root: path(ROOTS_BRAND_DASHBOARD, '/tax'),
+  },
+
+  recipe: {
+    root: path(ROOTS_BRAND_DASHBOARD, '/recipe'),
+  },
 
   promotion: {
     root: path(ROOTS_BRAND_DASHBOARD, '/promotion'),
+  },
+  campaign: {
+    root: path(ROOTS_BRAND_DASHBOARD, '/campaign'),
+    createCampaign: path(ROOTS_BRAND_DASHBOARD, '/campaign/new'),
+    editCampaign: (id: string) => path(ROOTS_BRAND_DASHBOARD, `/campaign/${id}`),
+  },
+
+  accountStore: {
+    root: path(ROOTS_BRAND_DASHBOARD, '/store-account'),
+  },
+
+  order:{
+    root:path(ROOTS_BRAND_DASHBOARD, '/order'),
   },
 
   brand: {

@@ -1,204 +1,185 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import
-{
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { copyToClipboard } from "@/lib/utils";
 import type { TCategoryResponse } from "@/schema/category.schema";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
-import
-{
-    ArrowDown,
-    ArrowUp,
-    ArrowUpDown,
-    Copy,
-    Eye,
-    EyeOff,
-    Folder,
-    FolderOpen,
-    MoreHorizontal,
+import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  Copy,
+  Eye,
+  EyeOff,
+  Folder,
+  FolderOpen,
+  MoreHorizontal,
 } from "lucide-react";
+import { AppColors } from "@/themes/colors";
+import { PATH_BRAND_DASHBOARD } from "@/routes/path";
 
 // Enhanced sortable header component that provides visual feedback for all sorting states
-const SortableHeader = ( { column, children }: { column: any, children: React.ReactNode } ) =>
-{
-    const sorted = column.getIsSorted();
+const SortableHeader = ({
+  column,
+  children,
+}: {
+  column: any;
+  children: React.ReactNode;
+}) => {
+  const sorted = column.getIsSorted();
 
-    return (
-        <Button
-            variant="ghost"
-            onClick={ () => column.toggleSorting( sorted === "asc" ) }
-            className="hover:bg-muted/50 -ml-3 h-8 data-[state=open]:bg-accent"
-        >
-            <span className="font-semibold">{ children }</span>
-            {/* Visual indicator for sorting state - shows all three states clearly */ }
-            { sorted === "asc" ? (
-                <ArrowUp className="ml-2 h-4 w-4" />
-            ) : sorted === "desc" ? (
-                <ArrowDown className="ml-2 h-4 w-4" />
-            ) : (
-                <ArrowUpDown className="ml-2 h-4 w-4 opacity-50" />
-            ) }
-        </Button>
-    );
+  return (
+    <Button
+      variant="ghost"
+      onClick={() => column.toggleSorting(sorted === "asc")}
+      className="hover:bg-muted/50 -ml-3 h-8 data-[state=open]:bg-accent"
+    >
+      <span className="font-semibold text-base">{children}</span>
+      {/* Visual indicator for sorting state - shows all three states clearly */}
+      {sorted === "asc" ? (
+        <ArrowUp className="ml-2 h-4 w-4" />
+      ) : sorted === "desc" ? (
+        <ArrowDown className="ml-2 h-4 w-4" />
+      ) : (
+        <ArrowUpDown className="ml-2 h-4 w-4 opacity-50" />
+      )}
+    </Button>
+  );
 };
 
 export const columns: ColumnDef<TCategoryResponse>[] = [
-    {
-        accessorKey: "displayOrder",
-        header: () => (
-            <div className="text-center font-semibold text-muted-foreground">
-                TT hiển thị
-            </div>
-        ),
-        cell: ( info ) => (
-            <div className="text-center">
-                <Badge variant="outline" className="font-mono text-xs">
-                    { info.getValue() as number }
-                </Badge>
-            </div>
-        ),
-        size: 120, // Fixed width for consistent alignment
+  {
+    accessorKey: "name",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Tên danh mục</SortableHeader>
+    ),
+    cell: (info) => {
+      const name = info.getValue() as string;
+      return (
+        <div className="max-w-[250px]">
+          <div
+            className="font-medium text-foreground truncate cursor-pointer hover:text-primary transition-colors text-sm"
+            title={name} // Tooltip for full name on hover
+          >
+            {name}
+          </div>
+        </div>
+      );
     },
-    {
-        accessorKey: "name",
-        header: ( { column } ) => (
-            <SortableHeader column={ column }>
-                Tên Danh Mục
-            </SortableHeader>
-        ),
-        cell: ( info ) =>
-        {
-            const name = info.getValue() as string;
-            return (
-                <div className="max-w-[250px]">
-                    <div
-                        className="font-medium text-foreground truncate cursor-pointer hover:text-primary transition-colors"
-                        title={ name } // Tooltip for full name on hover
-                    >
-                        { name }
-                    </div>
-                </div>
-            );
-        },
+  },
+  {
+    accessorKey: "code",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Mã danh mục</SortableHeader>
+    ),
+    cell: (info) => {
+      const code = info.getValue() as string;
+      return (
+        <div className="flex items-center gap-2 max-w-[180px] text-sm">
+          {code}
+        </div>
+      );
     },
-    {
-        accessorKey: "code",
-        header: ( { column } ) => (
-            <SortableHeader column={ column }>
-                Mã Danh Mục
-            </SortableHeader>
-        ),
-        cell: ( info ) =>
-        {
-            const code = info.getValue() as string;
-            return (
-                <div className="flex items-center gap-2 max-w-[180px]">
-                    <Badge variant="secondary" className="font-mono text-xs truncate">
-                        { code }
-                    </Badge>
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-6 w-6 p-0 hover:bg-muted flex-shrink-0"
-                        onClick={ () => copyToClipboard( code, "Mã danh mục" ) }
-                        title="Sao chép mã danh mục"
-                    >
-                        <Copy className="h-3 w-3" />
-                    </Button>
-                </div>
-            );
-        },
-    },
-    {
-        accessorKey: "type",
-        header: () => (
-            <div className="font-semibold">
-                Loại Danh Mục
-            </div>
-        ),
-        cell: ( info ) =>
-        {
-            const type = info.getValue() as number;
-            const isParentCategory = type === 1;
+  },
+  {
+    accessorKey: "type",
+    header: () => <div className="font-semibold text-base">Loại danh mục</div>,
+    cell: (info) => {
+      const type = info.getValue() as number;
+      const isParentCategory = type === 1;
 
-            return (
-                <div className="flex justify-start">
-                    <Badge
-                        variant="secondary"
-                        className={ `flex items-center gap-1.5 ${ isParentCategory
-                            ? "bg-purple-100 text-purple-800 hover:bg-purple-200"
-                            : "bg-blue-100 text-blue-800 hover:bg-blue-200"
-                            }` }
-                    >
-                        {/* Visual icons help users quickly distinguish category types */ }
-                        { isParentCategory ? (
-                            <>
-                                <FolderOpen className="h-3 w-3" />
-                                Danh mục cha
-                            </>
-                        ) : (
-                            <>
-                                <Folder className="h-3 w-3" />
-                                Danh mục con
-                            </>
-                        ) }
-                    </Badge>
-                </div>
-            );
-        },
+      return (
+        <div className="flex justify-center">
+          <div
+            className="flex items-center gap-1.5 px-3 py-1 rounded text-sm"
+            style={{
+              backgroundColor: isParentCategory
+                ? AppColors.indigo[10]
+                : AppColors.blueberry[10],
+              color: isParentCategory
+                ? AppColors.indigo[100]
+                : AppColors.blueberry[90],
+            }}
+          >
+            {isParentCategory ? (
+              <>
+                <FolderOpen className="h-3 w-3" />
+                Danh mục cha
+              </>
+            ) : (
+              <>
+                <Folder className="h-3 w-3" />
+                Danh mục con
+              </>
+            )}
+            {/* <Badge
+            variant="secondary"
+            className={`flex items-center gap-1.5 ${
+              isParentCategory
+                ? "bg-purple-100 text-purple-800 hover:bg-purple-200"
+                : "bg-blue-100 text-blue-800 hover:bg-blue-200"
+            }`}
+          >
+          </Badge> */}
+          </div>
+        </div>
+      );
     },
-    {
-        accessorKey: "status",
-        header: () => (
-            <div className="text-center font-semibold">
-                Trạng Thái
-            </div>
-        ),
-        cell: ( info ) =>
-        {
-            const status = info.getValue() as number;
-            // Corrected logic: 0 typically means active/visible, 1 means inactive/hidden
-            const isVisible = status === 0;
+  },
+  {
+    accessorKey: "displayOrder",
+    header: () => (
+      <div className="text-center font-semibold text-base">Sắp xếp</div>
+    ),
+    cell: (info) => (
+      <div className="text-center text-sm">{info.getValue() as number}</div>
+    ),
+    size: 120, // Fixed width for consistent alignment
+  },
+  {
+    accessorKey: "status",
+    header: () => (
+      <div className="text-center font-semibold text-base">Trạng Thái</div>
+    ),
+    cell: (info) => {
+      const status = info.getValue() as number;
+      // Corrected logic: 0 typically means active/visible, 1 means inactive/hidden
+      const isVisible = status === 0;
 
-            return (
-                <div className="flex justify-center">
-                    <Badge
-                        variant={ isVisible ? "default" : "secondary" }
-                        className={ `flex items-center gap-1.5 ${ isVisible
-                            ? "bg-green-100 text-green-800 hover:bg-green-200"
-                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                            }` }
-                    >
-                        {/* Status indicator with both visual and text cues */ }
-                        <div className={ `w-2 h-2 rounded-full ${ isVisible ? "bg-green-500" : "bg-gray-400"
-                            }` } />
-                        { isVisible ? (
-                            <>
-                                <Eye className="h-3 w-3" />
-                                Hiển thị
-                            </>
-                        ) : (
-                            <>
-                                <EyeOff className="h-3 w-3" />
-                                Ẩn
-                            </>
-                        ) }
-                    </Badge>
-                </div>
-            );
-        },
+      return (
+        <div className="flex justify-center">
+          <div
+            // variant={ isVisible ? "default" : "secondary" }
+            className={`flex items-center gap-1.5 px-3 py-1 rounded text-sm`}
+            style={{
+              backgroundColor: isVisible
+                ? AppColors.greenMint[10]
+                : AppColors.neutral[10],
+              color: isVisible
+                ? AppColors.greenMint[100]
+                : AppColors.neutral[90],
+            }}
+          >
+            {/* Status indicator with both visual and text cues */}
+            {isVisible ? <>Hoạt động</> : <>Không hoạt động</>}
+          </div>
+        </div>
+      );
     },
-{
+  },
+  {
     id: "actions",
-    header: () => <div className="text-center font-semibold">Thao Tác</div>,
+    header: () => (
+      <div className="text-center font-semibold text-base">Thao Tác</div>
+    ),
     cell: ({ row }) => {
       const category = row.original;
       const navigate = useNavigate();
@@ -224,7 +205,9 @@ export const columns: ColumnDef<TCategoryResponse>[] = [
               {/* Xem chi tiết thay cho Chỉnh sửa */}
               <DropdownMenuItem
                 className="cursor-pointer hover:bg-blue-50 focus:bg-blue-50"
-                onClick={() => navigate(`/dashboard/category/${category.id}`)}
+                onClick={() =>
+                  navigate(PATH_BRAND_DASHBOARD.category.edit(category.id))
+                }
               >
                 <Eye className="mr-2 h-4 w-4 text-blue-600" />
                 <span className="text-blue-700">Xem chi tiết</span>
@@ -248,31 +231,31 @@ export const columns: ColumnDef<TCategoryResponse>[] = [
 
 // Enhanced table configuration with category-specific optimizations
 export const categoryTableConfig = {
-    // Enable sorting for columns that benefit from it
-    enableSorting: true,
-    sortableColumns: [ 'displayOrder', 'name', 'code' ],
+  // Enable sorting for columns that benefit from it
+  enableSorting: true,
+  sortableColumns: ["displayOrder", "name", "code"],
 
-    // Optimized column sizing for category data
-    defaultColumnSizing: {
-        displayOrder: 120,
-        name: 250,
-        code: 180,
-        type: 160,
-        status: 140,
-        actions: 80,
-    },
+  // Optimized column sizing for category data
+  defaultColumnSizing: {
+    // displayOrder: 120,
+    // name: 250,
+    // code: 180,
+    // type: 160,
+    // status: 140,
+    // actions: 80,
+  },
 
-    // Pagination settings suitable for category management
-    pagination: {
-        pageSize: 15, // Slightly larger for category overview
-        pageSizeOptions: [ 15, 30, 50, 100 ],
-    },
+  // Pagination settings suitable for category management
+  pagination: {
+    pageSize: 15, // Slightly larger for category overview
+    pageSizeOptions: [15, 30, 50, 100],
+  },
 
-    // Filter configuration for category-specific needs
-    filtering: {
-        enableGlobalFilter: true,
-        searchPlaceholder: "Tìm kiếm danh mục...",
-        enableColumnFilters: true,
-        filterableColumns: [ 'type', 'status' ],
-    }
+  // Filter configuration for category-specific needs
+  filtering: {
+    enableGlobalFilter: true,
+    searchPlaceholder: "Tìm kiếm danh mục...",
+    enableColumnFilters: true,
+    filterableColumns: ["type", "status"],
+  },
 };

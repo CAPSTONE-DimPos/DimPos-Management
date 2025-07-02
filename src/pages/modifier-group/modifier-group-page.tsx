@@ -12,7 +12,7 @@ const ModifierGroupPage = () => {
     return (
         <div>
             <div className="flex items-center justify-between mb-6">
-                <h1 className="text-2xl font-semibold">Quản lý Tùy chọn</h1>
+                <h1 className="text-2xl font-semibold">Quản lý tùy chọn sản phẩm</h1>
                 {/* <Link to={ PATH_DASHBOARD.category.create }> */ }
                 <Button onClick={() => setOpen(true)}>
                     <CirclePlus className="mr-2 h-5 w-5" />

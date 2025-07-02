@@ -4,18 +4,19 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { AppColors } from "@/themes/colors";
 
 export const columns = (
   onViewOption: (data: TModifierGroupResponse) => void
 ): ColumnDef<TModifierGroupResponse>[] => [
   {
     accessorKey: "name",
-    header: () => <div className="font-semibold">Tên Tùy Chọn</div>,
+    header: () => <div className="font-semibold text-base">Tên tùy chọn</div>,
     cell: (info) => {
       const name = info.getValue() as string;
       return (
         <div className="max-w-[200px]">
-          <div className="font-medium text-foreground truncate cursor-pointer hover:text-primary transition-colors">
+          <div className="font-normal text-sm text-foreground truncate cursor-pointer hover:text-primary transition-colors">
             {name}
           </div>
         </div>
@@ -24,12 +25,12 @@ export const columns = (
   },
   {
     accessorKey: "description",
-    header: () => <div className="font-semibold">Mô Tả</div>,
+    header: () => <div className="font-semibold text-base">Mô Tả</div>,
     cell: (info) => {
       const description = info.getValue() as string;
       return (
         <div className="max-w-[200px]">
-          <div className="font-medium text-foreground truncate cursor-pointer hover:text-primary transition-colors">
+          <div className="font-normal text-sm text-foreground truncate cursor-pointer hover:text-primary transition-colors">
             {description || "Không có mô tả"}
           </div>
         </div>
@@ -38,7 +39,7 @@ export const columns = (
   },
   {
     accessorKey: "selectedType",
-    header: () => <div className="font-semibold">Hình thức chọn</div>,
+    header: () => <div className="font-semibold text-base">Hình thức chọn</div>,
     cell: (info) => {
       const selectedType = info.getValue() as number;
       const label =
@@ -49,7 +50,7 @@ export const columns = (
           : "Không xác định";
 
       return (
-        <div className="font-medium text-foreground truncate cursor-pointer hover:text-primary transition-colors">
+        <div className="font-normal text-sm text-foreground truncate cursor-pointer hover:text-primary transition-colors">
           {label}
         </div>
       );
@@ -57,13 +58,26 @@ export const columns = (
   },
   {
     accessorKey: "isActive",
-    header: () => <div className="text-center font-semibold">Trạng Thái</div>,
+    header: () => <div className="text-center font-semibold text-base ">Trạng Thái</div>,
     cell: (info) => {
       const status = info.getValue() as boolean;
 
       return (
         <div className="flex justify-center">
-          <Badge
+          <div
+            className="flex items-center gap-1.5 px-3 py-1 rounded text-sm"
+            style={{
+              backgroundColor: status
+                ? AppColors.greenMint[10]
+                : AppColors.neutral[10],
+              color: status
+                ? AppColors.greenMint[100]
+                : AppColors.neutral[90],
+            }}
+          >
+            {status ? <>Hiển thị</> : <>Ẩn</>}
+          </div>
+          {/* <Badge
             variant={status ? "default" : "destructive"}
             className={`${
               status
@@ -77,14 +91,14 @@ export const columns = (
               }`}
             />
             {status ? "Hiển Thị" : "Ẩn"}
-          </Badge>
+          </Badge> */}
         </div>
       );
     },
   },
   {
     id: "actions",
-    header: () => <div className="text-center font-semibold">Thao Tác</div>,
+    header: () => <div className="text-center font-semibold text-base">Thao Tác</div>,
     cell: ({ row }) => {
       const option = row.original;
 

@@ -1,13 +1,14 @@
-import ProductVariantTable from "./components/product-variant-table"
+import ProductVariantTable from "./components/product-variant-table";
 
+const ProductPage = () => {
+  return (
+    <div className="">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-semibold">Quản lý biến thể sản phẩm</h1>
+      </div>
+      <ProductVariantTable />
+    </div>
+  );
+};
 
-const ProductPage = () =>
-{
-    return (
-        <div className="px-8 py-4">
-            <ProductVariantTable />
-        </div>
-    )
-}
-
-export default ProductPage
+export default ProductPage;

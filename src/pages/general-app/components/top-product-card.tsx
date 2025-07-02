@@ -5,7 +5,7 @@ import { formatPrice } from '@/lib/utils';
 
 type Props = {}
 
-const RecentTransactionCard = ( _: Props ) =>
+const TopProductCard = ( _: Props ) =>
 {
     const transactions = [
         { id: 1, type: 'delivery', description: 'Giao dịch thất bại', date: '14/12/2025', amount: -62500000, status: 'failed' },
@@ -19,7 +19,7 @@ const RecentTransactionCard = ( _: Props ) =>
     return (
         <Card className="bg-white shadow-none border-none" >
             <CardHeader>
-                <CardTitle className="text-lg font-semibold">Hình thức thanh toán</CardTitle>
+                <CardTitle className="text-lg font-semibold">Top sản phẩm bán chạy</CardTitle>
                 {/* <CardDescription className="text-sm text-gray-500">
                     Các giao dịch diễn ra trong ngày hôm nay
                 </CardDescription> */}
@@ -58,4 +58,4 @@ const RecentTransactionCard = ( _: Props ) =>
     )
 }
 
-export default RecentTransactionCard
+export default TopProductCard

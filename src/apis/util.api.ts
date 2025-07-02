@@ -20,7 +20,10 @@ export const API_SUFFIX = {
   PRODUCT_API: "/products",
   PRODUCT_VARIANT_API: "/product-variants",
   MODIFIER_GROUP_API: "/modifier-groups",
-  MODIFIER_OPTION_API: "modifier-options",
+  MODIFIER_OPTION_API: "/modifier-options",
+  CAMPAIGN_API: "/campaigns",
+  PROMOTION_RULE_API: "promotion-rules",
+
   BRAND_API: {
     BRAND_DETAIL: "/brands/detail",
   },
