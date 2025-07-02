@@ -36,7 +36,7 @@ import
 import { useMutation } from "@tanstack/react-query";
 import { categoryApi } from "@/apis/category.api";
 import { handleApiError } from "@/lib/error";
-import { PATH_DASHBOARD } from '@/routes/path';
+import { PATH_BRAND_DASHBOARD } from '@/routes/path';
 import { useCategory } from "@/hooks/use-category";
 import type { RootState } from '@/redux/store';
 import { handleChangeModalState, handleSetCreatedId } from '@/redux/modal/modal-slice';
@@ -287,7 +287,7 @@ const CreateCategoryPage = () =>
                 if ( createdId )
                 {
                   dispatch( handleChangeModalState( false ) );
-                  navigate( PATH_DASHBOARD.category.edit( createdId ) );
+                  navigate( PATH_BRAND_DASHBOARD.category.edit( createdId ) );
                 }
               } }
             >
