@@ -75,7 +75,7 @@ const brandRoutes = {
       },
       {
         title: "Nhập hàng",
-        url: PATH_BRAND_DASHBOARD.product.importProduct,
+        url: PATH_BRAND_DASHBOARD.internalPurchaseOrders.root,
         icon: BoxAddIcon,
       }
     ]

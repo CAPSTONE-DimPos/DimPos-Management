@@ -68,6 +68,7 @@ const menu = request(envConfig.VITE_API_MENU_URL);
 const brand = request(envConfig.VITE_API_BRAND_URL);
 const store = request(envConfig.VITE_API_STORE_URL);
 const promotion = request( envConfig.VITE_API_PROMOTION_URL );
+// const inventory = request(envConfig.VITE_API_INVENTORY_URL);
 
 export const apiRequest = {
     catalog,
@@ -76,4 +77,6 @@ export const apiRequest = {
     brand,
     store,
     promotion,
+    // inventory,
+
 }
