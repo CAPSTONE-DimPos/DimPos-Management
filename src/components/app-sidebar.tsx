@@ -75,7 +75,7 @@ const brandRoutes = {
       },
       {
         title: "Nhập hàng",
-        url: PATH_BRAND_DASHBOARD.product.importProduct,
+        url: PATH_BRAND_DASHBOARD.internalPurchaseOrders.root,
         icon: BoxAddIcon,
       }
     ]
@@ -116,8 +116,15 @@ const adminRoutes = {
         url: PATH_ADMIN_DASHBOARD.general.app,
         icon: GeneralAppIcon,
       },
+      {
+        title: "Quản lí Thương hiệu",
+        url: PATH_ADMIN_DASHBOARD.brand.root,
+        icon: HomeIcon,
+      },
     ],
   },
+  
+  
 }
 
 const storeRoutes = {

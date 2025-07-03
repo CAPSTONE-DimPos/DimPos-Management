@@ -97,6 +97,18 @@ export const useProduct = () => {
             }),
         })
     }
+const createModifierOptionMutation = useMutation({
+  mutationFn: ({
+    groupId,
+    data,
+  }: {
+    groupId: string;
+    data: TUpdateModifierOptionRequest;
+  }) => productApi.createModifierOption(groupId, data),
+  onSuccess: (_res, { groupId }) => {
+    queryClient.invalidateQueries({ queryKey: ["modifier-options", groupId] });
+  },
+});
 
     const createProductMutation = useMutation({
         mutationFn: productApi.createProductApi,
@@ -160,5 +172,6 @@ export const useProduct = () => {
     createModifierGroupMutation,
     updateModifierGroupMutation,
     updateModifierOptionMutation,
+    createModifierOptionMutation,
     }
 }

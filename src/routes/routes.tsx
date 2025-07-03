@@ -8,6 +8,9 @@ import AuthGuard from "@/guards/auth-guard";
 import Logout from "@/pages/logout/logout";
 import { PATH_ADMIN_DASHBOARD, PATH_AUTH, PATH_BRAND_DASHBOARD, PATH_STORE_DASHBOARD } from "./path";
 import RoleBasedGuard from "@/guards/role-based-guard";
+import BrandManagementPage from "@/pages/brand-management";
+import CreateBrandPage from "@/pages/brand-management/create/brand-management-create-page";
+// import InternalPurchaseOrdersPage from "@/pages/internal-purchase-orders/list/internal-purchase-orders-page";
 // import CreateModifierGroupPage from "@/pages/create-modifier-group";
 
 const Loadable = ( Component: ElementType ) => ( props: any ) =>
@@ -139,6 +142,11 @@ export const AppRoutes = () =>
                         path: 'promotion',
                         element: <PromotionPage />,
                     },
+                    // {
+                    //     path: 'internal-purchase-orders',
+                    //     element: <InternalPurchaseOrdersPage />,
+                    // },
+                    
 
                     // Menu routes
                     {
@@ -189,6 +197,14 @@ export const AppRoutes = () =>
                     {
                         path: "app",
                         element: <GeneralAppPage />,
+                    },
+                    {
+                        path: 'brand',
+                        element: <BrandManagementPage />,
+                    },
+                    {
+                        path: 'brand/new',
+                        element: <CreateBrandPage />,
                     },
                 ],
             },
