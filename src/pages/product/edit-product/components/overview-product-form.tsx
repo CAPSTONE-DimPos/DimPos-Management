@@ -531,7 +531,7 @@ const EditProductForm = ({ initialData }: Props) => {
                       control={form.control}
                       name="category.id"
                       render={({ field }) => {
-                        const [searchTerm, setSearchTerm] = useState("");
+                        const [searchTerm] = useState("");
 
                         const filteredCategories = (
                           data?.data.data.items ?? []

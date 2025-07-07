@@ -2,15 +2,12 @@ import * as React from "react";
 
 import BoxAddIcon from "@/assets/icons/box-add-icon";
 import CollapseIcon from "@/assets/icons/collapse-icon";
-import DiscountIcon from "@/assets/icons/discount-icon";
 import GeneralAppIcon from "@/assets/icons/general-app-icon";
 import HomeIcon from "@/assets/icons/home-icon";
 // import InventoryReportIcon from "@/assets/icons/inventory-report-icon"
 import MenuIcon from "@/assets/icons/menu-icon";
 import ProductIcon from "@/assets/icons/product-icon";
 import ReceiptIcon from "@/assets/icons/receipt-icon";
-import ShopIcon from "@/assets/icons/shop-icon";
-import UsersIcon from "@/assets/icons/users-icon";
 import DimposLogo from "@/assets/logo/dimpos-logo";
 import { NavMain } from "@/components/nav-main";
 import {

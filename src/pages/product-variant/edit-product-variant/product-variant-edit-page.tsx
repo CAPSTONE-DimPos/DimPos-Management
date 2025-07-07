@@ -1,6 +1,6 @@
 // src/pages/ProductVariant/edit/ProductVariant-edit-page.tsx
 import { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -39,13 +39,8 @@ import { Switch } from "@/components/ui/switch";
 import ImageNotFound from "@/assets/illustration/image-not-found";
 import { Button } from "@/components/ui/button";
 
-type Props = {
-  initialData: TUpdateProductVariantRequest;
-};
-
-const ProductVariantEditPage = ({ initialData }: Props) => {
+const ProductVariantEditPage = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
 
   const { getProductVariantById } = useProductVariant();
   const { getProductById } = useProduct();
@@ -64,7 +59,21 @@ const ProductVariantEditPage = ({ initialData }: Props) => {
     formState: { errors },
   } = useForm<TUpdateProductVariantRequest>({
     resolver: zodResolver(UpdateProductVariantSchema),
-    defaultValues: initialData,
+    defaultValues: {
+      code: productVariantData.data.data.code,
+      alternativeCode: productVariantData.data.data.alternativeCode,
+      discountPercent: productVariantData.data.data.discountPercent,
+      discountPrice: productVariantData.data.data.discountPrice,
+      displayOrder: 0,
+      isActive: productVariantData.data.data.isActive,
+      isMenuDisplay: productVariantData.data.data.isMenuDisplay,
+      name: productVariantData.data.data.name,
+      price: productVariantData.data.data.price,
+      priceCOGS: productVariantData.data.data.priceCOGS,
+      size: productVariantData.data.data.size,
+      sku: productVariantData.data.data.sku,
+      status: productVariantData.data.data.status,
+    },
   });
 
   useEffect(() => {
@@ -133,7 +142,6 @@ const ProductVariantEditPage = ({ initialData }: Props) => {
             <Card className="shadow-none border-none bg-white lg:col-span-2 2xl:col-span-2">
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
                   <div>
                     <label className="block text-sm font-medium">
                       Mã biến thể *

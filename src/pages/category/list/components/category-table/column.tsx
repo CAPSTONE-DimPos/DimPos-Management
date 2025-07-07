@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -18,7 +17,6 @@ import {
   ArrowUpDown,
   Copy,
   Eye,
-  EyeOff,
   Folder,
   FolderOpen,
   MoreHorizontal,

@@ -1,11 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { type TProductVariantRequest } from '@/schema/product.schema';
+import { type TProductVariantResponse } from '@/schema/product-variant.schema';
 import { Plus } from 'lucide-react';
 import VariantProductForm from './variant-product-form';
 
 type Props = {
-    initialData: TProductVariantRequest[];
+    initialData: TProductVariantResponse[];
 }
 
 const VariantsProductSection = ( { initialData }: Props ) =>

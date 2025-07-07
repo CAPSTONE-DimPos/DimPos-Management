@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import type { TModifierGroupResponse} from "@/schema/product.schema";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";

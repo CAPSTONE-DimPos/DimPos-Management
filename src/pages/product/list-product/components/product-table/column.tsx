@@ -11,7 +11,7 @@ import type { TProductResponse } from "@/schema/product.schema";
 import { AppColors } from "@/themes/colors";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import type { ColumnDef } from "@tanstack/react-table";
-import { Copy, Eye, EyeOff } from "lucide-react";
+import { Copy, Eye } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const columns: ColumnDef<TProductResponse>[] = [

@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { copyToClipboard, formatPrice } from "@/lib/utils";
-import type { TProductVariantResponse } from "@/schema/product.schema";
+import type { TProductVariantResponse } from "@/schema/product-variant.schema";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Copy, Eye, EyeOff } from "lucide-react";
 
