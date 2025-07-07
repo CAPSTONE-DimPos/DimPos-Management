@@ -14,7 +14,7 @@ const BrandPage = ( _: Props ) =>
     {
         handleApiError( error );
     }
-    console.log( data );
+    // //console.log( data );
     return (
         <div>
             <h1 className="text-2xl font-semibold mb-6">Thương hiệu của tôi</h1>

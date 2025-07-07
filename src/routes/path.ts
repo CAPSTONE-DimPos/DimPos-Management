@@ -26,10 +26,17 @@ export const PATH_BRAND_DASHBOARD = {
     edit: (id: string) => path(ROOTS_BRAND_DASHBOARD, `/category/${id}`),
   },
   product: {
+    //Product
     root: path(ROOTS_BRAND_DASHBOARD, '/product'),
     createProduct: path(ROOTS_BRAND_DASHBOARD, '/product/new'),
     editProduct: (id: string) => path(ROOTS_BRAND_DASHBOARD, `/product/${id}`),
+
+    //Product variant
     variant: path(ROOTS_BRAND_DASHBOARD, '/product-variant'),
+    createVariant: path(ROOTS_BRAND_DASHBOARD, '/product-variant/new'),
+    editVariant: (id: string) => path(ROOTS_BRAND_DASHBOARD, `/product-variant/${id}`),
+
+    //Modifier
     modifier: path(ROOTS_BRAND_DASHBOARD, '/modifier-group'),
     // createModifier: path(ROOTS_BRAND_DASHBOARD, '/modifier-group/new'),
     menu: path(ROOTS_BRAND_DASHBOARD, '/menu'),

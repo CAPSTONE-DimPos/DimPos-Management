@@ -15,13 +15,9 @@ export const CampaignResponseSchema = z.object({
     .max(1000, { message: "Mô tả của chiến dịch không được quá 1000 ký tự" })
     .optional(),
 
-  startDate: z.string()
-    .nonempty({ message: "Ngày bắt đầu không được để trống" })
-    .transform((val) => new Date(val)),
+  startDate: z.date(),
 
-  endDate: z.string()
-    .nonempty({ message: "Ngày kết thúc không được để trống" })
-    .transform((val) => new Date(val)),
+  endDate: z.date(),
 
   priority: z.number().int().min(0, { message: "Độ ưu tiên không được để trống" }),
 
@@ -41,13 +37,9 @@ const BaseCampaignSchema = z.object({
     .max(1000, { message: "Mô tả của chiến dịch không được quá 1000 ký tự" })
     .optional(),
 
-  startDate: z.string()
-    .nonempty({ message: "Ngày bắt đầu không được để trống" })
-    .transform((val) => new Date(val)),
+  startDate: z.date(),
 
-  endDate: z.string()
-    .nonempty({ message: "Ngày kết thúc không được để trống" })
-    .transform((val) => new Date(val)),
+  endDate: z.date(),
 
   priority: z.number().int().min(0, { message: "Độ ưu tiên không được để trống" }),
 

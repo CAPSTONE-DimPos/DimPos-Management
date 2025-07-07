@@ -120,15 +120,6 @@ export const columns: ColumnDef<TCategoryResponse>[] = [
                 Danh mục con
               </>
             )}
-            {/* <Badge
-            variant="secondary"
-            className={`flex items-center gap-1.5 ${
-              isParentCategory
-                ? "bg-purple-100 text-purple-800 hover:bg-purple-200"
-                : "bg-blue-100 text-blue-800 hover:bg-blue-200"
-            }`}
-          >
-          </Badge> */}
           </div>
         </div>
       );

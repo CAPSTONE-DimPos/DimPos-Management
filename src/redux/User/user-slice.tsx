@@ -130,14 +130,14 @@ const userSlice = createSlice( {
                 // Check if we have the minimum required data
                 if ( !accessToken || !refreshToken || !storedUserData )
                 {
-                    console.log( 'Missing authentication data in localStorage' );
+                    //console.log( 'Missing authentication data in localStorage' );
                     clearStoredAuthData();
                     return;
                 }
 
                 if ( isTokenExpired( accessToken ) )
                 {
-                    console.log( 'Stored access token is expired, clearing authentication data' );
+                    //console.log( 'Stored access token is expired, clearing authentication data' );
                     clearStoredAuthData();
 
                     state.user = null;
@@ -171,7 +171,7 @@ const userSlice = createSlice( {
 
             clearStoredAuthData();
 
-            console.log( 'User logged out successfully' );
+            //console.log( 'User logged out successfully' );
         }
     },
 } );

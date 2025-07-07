@@ -1,23 +1,16 @@
 // src/pages/campaign/edit/campaign-edit-page.tsx
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { Button } from "@/components/ui/button";
-import { Upload } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 
 import { useCampaign } from "@/hooks/use-campaign";
@@ -26,7 +19,6 @@ import { handleApiError } from "@/lib/error";
 import {
   UpdateCampaignSchema,
   type TUpdateCampaignRequest,
-  type TCampaignResponse,
 } from "@/schema/campaign.schema";
 
 const CampaignEditPage = () => {
@@ -41,7 +33,7 @@ const CampaignEditPage = () => {
     handleSubmit,
     control,
     setValue,
-    watch,
+    // watch,
     formState: { errors },
   } = useForm<TUpdateCampaignRequest>({
     resolver: zodResolver(UpdateCampaignSchema),
@@ -61,7 +53,7 @@ const CampaignEditPage = () => {
   useEffect(() => {
     if (campaignData?.data?.data) {
       const campaign = campaignData.data.data;
-      console.log(campaign);
+      // //console.log(campaign);
       setValue("id", campaign.id);
       setValue("name", campaign.name);
       setValue("description", campaign.description ?? "");

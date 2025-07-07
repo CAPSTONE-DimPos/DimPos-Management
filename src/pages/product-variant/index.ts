@@ -1,1 +1,1 @@
-export {default} from "./product-variant-page";
+export {default} from "./list-product-variant/product-variant-page";

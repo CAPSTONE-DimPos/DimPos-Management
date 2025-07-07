@@ -15,6 +15,7 @@ import {
 import RoleBasedGuard from "@/guards/role-based-guard";
 import CampaignEditPage from "@/pages/campaign/edit";
 import CampaignPage from "@/pages/campaign";
+import ProductVariantEditPage from "@/pages/product-variant/edit-product-variant";
 // import CreateModifierGroupPage from "@/pages/create-modifier-group";
 
 const Loadable = (Component: ElementType) => (props: any) => {
@@ -41,22 +42,22 @@ const CategoryCreatePage = Loadable(
   lazy(() => import("@/pages/category/create"))
 );
 const CategoryEditPage = Loadable(lazy(() => import("@/pages/category/edit")));
-const ProductPage = Loadable(lazy(() => import("@/pages/product")));
+const ProductPage = Loadable(lazy(() => import("@/pages/product/list-product")));
 const ProductCreatePage = Loadable(
-  lazy(() => import("@/pages/create-product"))
+  lazy(() => import("@/pages/product/create-product"))
 );
-const ProductEditPage = Loadable(lazy(() => import("@/pages/edit-product")));
+const ProductEditPage = Loadable(lazy(() => import("@/pages/product/edit-product")));
 const ProductVariantPage = Loadable(
   lazy(() => import("@/pages/product-variant"))
 );
 const ModifierGroupPage = Loadable(
-  lazy(() => import("@/pages/modifier-group"))
+  lazy(() => import("@/pages/modifier-group/list-modifier-group"))
 );
 
 // Menu routes
-const MenuPage = Loadable(lazy(() => import("@/pages/menu")));
-const MenuCreatePage = Loadable(lazy(() => import("@/pages/create-menu")));
-const MenuEditPage = Loadable(lazy(() => import("@/pages/edit-menu")));
+const MenuPage = Loadable(lazy(() => import("@/pages/menu/list-menu")));
+const MenuCreatePage = Loadable(lazy(() => import("@/pages/menu/create-menu")));
+const MenuEditPage = Loadable(lazy(() => import("@/pages/menu/edit-menu")));
 
 const PromotionPage = Loadable(lazy(() => import("@/pages/promotion")));
 // const CampaignPage = Loadable(lazy(() => import("@/pages/campaign")));
@@ -146,6 +147,10 @@ export const AppRoutes = () =>
         {
           path: "product-variant",
           element: <ProductVariantPage />,
+        },
+        {
+          path: "product-variant/:id",
+          element: <ProductVariantEditPage />,
         },
         {
           path: "modifier-group",
