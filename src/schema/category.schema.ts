@@ -34,7 +34,7 @@ const CategoryStatusEnum = z.union([z.literal(0), z.literal(1)]);
 export const CreateCategorySchema = z.object({
   code: z.string()
   .min(1, { message: "Mã danh mục không được để trống" })
-  .max(20, { message: "Mã danh mục không được quá 20 ký tự" }),
+  .max(5, { message: "Mã danh mục không được quá 5 ký tự" }),
 
   name: z.string()
     .min(1, { message: "Tên của danh mục không được ít hơn 1 ký tự" })

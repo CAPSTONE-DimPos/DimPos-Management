@@ -28,7 +28,7 @@ const RevenueChart = ( _: Props ) =>
         <Card className="lg:col-span-2 bg-white shadow-none border-none">
             <CardHeader className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className='col-span-2'>
-                    <CardTitle className="text-lg font-semibold">Thống kê thu nhập</CardTitle>
+                    <CardTitle className="text-lg font-semibold">Doanh thu theo thời gian</CardTitle>
                 </div>
                 <div className="col-span-2 md:col-span-1">
                     <Select defaultValue="thismonth">

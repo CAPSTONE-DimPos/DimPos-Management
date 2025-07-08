@@ -11,9 +11,9 @@ export const useRowSelection = () =>
         onSelectionChange: ( selected: string[], deselected: string[] ) => void
     ) =>
     {
-        console.log( "Row selection changed:", newSelection );
+        // //console.log( "Row selection changed:", newSelection );
         const oldSelection = previousSelectionRef.current;
-        console.log( "Old selection:", oldSelection );
+        // //console.log( "Old selection:", oldSelection );
 
         const newlySelected = Object.entries( newSelection )
             .filter( ( [ rowId, isSelected ] ) => isSelected && !oldSelection[ rowId ] )

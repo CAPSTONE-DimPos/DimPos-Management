@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { formatPrice } from '@/lib/utils';
@@ -19,10 +19,10 @@ const RecentTransactionCard = ( _: Props ) =>
     return (
         <Card className="bg-white shadow-none border-none" >
             <CardHeader>
-                <CardTitle className="text-lg font-semibold">Giao dịch gần đây</CardTitle>
-                <CardDescription className="text-sm text-gray-500">
+                <CardTitle className="text-lg font-semibold">Hình thức thanh toán</CardTitle>
+                {/* <CardDescription className="text-sm text-gray-500">
                     Các giao dịch diễn ra trong ngày hôm nay
-                </CardDescription>
+                </CardDescription> */}
             </CardHeader>
             <CardContent>
                 <ScrollArea className="space-y-4 max-h-[300px] overflow-y-auto">

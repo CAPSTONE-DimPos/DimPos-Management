@@ -2,7 +2,7 @@ import { apiRequest } from "@/lib/http";
 import type { TBrandMenu, TBrandStore } from "@/schema/menu.schema";
 import type { BaseResponse, PaginationResponse } from "@/types/response.type";
 import { API_SUFFIX } from "./util.api";
-import type { TProductVariantResponse } from "@/schema/product.schema";
+import type { TProductVariantResponse } from "@/schema/product-variant.schema";
 
 const getBrandMenu = async (params: any) => 
     await apiRequest.menu.get<BaseResponse<PaginationResponse<TBrandMenu>>>(`${API_SUFFIX.BRAND_MENU_API}`, {params});

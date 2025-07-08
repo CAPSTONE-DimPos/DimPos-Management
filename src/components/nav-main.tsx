@@ -25,7 +25,7 @@ export function NavMain ( {
 {
   const { open, toggleSidebar } = useSidebar()
   const pathname = useLocation().pathname;
-  console.log( "NavMain: ", ( '/' + pathname.replace( /^\//, '' ).split( '/' ).slice( 0, 2 ).join( '/' ) ) );
+  // //console.log( "NavMain: ", ( '/' + pathname.replace( /^\//, '' ).split( '/' ).slice( 0, 2 ).join( '/' ) ) );
   return (
     <SidebarGroup>
       <SidebarGroupLabel className="text-sm mb-1">{ content.mainTitle }</SidebarGroupLabel>

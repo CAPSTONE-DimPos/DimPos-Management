@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userSlice from './user/user-slice';
+import userSlice from '@/redux/user/user-slice';
 import modalSlice from './modal/modal-slice';
 
 

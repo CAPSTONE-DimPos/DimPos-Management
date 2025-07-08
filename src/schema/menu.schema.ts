@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ProductVariantSchema } from "./product.schema";
+import { ProductVariantSchema } from "./product-variant.schema";
 
 export const BrandStoreSchema = z.object({
     id: z.string().uuid(),

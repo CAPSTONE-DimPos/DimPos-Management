@@ -42,7 +42,7 @@ export function LoginForm ( {
       password: "",
     },
   } );
-  // console.log( "Is successful login mutation:", loginMutation.isSuccess );
+  // //console.log( "Is successful login mutation:", loginMutation.isSuccess );
   const onSubmit = async ( data: TLoginRequest ) =>
   {
     if ( loginMutation.isPending ) return;
@@ -52,7 +52,7 @@ export function LoginForm ( {
       const result = await loginMutation.mutateAsync( data );
       const accessToken = result.data.data.accessToken;
       const role = ( jwtDecode( accessToken ) as any ).role;
-      console.log( "Decoded role:", role );
+      //console.log( "Decoded role:", role );
       if ( RoleSchema.safeParse( role ).error )
       {
         throw {

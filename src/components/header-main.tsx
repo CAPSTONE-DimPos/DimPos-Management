@@ -15,7 +15,7 @@ const HeaderMain = () =>
     const pathname = useLocation().pathname;
     const navigate = useNavigate();
     const { isMobile, toggleSidebar } = useSidebar();
-    console.log( "HeaderMain: ", pathname );
+    // //console.log( "HeaderMain: ", pathname );
     const shouldShowBack = () =>
     {
         const segments = pathname.split( "/" ).filter( Boolean );

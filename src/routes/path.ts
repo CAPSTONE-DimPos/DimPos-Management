@@ -26,10 +26,17 @@ export const PATH_BRAND_DASHBOARD = {
     edit: (id: string) => path(ROOTS_BRAND_DASHBOARD, `/category/${id}`),
   },
   product: {
+    //Product
     root: path(ROOTS_BRAND_DASHBOARD, '/product'),
     createProduct: path(ROOTS_BRAND_DASHBOARD, '/product/new'),
     editProduct: (id: string) => path(ROOTS_BRAND_DASHBOARD, `/product/${id}`),
+
+    //Product variant
     variant: path(ROOTS_BRAND_DASHBOARD, '/product-variant'),
+    createVariant: path(ROOTS_BRAND_DASHBOARD, '/product-variant/new'),
+    editVariant: (id: string) => path(ROOTS_BRAND_DASHBOARD, `/product-variant/${id}`),
+
+    //Modifier
     modifier: path(ROOTS_BRAND_DASHBOARD, '/modifier-group'),
     // createModifier: path(ROOTS_BRAND_DASHBOARD, '/modifier-group/new'),
     menu: path(ROOTS_BRAND_DASHBOARD, '/menu'),
@@ -38,14 +45,40 @@ export const PATH_BRAND_DASHBOARD = {
     discount: path(ROOTS_BRAND_DASHBOARD, '/discount'),
     importProduct: path(ROOTS_BRAND_DASHBOARD, '/import-product'),
   },
-   internalPurchaseOrders: {
+  combo: {
+    root: path(ROOTS_BRAND_DASHBOARD, '/combo'),
+  },
+
+  ingredient: {
+    root: path(ROOTS_BRAND_DASHBOARD, '/ingredient'),
+  },
+  tax: {
+    root: path(ROOTS_BRAND_DASHBOARD, '/tax'),
+  },
+
+  recipe: {
+    root: path(ROOTS_BRAND_DASHBOARD, '/recipe'),
+  },
+  internalPurchaseOrders: {
     root: path(ROOTS_BRAND_DASHBOARD, '/internal-purchase-orders'),
     create: path(ROOTS_BRAND_DASHBOARD, '/internal-purchase-orders/create'),
-    detail: (id: string) =>
-      path(ROOTS_BRAND_DASHBOARD, `/internal-purchase-orders/${id}`),
+    detail: (id: string) => path(ROOTS_BRAND_DASHBOARD, `/internal-purchase-orders/${id}`),
   },
   promotion: {
     root: path(ROOTS_BRAND_DASHBOARD, '/promotion'),
+  },
+  campaign: {
+    root: path(ROOTS_BRAND_DASHBOARD, '/campaign'),
+    createCampaign: path(ROOTS_BRAND_DASHBOARD, '/campaign/new'),
+    editCampaign: (id: string) => path(ROOTS_BRAND_DASHBOARD, `/campaign/${id}`),
+  },
+
+  accountStore: {
+    root: path(ROOTS_BRAND_DASHBOARD, '/store-account'),
+  },
+
+  order:{
+    root:path(ROOTS_BRAND_DASHBOARD, '/order'),
   },
 
   brand: {

@@ -3,7 +3,6 @@ import { API_SUFFIX } from "./util.api";
 
 import type {
   TProductResponse,
-  TProductVariantResponse,
   TModifierGroupResponse,
   TModifierOptionResponse,
   TCreateModifierGroupRequest,
@@ -24,10 +23,10 @@ const getProductById = async (id: string) =>
     `${API_SUFFIX.PRODUCT_API}/${id}`
   );
 
-const getProductVariants = async (params?: any) =>
-  await apiRequest.catalog.get<BaseResponse<PaginationResponse<TProductVariantResponse>>>(
-    API_SUFFIX.PRODUCT_VARIANT_API,
-    { params }
+const updateProductApi = async (id: string, data: FormData) =>
+  await apiRequest.catalog.patch<BaseResponse<TProductResponse>>(
+    `${API_SUFFIX.PRODUCT_API}/${id}`,
+    data
   );
 
 const createProductApi = async (data: FormData) =>
@@ -86,8 +85,8 @@ export const productApi = {
   // Product
   getProducts,
   getProductById,
-  getProductVariants,
   createProductApi,
+  updateProductApi,
 
   // Modifier Group
   getModifierGroups,
