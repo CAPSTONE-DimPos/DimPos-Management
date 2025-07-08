@@ -1,3 +1,4 @@
+<a href="https://wakatime.com/badge/user/25a5b87a-cf02-4240-a7d4-97a55e1ef4f6/project/6fe20e4b-0b6a-4ea7-a8e4-7e94accc5c16"><img src="https://wakatime.com/badge/user/25a5b87a-cf02-4240-a7d4-97a55e1ef4f6/project/6fe20e4b-0b6a-4ea7-a8e4-7e94accc5c16.svg" alt="wakatime"></a>
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

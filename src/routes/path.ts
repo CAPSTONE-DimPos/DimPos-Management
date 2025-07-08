@@ -59,7 +59,11 @@ export const PATH_BRAND_DASHBOARD = {
   recipe: {
     root: path(ROOTS_BRAND_DASHBOARD, '/recipe'),
   },
-
+  internalPurchaseOrders: {
+    root: path(ROOTS_BRAND_DASHBOARD, '/internal-purchase-orders'),
+    create: path(ROOTS_BRAND_DASHBOARD, '/internal-purchase-orders/create'),
+    detail: (id: string) => path(ROOTS_BRAND_DASHBOARD, `/internal-purchase-orders/${id}`),
+  },
   promotion: {
     root: path(ROOTS_BRAND_DASHBOARD, '/promotion'),
   },
@@ -94,14 +98,22 @@ export const PATH_BRAND_DASHBOARD = {
 
 export const PATH_ADMIN_DASHBOARD = {
   root: ROOTS_ADMIN_DASHBOARD,
+
   general: {
-    app: path(ROOTS_ADMIN_DASHBOARD, '/app'),
+    app: path(ROOTS_ADMIN_DASHBOARD, "/app"),
   },
-}
+
+  brand: {
+    root: path(ROOTS_ADMIN_DASHBOARD, "/brand"),
+    create: path(ROOTS_ADMIN_DASHBOARD, "/brand/new"), 
+    edit: (id: string) => path(ROOTS_ADMIN_DASHBOARD, `/brand/${id}`), 
+  },
+};
 
 export const PATH_STORE_DASHBOARD = {
   root: ROOTS_STORE_DASHBOARD,
   general: {
     app: path(ROOTS_STORE_DASHBOARD, '/app'),
+  
   },
 };

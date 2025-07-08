@@ -2,9 +2,10 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useDispatch,  } from "react-redux";
+import { useDispatch, } from "react-redux";
 
-import {
+import
+{
   Card,
   CardHeader,
   CardTitle,
@@ -13,7 +14,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
+import
+{
   Select,
   SelectContent,
   SelectItem,
@@ -24,7 +26,8 @@ import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 
-import {
+import
+{
   CreateCategorySchema,
   type TCreateCategoryRequest,
   type TCategoryResponse,
@@ -33,14 +36,16 @@ import { useMutation } from "@tanstack/react-query";
 import { categoryApi } from "@/apis/category.api";
 import { handleApiError } from "@/lib/error";
 import { useCategory } from "@/hooks/use-category";
-import {
+import
+{
   handleChangeModalState,
   handleSetCreatedId,
 } from "@/redux/modal/modal-slice";
 
-const CreateCategoryPage = () => {
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [selectedType, setSelectedType] = useState<number>(1);
+const CreateCategoryPage = () =>
+{
+  const [ imagePreview, setImagePreview ] = useState<string | null>( null );
+  const [ selectedType, setSelectedType ] = useState<number>( 1 );
   // const navigate = useNavigate();
   const dispatch = useDispatch();
   // const { isOpen, createdId } = useSelector((state: RootState) => state.modal);
@@ -57,8 +62,8 @@ const CreateCategoryPage = () => {
     setValue,
     watch,
     formState: { errors },
-  } = useForm<TCreateCategoryRequest>({
-    resolver: zodResolver(CreateCategorySchema),
+  } = useForm<TCreateCategoryRequest>( {
+    resolver: zodResolver( CreateCategorySchema ),
     defaultValues: {
       code: "",
       name: "",
@@ -69,77 +74,87 @@ const CreateCategoryPage = () => {
       status: 0,
       parentId: null,
     },
-  });
+  } );
 
-  const createCategoryMutation = useMutation({
-    mutationFn: (formData: FormData) => categoryApi.createCategory(formData),
-  });
+  const createCategoryMutation = useMutation( {
+    mutationFn: ( formData: FormData ) => categoryApi.createCategory( formData ),
+  } );
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleImageChange = ( e: React.ChangeEvent<HTMLInputElement> ) =>
+  {
+    const file = e.target.files?.[ 0 ];
+    if ( !file ) return;
 
     const reader = new FileReader();
-    reader.onload = () => {
-      setImagePreview(reader.result as string);
+    reader.onload = () =>
+    {
+      setImagePreview( reader.result as string );
     };
-    reader.readAsDataURL(file);
+    reader.readAsDataURL( file );
 
-    setValue("image", file);
+    setValue( "image", file );
   };
 
-  const handleRemoveImage = () => {
-    setImagePreview(null);
-    setValue("image", undefined);
+  const handleRemoveImage = () =>
+  {
+    setImagePreview( null );
+    setValue( "image", undefined );
     const input = document.getElementById(
       "upload-image"
     ) as HTMLInputElement | null;
-    if (input) input.value = "";
+    if ( input ) input.value = "";
   };
 
-  const onSubmit = async (data: TCreateCategoryRequest) => {
+  const onSubmit = async ( data: TCreateCategoryRequest ) =>
+  {
     const formData = new FormData();
-    formData.append("code", data.code ?? "");
-    formData.append("name", data.name);
-    formData.append("description", data.description ?? "");
-    formData.append("type", data.type.toString());
-    formData.append("status", data.status.toString());
-    formData.append("displayOrder", data.displayOrder?.toString() || "0");
-    if (data.parentId != null) {
-      formData.append("parentId", data.parentId);
+    formData.append( "code", data.code ?? "" );
+    formData.append( "name", data.name );
+    formData.append( "description", data.description ?? "" );
+    formData.append( "type", data.type.toString() );
+    formData.append( "status", data.status.toString() );
+    formData.append( "displayOrder", data.displayOrder?.toString() || "0" );
+    if ( data.parentId != null )
+    {
+      formData.append( "parentId", data.parentId );
     }
-    if (data.image instanceof File) {
-      formData.append("image", data.image);
+    if ( data.image instanceof File )
+    {
+      formData.append( "image", data.image );
     }
 
-    try {
-      const result = await createCategoryMutation.mutateAsync(formData);
-      dispatch(handleSetCreatedId(result.data.data.id));
-      dispatch(handleChangeModalState(true));
-      toast.success("Tạo danh mục thành công!");
-    } catch (error) {
-      handleApiError(error);
+    try
+    {
+      const result = await createCategoryMutation.mutateAsync( formData );
+      dispatch( handleSetCreatedId( result.data.data.id ) );
+      dispatch( handleChangeModalState( true ) );
+      toast.success( "Tạo danh mục thành công!" );
+    } catch ( error )
+    {
+      handleApiError( error );
     }
   };
 
-  const watchType = watch("type");
+  const watchType = watch( "type" );
 
-  useEffect(() => {
-    setSelectedType(watchType);
-    if (watchType === 1) {
-      setValue("parentId", null);
+  useEffect( () =>
+  {
+    setSelectedType( watchType );
+    if ( watchType === 1 )
+    {
+      setValue( "parentId", null );
     }
-  }, [watchType, setValue]);
+  }, [ watchType, setValue ] );
 
   return (
     <div className="container max-w-6xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Tạo Danh Mục Mới</h1>
 
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={ handleSubmit( onSubmit ) }
         className="grid gap-6 grid-cols-1 lg:grid-cols-4"
       >
-        {/* Hình ảnh */}
+        {/* Hình ảnh */ }
         <div className="lg:col-span-1 lg:order-first">
           <Card className="shadow-none border-none bg-white">
             <CardHeader>
@@ -152,12 +167,12 @@ const CreateCategoryPage = () => {
                 type="file"
                 id="upload-image"
                 accept="image/*"
-                onChange={handleImageChange}
+                onChange={ handleImageChange }
                 className="hidden"
               />
-              {imagePreview ? (
+              { imagePreview ? (
                 <img
-                  src={imagePreview}
+                  src={ imagePreview }
                   alt="Preview"
                   className="w-full h-auto rounded-lg"
                 />
@@ -166,39 +181,39 @@ const CreateCategoryPage = () => {
                   <Upload className="w-12 h-12 mx-auto mb-2 opacity-40" />
                   <p>Chưa chọn hình ảnh</p>
                 </div>
-              )}
-              {errors.image && (
+              ) }
+              { errors.image && (
                 <p className="text-sm text-red-500 mt-2">
-                  {errors.image.message as string}
+                  { errors.image.message as string }
                 </p>
-              )}
+              ) }
             </CardContent>
             <CardFooter>
               <div className="flex gap-2 items-center">
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() =>
-                    document.getElementById("upload-image")?.click()
+                  onClick={ () =>
+                    document.getElementById( "upload-image" )?.click()
                   }
                 >
                   <Upload className="w-4 h-4 mr-2" /> Tải lên
                 </Button>
-                {imagePreview && (
+                { imagePreview && (
                   <Button
                     type="button"
                     variant="destructive"
-                    onClick={handleRemoveImage}
+                    onClick={ handleRemoveImage }
                   >
                     Xóa
                   </Button>
-                )}
+                ) }
               </div>
             </CardFooter>
           </Card>
         </div>
 
-        {/* Thông tin chính */}
+        {/* Thông tin chính */ }
         <div className="lg:col-span-3 space-y-6">
           <Card className="shadow-none border-none bg-white">
             <CardHeader className="flex flex-row items-center justify-between">
@@ -206,16 +221,16 @@ const CreateCategoryPage = () => {
               <div className="flex items-center space-x-2">
                 <span className="text-sm font-medium">Hoạt động</span>
                 <Controller
-                  control={control}
+                  control={ control }
                   name="status"
-                  render={({ field }) => (
+                  render={ ( { field } ) => (
                     <Switch
-                      checked={field.value === 0}
-                      onCheckedChange={(checked) =>
-                        field.onChange(checked ? 0 : 1)
+                      checked={ field.value === 0 }
+                      onCheckedChange={ ( checked ) =>
+                        field.onChange( checked ? 0 : 1 )
                       }
                     />
-                  )}
+                  ) }
                 />
               </div>
             </CardHeader>
@@ -225,33 +240,33 @@ const CreateCategoryPage = () => {
                 <label className="block text-sm font-medium">
                   Mã danh mục *
                 </label>
-                <Input {...register("code")} placeholder="Nhập mã danh mục" />
-                {errors.code && (
-                  <p className="text-sm text-red-500">{errors.code.message}</p>
-                )}
+                <Input { ...register( "code" ) } placeholder="Nhập mã danh mục" />
+                { errors.code && (
+                  <p className="text-sm text-red-500">{ errors.code.message }</p>
+                ) }
               </div>
 
               <div>
                 <label className="block text-sm font-medium">
                   Tên danh mục *
                 </label>
-                <Input {...register("name")} placeholder="Nhập tên danh mục" />
-                {errors.name && (
-                  <p className="text-sm text-red-500">{errors.name.message}</p>
-                )}
+                <Input { ...register( "name" ) } placeholder="Nhập tên danh mục" />
+                { errors.name && (
+                  <p className="text-sm text-red-500">{ errors.name.message }</p>
+                ) }
               </div>
 
               <div>
                 <label className="block text-sm font-medium">Mô tả</label>
                 <Textarea
-                  {...register("description")}
+                  { ...register( "description" ) }
                   placeholder="Mô tả danh mục"
                 />
-                {errors.description && (
+                { errors.description && (
                   <p className="text-sm text-red-500">
-                    {errors.description.message}
+                    { errors.description.message }
                   </p>
-                )}
+                ) }
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="grid grid-cols-1 lg:grid-cols-1 items-center">
@@ -259,12 +274,12 @@ const CreateCategoryPage = () => {
                     Loại danh mục *
                   </label>
                   <Controller
-                    control={control}
+                    control={ control }
                     name="type"
-                    render={({ field }) => (
+                    render={ ( { field } ) => (
                       <Select
-                        value={String(field.value)}
-                        onValueChange={(val) => field.onChange(Number(val))}
+                        value={ String( field.value ) }
+                        onValueChange={ ( val ) => field.onChange( Number( val ) ) }
                       >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Chọn loại" />
@@ -274,75 +289,75 @@ const CreateCategoryPage = () => {
                           <SelectItem value="2">Danh mục con</SelectItem>
                         </SelectContent>
                       </Select>
-                    )}
+                    ) }
                   />
-                  {errors.type && (
+                  { errors.type && (
                     <p className="text-sm text-red-500">
-                      {errors.type.message}
+                      { errors.type.message }
                     </p>
-                  )}
+                  ) }
                 </div>
 
-                {selectedType === 2 && (
+                { selectedType === 2 && (
                   <div className="grid grid-cols-1 lg:grid-cols-1 items-center">
                     <label className="block text-sm font-medium">
                       Danh mục cha *
                     </label>
                     <Controller
-                      control={control}
+                      control={ control }
                       name="parentId"
-                      render={({ field }) => (
+                      render={ ( { field } ) => (
                         <Select
-                          value={field.value || ""}
-                          onValueChange={(val) => field.onChange(val)}
+                          value={ field.value || "" }
+                          onValueChange={ ( val ) => field.onChange( val ) }
                         >
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Chọn danh mục cha" />
                           </SelectTrigger>
                           <SelectContent>
-                            {parentCategories.map((cat) => (
-                              <SelectItem key={cat.id} value={cat.id}>
-                                {`${cat.code} - ${cat.name}`}
+                            { parentCategories.map( ( cat ) => (
+                              <SelectItem key={ cat.id } value={ cat.id }>
+                                { `${ cat.code } - ${ cat.name }` }
                               </SelectItem>
-                            ))}
+                            ) ) }
                           </SelectContent>
                         </Select>
-                      )}
+                      ) }
                     />
-                    {errors.parentId && (
+                    { errors.parentId && (
                       <p className="text-sm text-red-500">
-                        {errors.parentId.message}
+                        { errors.parentId.message }
                       </p>
-                    )}
+                    ) }
                   </div>
-                )}
+                ) }
 
                 <div className="grid grid-cols-1 lg:grid-cols-1 items-center">
                   <label className="block text-sm font-medium">
                     Thứ tự hiển thị
                   </label>
-                  <Input type="number" {...register("displayOrder" as const)} />
-                  {errors.displayOrder && (
+                  <Input type="number" { ...register( "displayOrder" as const ) } />
+                  { errors.displayOrder && (
                     <p className="text-sm text-red-500">
-                      {errors.displayOrder.message}
+                      { errors.displayOrder.message }
                     </p>
-                  )}
+                  ) }
                 </div>
               </div>
             </CardContent>
           </Card>
 
           <div className="flex justify-end">
-            <Button type="submit" disabled={createCategoryMutation.isPending}>
-              {createCategoryMutation.isPending
+            <Button type="submit" disabled={ createCategoryMutation.isPending }>
+              { createCategoryMutation.isPending
                 ? "Đang lưu..."
-                : "Lưu Danh Mục"}
+                : "Lưu Danh Mục" }
             </Button>
           </div>
         </div>
       </form>
 
-      {/* Dialog xác nhận thành công */}
+      {/* Dialog xác nhận thành công */ }
       {/* <Dialog
         open={isOpen}
         onOpenChange={(open) => dispatch(handleChangeModalState(open))}

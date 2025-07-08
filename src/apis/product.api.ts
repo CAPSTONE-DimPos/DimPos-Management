@@ -75,7 +75,11 @@ const updateModifierOption = async (id: string, data: TUpdateModifierOptionReque
     `${API_SUFFIX.MODIFIER_OPTION_API}/${id}`,
     data
   );
-
+const createModifierOption = async (groupId: string, data: TUpdateModifierOptionRequest) =>
+  await apiRequest.catalog.post<BaseResponse<TModifierOptionResponse>>(
+    `${API_SUFFIX.MODIFIER_GROUP_API}/${groupId}/modifier-options`,
+    data
+  );
 // ==== EXPORT COMBINED API ====
 export const productApi = {
   // Product
@@ -89,7 +93,7 @@ export const productApi = {
   getModifierGroupById,
   createModifierGroup,
   updateModifierGroup,
-
+  createModifierOption,
   // Modifier Option
   getModifierOptionsByGroupId,
   getModifierOptionById,
