@@ -373,6 +373,9 @@ const CategoryEditPage = () => {
             </div>
           </div>
         </div>
+        <div className="flex justify-end mt-6 mr-16">
+          <Button type="submit">Lưu thay đổi</Button>
+        </div>
       </form>
     </div>
 

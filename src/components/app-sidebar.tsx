@@ -51,12 +51,12 @@ const brandRoutes = {
     mainTitle: "Quản lý sản phẩm & danh mục",
     items: [
       {
-        title: "Danh mục sản phẩm",
+        title: "Danh mục",
         url: PATH_BRAND_DASHBOARD.category.root,
         icon: MenuIcon,
       },
       {
-        title: "Sản Phẩm",
+        title: "Sản phẩm",
         url: PATH_BRAND_DASHBOARD.product.root,
         icon: ProductIcon,
       },
@@ -66,12 +66,12 @@ const brandRoutes = {
         icon: ProductVariantIcon,
       },
       {
-        title: "Combo",
+        title: "Combo sản phẩm",
         url: PATH_BRAND_DASHBOARD.combo.root,
         icon: ProductComboIcon,
       },
       {
-        title: "Tùy Chọn Sản Phẩm",
+        title: "Tùy chọn sản phẩm",
         url: PATH_BRAND_DASHBOARD.product.modifier,
         icon: DocumentFilterIcon,
       },
