@@ -263,7 +263,7 @@ const storeRoutes = {
       {
         title: "Phương thức thanh toán",
         url: PATH_STORE_DASHBOARD.storeSettings.paymentMethods,
-        icon: shopIcon,
+        icon: ShopIcon,
       },
       {
         title: "Cấu hình ca tài chính",
@@ -277,11 +277,12 @@ const storeRoutes = {
 
 
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar ( { ...props }: React.ComponentProps<typeof Sidebar> )
+{
   const { toggleSidebar, open } = useSidebar();
-  const { role } = useSelector((state: RootState) => state.user);
+  const { role } = useSelector( ( state: RootState ) => state.user );
   return (
-    <Sidebar variant="sidebar" collapsible="icon" {...props}>
+    <Sidebar variant="sidebar" collapsible="icon" { ...props }>
       <SidebarHeader>
         <div className="flex items-center justify-between my-4 ml-2">
           <div
@@ -315,26 +316,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <NavMain content={ brandRoutes.generalManagement } />
               </SidebarContent>
             );
-         
-            case 'StoreAdmin':
-              return (
-                <SidebarContent>
-                  <NavMain content={storeRoutes.dashboard} />
-                  <NavMain content={storeRoutes.sales} />
-                  <NavMain content={storeRoutes.operation} />
-                  <NavMain content={storeRoutes.settings} />
-                </SidebarContent>
-              );
-            case 'SystemAdmin':
-              return (
-                <SidebarContent>
-                  <NavMain content={adminRoutes.dashboard} />
-                </SidebarContent>
-              );
-            default:
-              return null;
-          }
-        })()
+
+          case 'StoreAdmin':
+            return (
+              <SidebarContent>
+                <NavMain content={ storeRoutes.dashboard } />
+                <NavMain content={ storeRoutes.sales } />
+                <NavMain content={ storeRoutes.operation } />
+                <NavMain content={ storeRoutes.settings } />
+              </SidebarContent>
+            );
+          case 'SystemAdmin':
+            return (
+              <SidebarContent>
+                <NavMain content={ adminRoutes.dashboard } />
+              </SidebarContent>
+            );
+          default:
+            return null;
+        }
+      } )()
       }
       <SidebarRail />
     </Sidebar>
