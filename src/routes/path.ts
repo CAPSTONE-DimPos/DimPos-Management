@@ -105,15 +105,60 @@ export const PATH_ADMIN_DASHBOARD = {
 
   brand: {
     root: path(ROOTS_ADMIN_DASHBOARD, "/brand"),
-    create: path(ROOTS_ADMIN_DASHBOARD, "/brand/new"), 
-    edit: (id: string) => path(ROOTS_ADMIN_DASHBOARD, `/brand/${id}`), 
+    create: path(ROOTS_ADMIN_DASHBOARD, "/brand/new"),
+    edit: (id: string) => path(ROOTS_ADMIN_DASHBOARD, `/brand/${id}`),
   },
 };
 
 export const PATH_STORE_DASHBOARD = {
   root: ROOTS_STORE_DASHBOARD,
+
   general: {
     app: path(ROOTS_STORE_DASHBOARD, '/app'),
-  
+  },
+
+  dashboard: {
+    root: path(ROOTS_STORE_DASHBOARD, '/app'),
+    metrics: path(ROOTS_STORE_DASHBOARD, '/dashboard/metrics'),
+    charts: path(ROOTS_STORE_DASHBOARD, '/dashboard/charts'),
+  },
+
+  menu: {
+    root: path(ROOTS_STORE_DASHBOARD, '/menu'),
+    detail: (id: string) => path(ROOTS_STORE_DASHBOARD, `/menu/${id}`),
+  },
+
+  promotion: {
+    root: path(ROOTS_STORE_DASHBOARD, '/promotion'),
+    detail: (id: string) => path(ROOTS_STORE_DASHBOARD, `/promotion/${id}`),
+  },
+
+  order: {
+    root: path(ROOTS_STORE_DASHBOARD, '/orders'),
+    detail: (id: string) => path(ROOTS_STORE_DASHBOARD, `/orders/${id}`),
+  },
+
+  account: {
+    root: path(ROOTS_STORE_DASHBOARD, '/accounts'),
+    detail: (id: string) => path(ROOTS_STORE_DASHBOARD, `/accounts/${id}`),
+  },
+
+  purchaseRequest: {
+    root: path(ROOTS_STORE_DASHBOARD, '/purchase-requests'),
+    detail: (id: string) => path(ROOTS_STORE_DASHBOARD, `/purchase-requests/${id}`),
+  },
+
+  financialShift: {
+    root: path(ROOTS_STORE_DASHBOARD, '/financial-shifts'),
+  },
+
+  inventory: {
+    root: path(ROOTS_STORE_DASHBOARD, '/inventory'),
+  },
+
+  storeSettings: {
+    root: path(ROOTS_STORE_DASHBOARD, '/settings'),
+    paymentMethods: path(ROOTS_STORE_DASHBOARD, '/settings/payment-methods'),
+    shiftConfig: path(ROOTS_STORE_DASHBOARD, '/settings/shift-config'),
   },
 };
