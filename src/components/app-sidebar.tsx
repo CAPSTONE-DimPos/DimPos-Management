@@ -13,8 +13,7 @@ import ShopIcon from "@/assets/icons/shop-icon"
 import UsersIcon from "@/assets/icons/users-icon"
 import DimposLogo from "@/assets/logo/dimpos-logo"
 import { NavMain } from "@/components/nav-main"
-import
-{
+import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
@@ -123,73 +122,144 @@ const adminRoutes = {
       },
     ],
   },
-  
-  
+
+
 }
 
 const storeRoutes = {
   dashboard: {
-    mainTitle: "Dashboard",
+    mainTitle: "Tổng quan hoạt động",
     items: [
       {
         title: "Báo Cáo Tổng Quan",
-        url: PATH_STORE_DASHBOARD.general.app,
+        url: PATH_STORE_DASHBOARD.dashboard.root,
         icon: GeneralAppIcon,
+      },
+      {
+        title: "Chỉ số kinh doanh",
+        url: PATH_STORE_DASHBOARD.dashboard.metrics,
+        icon: InventoryReportIcon,
+      },
+      {
+        title: "Biểu đồ & Thống kê",
+        url: PATH_STORE_DASHBOARD.dashboard.charts,
+        icon: ReceiptIcon,
       },
     ],
   },
-}
+  sales: {
+    mainTitle: "Bán hàng & khuyến mãi",
+    items: [
+      {
+        title: "Thực đơn",
+        url: PATH_STORE_DASHBOARD.menu.root,
+        icon: MenuIcon,
+      },
+      {
+        title: "Đơn hàng",
+        url: PATH_STORE_DASHBOARD.order.root,
+        icon: ReceiptIcon,
+      },
+      {
+        title: "Chiến dịch khuyến mãi",
+        url: PATH_STORE_DASHBOARD.promotion.root,
+        icon: DiscountIcon,
+      },
+    ],
+  },
+  operation: {
+    mainTitle: "Vận hành cửa hàng",
+    items: [
+      {
+        title: "Yêu cầu nhập hàng",
+        url: PATH_STORE_DASHBOARD.purchaseRequest.root,
+        icon: BoxAddIcon,
+      },
+      {
+        title: "Tồn kho sản phẩm",
+        url: PATH_STORE_DASHBOARD.inventory.root,
+        icon: ProductIcon,
+      },
+      {
+        title: "Ca tài chính",
+        url: PATH_STORE_DASHBOARD.financialShift.root,
+        icon: NoteIcon,
+      },
+    ],
+  },
+  settings: {
+    mainTitle: "Quản lý & cấu hình",
+    items: [
+      {
+        title: "Tài khoản cửa hàng",
+        url: PATH_STORE_DASHBOARD.account.root,
+        icon: UsersIcon,
+      },
+      {
+        title: "Phương thức thanh toán",
+        url: PATH_STORE_DASHBOARD.storeSettings.paymentMethods,
+        icon: ShopIcon,
+      },
+      {
+        title: "Cấu hình ca tài chính",
+        url: PATH_STORE_DASHBOARD.storeSettings.shiftConfig,
+        icon: CollapseIcon,
+      },
+    ],
+  },
+};
 
 
 
-export function AppSidebar ( { ...props }: React.ComponentProps<typeof Sidebar> )
-{
+
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { toggleSidebar, open } = useSidebar();
-  const { role } = useSelector( ( state: RootState ) => state.user );
+  const { role } = useSelector((state: RootState) => state.user);
   return (
-    <Sidebar variant="sidebar" collapsible="icon" { ...props }>
+    <Sidebar variant="sidebar" collapsible="icon" {...props}>
       <SidebarHeader>
         <div className="flex items-center justify-between my-4 ml-2">
-          <div className="cursor-pointer" onClick={ open ? undefined : toggleSidebar }>
-            <DimposLogo className={ cn( open ? 'size-15' : 'size-6', 'duration-300' ) } />
+          <div className="cursor-pointer" onClick={open ? undefined : toggleSidebar}>
+            <DimposLogo className={cn(open ? 'size-15' : 'size-6', 'duration-300')} />
           </div>
-          { open
+          {open
             &&
-            <div className="cursor-pointer" onClick={ toggleSidebar }>
+            <div className="cursor-pointer" onClick={toggleSidebar}>
               <CollapseIcon className="size-6 cursor-pointer text-gray-500 hover:text-gray-700 transition-colors duration-200" />
             </div>
           }
         </div>
       </SidebarHeader>
       {
-        ( () =>
-        {
-          switch ( role )
-          {
+        (() => {
+          switch (role) {
             case 'BrandAdmin':
               return (
                 <SidebarContent>
-                  <NavMain content={ brandRoutes.dashboard } />
-                  <NavMain content={ brandRoutes.productManagement } />
-                  <NavMain content={ brandRoutes.generalManagement } />
+                  <NavMain content={brandRoutes.dashboard} />
+                  <NavMain content={brandRoutes.productManagement} />
+                  <NavMain content={brandRoutes.generalManagement} />
                 </SidebarContent>
               );
             case 'StoreAdmin':
               return (
                 <SidebarContent>
-                  <NavMain content={ storeRoutes.dashboard } />
+                  <NavMain content={storeRoutes.dashboard} />
+                  <NavMain content={storeRoutes.sales} />
+                  <NavMain content={storeRoutes.operation} />
+                  <NavMain content={storeRoutes.settings} />
                 </SidebarContent>
               );
             case 'SystemAdmin':
               return (
                 <SidebarContent>
-                  <NavMain content={ adminRoutes.dashboard } />
+                  <NavMain content={adminRoutes.dashboard} />
                 </SidebarContent>
               );
             default:
               return null;
           }
-        } )()
+        })()
       }
       <SidebarRail />
     </Sidebar>

@@ -13,45 +13,44 @@ import CreateBrandPage from "@/pages/brand-management/create/brand-management-cr
 // import InternalPurchaseOrdersPage from "@/pages/internal-purchase-orders/list/internal-purchase-orders-page";
 // import CreateModifierGroupPage from "@/pages/create-modifier-group";
 
-const Loadable = ( Component: ElementType ) => ( props: any ) =>
-{
+const Loadable = (Component: ElementType) => (props: any) => {
     return (
-        <Suspense fallback={ <LoadingScreen /> }>
-            <Component { ...props } />
+        <Suspense fallback={<LoadingScreen />}>
+            <Component {...props} />
         </Suspense>
     );
 };
 //
-const LoginPage = Loadable( lazy( () => import( "@/pages/login" ) ) )
+const LoginPage = Loadable(lazy(() => import("@/pages/login")))
 
-const GeneralAppPage = Loadable( lazy( () => import( "@/pages/general-app" ) ) )
-const InventoryReportPage = Loadable( lazy( () => import( "@/pages/inventory-report/inventory-report-page" ) ) )
-const GeneralEcommercePage = Loadable( lazy( () => import( "@/pages/general-ecommerce" ) ) )
+const GeneralAppPage = Loadable(lazy(() => import("@/pages/general-app")))
+const InventoryReportPage = Loadable(lazy(() => import("@/pages/inventory-report/inventory-report-page")))
+const GeneralEcommercePage = Loadable(lazy(() => import("@/pages/general-ecommerce")))
 
 // Product routes
-const CategoryPage = Loadable( lazy( () => import( "@/pages/category" ) ) )
-const CategoryCreatePage = Loadable( lazy( () => import( "@/pages/category/create" ) ) );
-const CategoryEditPage = Loadable( lazy( () => import( "@/pages/category/edit" ) ) );
-const ProductPage = Loadable( lazy( () => import( "@/pages/product" ) ) )
-const ProductCreatePage = Loadable( lazy( () => import( "@/pages/create-product" ) ) )
-const ProductEditPage = Loadable( lazy( () => import( "@/pages/edit-product" ) ) )
-const ProductVariantPage = Loadable( lazy( () => import( "@/pages/product-variant" ) ) )
-const ModifierGroupPage = Loadable( lazy( () => import( "@/pages/modifier-group" ) ) )
+const CategoryPage = Loadable(lazy(() => import("@/pages/category")))
+const CategoryCreatePage = Loadable(lazy(() => import("@/pages/category/create")));
+const CategoryEditPage = Loadable(lazy(() => import("@/pages/category/edit")));
+const ProductPage = Loadable(lazy(() => import("@/pages/product")))
+const ProductCreatePage = Loadable(lazy(() => import("@/pages/create-product")))
+const ProductEditPage = Loadable(lazy(() => import("@/pages/edit-product")))
+const ProductVariantPage = Loadable(lazy(() => import("@/pages/product-variant")))
+const ModifierGroupPage = Loadable(lazy(() => import("@/pages/modifier-group")))
 
 // Menu routes
-const MenuPage = Loadable( lazy( () => import( "@/pages/menu" ) ) )
-const MenuCreatePage = Loadable( lazy( () => import( "@/pages/create-menu" ) ) )
-const MenuEditPage = Loadable( lazy( () => import( "@/pages/edit-menu" ) ) )
+const MenuPage = Loadable(lazy(() => import("@/pages/menu")))
+const MenuCreatePage = Loadable(lazy(() => import("@/pages/create-menu")))
+const MenuEditPage = Loadable(lazy(() => import("@/pages/edit-menu")))
 
-const PromotionPage = Loadable( lazy( () => import( "@/pages/promotion" ) ) )
+const PromotionPage = Loadable(lazy(() => import("@/pages/promotion")))
 
-const BrandPage = Loadable( lazy( () => import( "@/pages/brand" ) ) )
-const StorePage = Loadable( lazy( () => import( "@/pages/store" ) ) )
-const RolePage = Loadable( lazy( () => import( "@/pages/role" ) ) )
-const InvoicePage = Loadable( lazy( () => import( "@/pages/invoice" ) ) )
+const BrandPage = Loadable(lazy(() => import("@/pages/brand")))
+const StorePage = Loadable(lazy(() => import("@/pages/store")))
+const RolePage = Loadable(lazy(() => import("@/pages/role")))
+const InvoicePage = Loadable(lazy(() => import("@/pages/invoice")))
 
 
-const Page404 = Loadable( lazy( () => import( "@/pages/page-404" ) ) )
+const Page404 = Loadable(lazy(() => import("@/pages/page-404")))
 
 export const AppRoutes = () =>
     useRoutes(
@@ -60,7 +59,7 @@ export const AppRoutes = () =>
                 path: PATH_AUTH.root,
                 children: [
                     {
-                        element: <Navigate to={ PATH_AUTH.login } replace />,
+                        element: <Navigate to={PATH_AUTH.login} replace />,
                         index: true,
                     },
                     {
@@ -88,7 +87,7 @@ export const AppRoutes = () =>
                 ),
                 children: [
                     {
-                        element: <Navigate to={ PATH_BRAND_DASHBOARD.general.app } replace />,
+                        element: <Navigate to={PATH_BRAND_DASHBOARD.general.app} replace />,
                         index: true,
                     },
                     {
@@ -146,7 +145,7 @@ export const AppRoutes = () =>
                     //     path: 'internal-purchase-orders',
                     //     element: <InternalPurchaseOrdersPage />,
                     // },
-                    
+
 
                     // Menu routes
                     {
@@ -191,7 +190,7 @@ export const AppRoutes = () =>
                 ),
                 children: [
                     {
-                        element: <Navigate to={ PATH_ADMIN_DASHBOARD.general.app } replace />,
+                        element: <Navigate to={PATH_ADMIN_DASHBOARD.general.app} replace />,
                         index: true,
                     },
                     {
@@ -210,7 +209,6 @@ export const AppRoutes = () =>
             },
             // Store Admin Dashboard routes
             {
-
                 path: PATH_STORE_DASHBOARD.root,
                 element: (
                     <RoleBasedGuard role="StoreAdmin">
@@ -218,14 +216,43 @@ export const AppRoutes = () =>
                     </RoleBasedGuard>
                 ),
                 children: [
-                    {
-                        element: <Navigate to={ PATH_STORE_DASHBOARD.general.app } replace />,
-                        index: true,
-                    },
-                    {
-                        path: "app",
-                        element: <GeneralAppPage />,
-                    },
+                    { element: <Navigate to={PATH_STORE_DASHBOARD.general.app} replace />, index: true },
+
+                    // Dashboard
+                    { path: 'app', element: <GeneralAppPage /> },
+                    { path: 'dashboard/metrics', element: <GeneralAppPage /> },
+                    { path: 'dashboard/charts', element: <GeneralAppPage /> },
+
+                    // Menu
+                    { path: 'menu', element: <GeneralAppPage /> },
+                    { path: 'menu/:id', element: <GeneralAppPage /> },
+
+                    // Promotion
+                    { path: 'promotion', element: <GeneralAppPage /> },
+                    { path: 'promotion/:id', element: <GeneralAppPage /> },
+
+                    // Orders
+                    { path: 'orders', element: <GeneralAppPage /> },
+                    { path: 'orders/:id', element: <GeneralAppPage /> },
+
+                    // Store Accounts
+                    { path: 'accounts', element: <GeneralAppPage /> },
+                    { path: 'accounts/:id', element: <GeneralAppPage /> },
+
+                    // Purchase Requests
+                    { path: 'purchase-requests', element: <GeneralAppPage /> },
+                    { path: 'purchase-requests/:id', element: <GeneralAppPage /> },
+
+                    // Financial Shifts
+                    { path: 'financial-shifts', element: <GeneralAppPage /> },
+
+                    // Inventory
+                    { path: 'inventory', element: <GeneralAppPage /> },
+
+                    // Settings
+                    { path: 'settings', element: <GeneralAppPage /> },
+                    { path: 'settings/payment-methods', element: <GeneralAppPage /> },
+                    { path: 'settings/shift-config', element: <GeneralAppPage /> },
                 ],
             },
             {
@@ -235,7 +262,7 @@ export const AppRoutes = () =>
                         <DashBoardLayout />
                     </AuthGuard>
                 ),
-                children: [ { element: <Navigate to={ PATH_BRAND_DASHBOARD.root } replace />, index: true } ],
+                children: [{ element: <Navigate to={PATH_BRAND_DASHBOARD.root} replace />, index: true }],
             },
             // Add the 404 route
             {
