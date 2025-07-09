@@ -1,7 +1,8 @@
 import { productVariantApi } from "@/apis/product-variant.api";
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 
-interface UseProductVariantParams {
+interface UseProductVariantParams
+{
   page?: number;
   size?: number;
   sortBy?: string;
@@ -9,9 +10,11 @@ interface UseProductVariantParams {
   name?: string;
 }
 
-export const useProductVariant = () => {
+export const useProductVariant = () =>
+{
   const queryClient = useQueryClient();
-  const getProductVariants = (params: UseProductVariantParams = {}) => {
+  const getProductVariants = ( params: UseProductVariantParams = {} ) =>
+  {
     const {
       page = params.page || 1,
       size = params.size || 10,
@@ -20,7 +23,7 @@ export const useProductVariant = () => {
       name = params.name || "",
     } = params;
 
-    return useSuspenseQuery({
+    return useSuspenseQuery( {
       queryKey: [
         "product-variants",
         {
@@ -32,34 +35,36 @@ export const useProductVariant = () => {
         },
       ],
       queryFn: () =>
-        productVariantApi.getProductVariants({
+        productVariantApi.getProductVariants( {
           page: page,
           size: size,
           sortBy: sortBy,
           isAsc: isAsc,
           name: name,
-        }),
+        } ),
       // placeholderData: keepPreviousData,
-    });
+    } );
   };
-  const getProductVariantById = (id: string) => {
-    return useSuspenseQuery({
-      queryKey: ["productVariant", id],
-      queryFn: () => productVariantApi.getProductVariantById(id),
-    });
+  const getProductVariantById = ( id: string ) =>
+  {
+    return useSuspenseQuery( {
+      queryKey: [ "productVariant", id ],
+      queryFn: () => productVariantApi.getProductVariantById( id ),
+    } );
   };
-  const updateProductVariantMutation = useMutation({
-    mutationFn: ({
+  const updateProductVariantMutation = useMutation( {
+    mutationFn: ( {
       id,
       data,
     }: {
       id: string;
-      data: { name: string; displayOrder?: number; status: 0 | 1; sku: string };
-    }) => productVariantApi.updateProductVariantApi(id, data),
-    onSuccess: (_res, { id }) => {
-      queryClient.invalidateQueries({ queryKey: ["productVariant", id] });
+      data: { name: string; displayOrder?: number; isActive: boolean; sku: string; price: number };
+    } ) => productVariantApi.updateProductVariantApi( id, data ),
+    onSuccess: ( _res, { id } ) =>
+    {
+      queryClient.invalidateQueries( { queryKey: [ "productVariant", id ] } );
     },
-  });
+  } );
   return {
     getProductVariants,
     getProductVariantById,

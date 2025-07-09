@@ -3,8 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { ProductVariantSchema, type TProductVariantResponse, type TUpdateProductVariantRequest } from "@/schema/product-variant.schema";
+import { ProductVariantSchema, type TProductVariantResponse } from "@/schema/product-variant.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -19,7 +18,7 @@ const VariantProductForm = ( { initialData }: Props ) =>
         resolver: zodResolver( ProductVariantSchema ),
         defaultValues: initialData,
     } );
-    const onSubmit = async ( _: TUpdateProductVariantRequest ) => 
+    const onSubmit = async ( _: TProductVariantResponse ) => 
     {
 
     }
@@ -93,24 +92,7 @@ const VariantProductForm = ( { initialData }: Props ) =>
                                     <FormItem>
                                         <FormLabel>Kích Thước</FormLabel>
                                         <FormControl>
-                                            <Input disabled={ false } placeholder="S, M, L, XL..." { ...field } value={field.value ?? ""}/>
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                ) }
-                            />
-                            <FormField
-                                control={ form.control }
-                                name={ `isMenuDisplay` }
-                                render={ ( { field } ) => (
-                                    <FormItem className="flex items-center space-x-2">
-                                        <FormLabel>Hiển thị trên menu</FormLabel>
-                                        <FormControl>
-                                            <Switch
-                                                disabled={ false }
-                                                checked={ field.value }
-                                                onCheckedChange={ field.onChange }
-                                            />
+                                            <Input disabled={ false } placeholder="S, M, L, XL..." { ...field } value={ field.value ?? "" } />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

@@ -11,30 +11,30 @@ import ReceiptIcon from "@/assets/icons/receipt-icon";
 import DimposLogo from "@/assets/logo/dimpos-logo";
 import { NavMain } from "@/components/nav-main";
 import
-  {
-    Sidebar,
-    SidebarContent,
-    SidebarHeader,
-    SidebarRail,
-    useSidebar,
-  } from "@/components/ui/sidebar";
+{
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarRail,
+  useSidebar,
+} from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import
-  {
-    PATH_BRAND_DASHBOARD,
-    PATH_ADMIN_DASHBOARD,
-    PATH_STORE_DASHBOARD,
-  } from "@/routes/path";
+{
+  PATH_BRAND_DASHBOARD,
+  PATH_ADMIN_DASHBOARD,
+  PATH_STORE_DASHBOARD,
+} from "@/routes/path";
 import NoteIcon from "@/assets/icons/note-icon";
 import DocumentFilterIcon from "@/assets/icons/document-filter-icon";
 import type { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import ProductVariantIcon from "@/assets/icons/product-variant-icon";
 import ProductComboIcon from "@/assets/icons/product-combo-icon";
-import discountIcon from "@/assets/icons/discount-icon";
-import usersIcon from "@/assets/icons/users-icon";
-import shopIcon from "@/assets/icons/shop-icon";
-import inventoryReportIcon from "@/assets/icons/inventory-report-icon";
+import DiscountIcon from "@/assets/icons/discount-icon";
+import UsersIcon from "@/assets/icons/users-icon";
+import ShopIcon from "@/assets/icons/shop-icon";
+import InventoryReportIcon from "@/assets/icons/inventory-report-icon";
 
 // This is sample data.
 const brandRoutes = {
@@ -120,7 +120,7 @@ const brandRoutes = {
       {
         title: "Khuyến mãi",
         url: PATH_BRAND_DASHBOARD.promotion.root,
-        icon: GeneralAppIcon,
+        icon: DiscountIcon,
       },
       {
         title: "Chiến dịch",
@@ -203,7 +203,7 @@ const storeRoutes = {
       {
         title: "Chỉ số kinh doanh",
         url: PATH_STORE_DASHBOARD.dashboard.metrics,
-        icon: inventoryReportIcon,
+        icon: InventoryReportIcon,
       },
       {
         title: "Biểu đồ & Thống kê",
@@ -228,7 +228,7 @@ const storeRoutes = {
       {
         title: "Chiến dịch khuyến mãi",
         url: PATH_STORE_DASHBOARD.promotion.root,
-        icon: discountIcon,
+        icon: DiscountIcon,
       },
     ],
   },
@@ -258,7 +258,7 @@ const storeRoutes = {
       {
         title: "Tài khoản cửa hàng",
         url: PATH_STORE_DASHBOARD.account.root,
-        icon: usersIcon,
+        icon: UsersIcon,
       },
       {
         title: "Phương thức thanh toán",
