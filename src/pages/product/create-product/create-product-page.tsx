@@ -5,7 +5,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { useCategory } from '@/hooks/use-category';
 import { useProduct } from '@/hooks/use-product';
@@ -46,11 +45,8 @@ const CreateProductPage = () =>
         resolver: zodResolver( CreateProductSchema ),
         defaultValues: {
             code: '',
-            alternativeCode: '',
             name: '',
             description: '',
-            isAvailable: true,
-            saleType: undefined,
             note: '',
             categoryId: '',
             productImages: [],
@@ -114,29 +110,10 @@ const CreateProductPage = () =>
         const formData = new FormData();
         formData.append( 'Code', data.code );
         formData.append( 'Name', data.name );
-        // formData.append( 'Price', data.price?.toString() || "0" );
+        formData.append( 'Price', data.price?.toString() || "0" );
         formData.append( 'Description', data.description );
-        formData.append( 'IsAvailable', data.isAvailable.toString() );
-        formData.append( 'SaleType', data.saleType.toString() );
-        formData.append( 'CategoryId', data.categoryId);
+        formData.append( 'CategoryId', data.categoryId );
 
-        // Optional fields
-        if ( data.alternativeCode )
-        {
-            formData.append( 'AlternativeCode', data.alternativeCode );
-        }
-        if ( data.discountPrice !== undefined )
-        {
-            formData.append( 'DiscountPrice', data.discountPrice?.toString() || "0" );
-        }
-        if ( data.discountPercent !== undefined )
-        {
-            formData.append( 'DiscountPercent', data.discountPercent?.toString() || "0" );
-        }
-        if ( data.priceCOGS !== undefined )
-        {
-            formData.append( 'PriceCOGS', data.priceCOGS?.toString() || "0" );
-        }
         if ( data.displayOrder !== undefined )
         {
             formData.append( 'DisplayOrder', data.displayOrder?.toString() || "0" );
@@ -208,24 +185,6 @@ const CreateProductPage = () =>
                         <Card className='shadow-none border-none bg-white lg:col-span-2 xl:col-span-2'>
                             <CardHeader className='grid grid-cols-1 md:grid-cols-2 items-center gap-4'>
                                 <CardTitle>Thông Tin Cơ Bản</CardTitle>
-                                <FormField
-                                    control={ form.control }
-                                    name="isAvailable"
-                                    render={ ( { field } ) => (
-                                        <FormItem className="flex flex-row md:justify-end items-center space-x-3 space-y-0">
-                                            <div className="space-y-1 leading-none">
-                                                <FormLabel>Có sẵn</FormLabel>
-                                            </div>
-                                            <FormControl>
-                                                <Switch
-                                                    disabled={ createProductMutation.isPending }
-                                                    checked={ field.value }
-                                                    onCheckedChange={ field.onChange }
-                                                />
-                                            </FormControl>
-                                        </FormItem>
-                                    ) }
-                                />
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -244,20 +203,41 @@ const CreateProductPage = () =>
                                     />
                                     <FormField
                                         control={ form.control }
-                                        name="alternativeCode"
+                                        name="sku"
                                         render={ ( { field } ) => (
                                             <FormItem>
-                                                <FormLabel>Mã Thay Thế</FormLabel>
+                                                <FormLabel>Mã SKU *</FormLabel>
                                                 <FormControl>
-                                                    <Input disabled={ createProductMutation.isPending } placeholder="Nhập mã thay thế" { ...field } />
+                                                    <Input
+                                                        disabled={ createProductMutation.isPending }
+                                                        placeholder="Nhập mã SKU sản phẩm"
+                                                        { ...field }
+                                                    />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         ) }
                                     />
-
                                 </div>
-
+                                <FormField
+                                    control={ form.control }
+                                    name="price"
+                                    render={ ( { field } ) => (
+                                        <FormItem>
+                                            <FormLabel>Giá gốc *</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="number"
+                                                    disabled={ createProductMutation.isPending }
+                                                    placeholder="0"
+                                                    { ...field }
+                                                    onChange={ ( e ) => field.onChange( Number( e.target.value ) ) }
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    ) }
+                                />
                                 <FormField
                                     control={ form.control }
                                     name="name"
@@ -302,7 +282,7 @@ const CreateProductPage = () =>
                                                         placeholder="Nhập ghi chú cho sản phẩm"
                                                         className="min-h-[100px]"
                                                         { ...field }
-                                                        value={field.value ?? ""}
+                                                        value={ field.value ?? "" }
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -345,21 +325,13 @@ const CreateProductPage = () =>
                                     />
                                     <FormField
                                         control={ form.control }
-                                        name="saleType"
+                                        name="displayOrder"
                                         render={ ( { field } ) => (
                                             <FormItem className='grid grid-cols-1 lg:grid-cols-2 items-center'>
-                                                <FormLabel>Loại Hình Bán *</FormLabel>
-                                                <Select disabled={ createProductMutation.isPending } onValueChange={ ( value ) => field.onChange( Number( value ) ) } defaultValue={ field.value?.toString() }>
-                                                    <FormControl>
-                                                        <SelectTrigger>
-                                                            <SelectValue placeholder="Chọn loại hình" />
-                                                        </SelectTrigger>
-                                                    </FormControl>
-                                                    <SelectContent>
-                                                        <SelectItem value="0">Hoàn thiện khi đặt</SelectItem>
-                                                        <SelectItem value="1">Sản phẩm bán sẵn</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
+                                                <FormLabel>Thứ tự hiển thị *</FormLabel>
+                                                <FormControl>
+                                                    <Input disabled={ createProductMutation.isPending } placeholder="Thứ tự hiển thị" { ...field } onChange={ ( e ) => field.onChange( Number( e.target.value ) ) } />
+                                                </FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         ) }
@@ -460,96 +432,6 @@ const CreateProductPage = () =>
                                             </p>
                                         </div>
                                     ) }
-                                </CardContent>
-                            </Card>
-
-
-                            {/* Pricing */ }
-                            <Card className='shadow-none bg-white border-none'>
-                                <CardHeader>
-                                    <CardTitle>Giá Cả</CardTitle>
-                                </CardHeader>
-                                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <FormField
-                                        control={ form.control }
-                                        name="price"
-                                        render={ ( { field } ) => (
-                                            <FormItem>
-                                                <FormLabel>Giá Bán *</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        disabled={ createProductMutation.isPending }
-                                                        type="number"
-                                                        placeholder="0"
-                                                        { ...field }
-                                                        onChange={ ( e ) => field.onChange( Number( e.target.value ) ) }
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        ) }
-                                    />
-                                    <FormField
-                                        control={ form.control }
-                                        name="discountPrice"
-                                        render={ ( { field } ) => (
-                                            <FormItem>
-                                                <FormLabel>Giá Giảm</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        disabled={ createProductMutation.isPending }
-                                                        type="number"
-                                                        placeholder="0"
-                                                        { ...field }
-                                                        onChange={ ( e ) => field.onChange( Number( e.target.value ) ) }
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        ) }
-                                    />
-                                    <FormField
-                                        control={ form.control }
-                                        name="discountPercent"
-                                        render={ ( { field } ) => (
-                                            <FormItem>
-                                                <FormLabel>% Giảm Giá</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        disabled={ createProductMutation.isPending }
-                                                        type="number"
-                                                        placeholder="0"
-                                                        min="0"
-                                                        max="100"
-                                                        { ...field }
-                                                        onChange={ ( e ) => field.onChange( e.target.value ? Number( e.target.value ) : undefined ) }
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        ) }
-                                    />
-                                    <FormField
-                                        control={ form.control }
-                                        name="priceCOGS"
-                                        render={ ( { field } ) => (
-                                            <FormItem>
-                                                <FormLabel>Giá COGS</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        disabled={ createProductMutation.isPending }
-                                                        type="number"
-                                                        placeholder="0"
-                                                        min="0"
-                                                        max="100"
-                                                        { ...field }
-                                                        onChange={ ( e ) => field.onChange( e.target.value ? Number( e.target.value ) : undefined ) }
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        ) }
-                                    />
                                 </CardContent>
                             </Card>
                         </div>
