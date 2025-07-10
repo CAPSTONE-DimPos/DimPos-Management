@@ -6,6 +6,7 @@ import type {
 import
 {
     useMutation,
+    useQuery,
     useQueryClient,
     useSuspenseQuery,
 } from "@tanstack/react-query";
@@ -33,7 +34,7 @@ export const useProduct = () =>
             isAsc = params.isAsc || true,
             name = params.name || "",
         } = params;
-        return useSuspenseQuery( {
+        return useQuery( {
             queryKey: [
                 "products",
                 {
