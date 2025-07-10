@@ -1,6 +1,6 @@
 import { brandMenuApi } from "@/apis/menu.api";
 import type { TUpdateBrandProduct, TUpdateBrandStore } from "@/schema/menu.schema";
-import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 
 interface UseMenuParams
 {
@@ -22,7 +22,7 @@ export const useMenu = () =>
             isAsc = params.isAsc || true,
         } = params;
 
-        return useSuspenseQuery( {
+        return useQuery( {
             queryKey: [ 'brandMenus', {
                 page,
                 size,
@@ -55,7 +55,7 @@ export const useMenu = () =>
             isAsc = params.isAsc || true,
         } = params;
 
-        return useSuspenseQuery( {
+        return useQuery( {
             queryKey: [ 'brandMenuProducts', id, {
                 page,
                 size,
@@ -96,7 +96,7 @@ export const useMenu = () =>
             isAsc = params.isAsc || true,
         } = params;
 
-        return useSuspenseQuery( {
+        return useQuery( {
             queryKey: [ 'brandMenuStores', id, {
                 page,
                 size,

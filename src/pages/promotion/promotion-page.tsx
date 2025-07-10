@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { CirclePlusIcon } from "lucide-react"
+import PromotionTable from "./components/promotion-table"
 
 type Props = {}
 
@@ -14,6 +15,8 @@ const PromotionPage = ( _: Props ) =>
                     Tạo khuyến mãi mới
                 </Button>
             </div>
+
+            <PromotionTable />
         </div>
     )
 }

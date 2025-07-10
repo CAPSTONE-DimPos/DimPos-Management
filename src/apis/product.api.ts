@@ -80,21 +80,17 @@ const createModifierOption = async (groupId: string, data: TUpdateModifierOption
     `${API_SUFFIX.MODIFIER_GROUP_API}/${groupId}/modifier-options`,
     data
   );
-// ==== EXPORT COMBINED API ====
+
 export const productApi = {
-  // Product
   getProducts,
   getProductById,
   createProductApi,
   updateProductApi,
-
-  // Modifier Group
   getModifierGroups,
   getModifierGroupById,
   createModifierGroup,
   updateModifierGroup,
   createModifierOption,
-  // Modifier Option
   getModifierOptionsByGroupId,
   getModifierOptionById,
   updateModifierOption,

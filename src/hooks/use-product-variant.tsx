@@ -1,5 +1,5 @@
 import { productVariantApi } from "@/apis/product-variant.api";
-import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 
 interface UseProductVariantParams
 {
@@ -23,7 +23,7 @@ export const useProductVariant = () =>
       name = params.name || "",
     } = params;
 
-    return useSuspenseQuery( {
+    return useQuery( {
       queryKey: [
         "product-variants",
         {
