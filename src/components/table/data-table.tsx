@@ -34,6 +34,7 @@ import
     getSortedRowModel,
     type PaginationState,
     type SortingState,
+    type TableMeta,
     useReactTable,
 } from "@tanstack/react-table";
 import
@@ -84,6 +85,7 @@ interface DataTableProps<TData, TValue>
         newSelection: Record<string, boolean>,
         oldSelection: Record<string, boolean>
     ) => void;
+    meta?: TableMeta<TData>;
 }
 
 // Skeleton component for loading state
@@ -155,6 +157,7 @@ export function DataTable<TData, TValue> ( {
     onSettings,
     rowSelection,
     onRowSelectionChange,
+    meta,
 }: DataTableProps<TData, TValue> )
 {
     const [ rowSelectionState, setRowSelectionState ] = useState( {} );
@@ -233,6 +236,7 @@ export function DataTable<TData, TValue> ( {
         manualPagination: true,
         manualFiltering: true,
         manualSorting: true,
+        meta,
     } );
 
     return (
@@ -363,7 +367,7 @@ export function DataTable<TData, TValue> ( {
 
             {/* Table Container with improved styling */ }
             <div className="rounded-2xl border bg-card">
-                <ScrollArea className={ cn( isShort ? "h-[calc(50vh)] md:h-[calc(45dvh)]" : "h-[calc(80vh-280px)] md:h-[calc(90dvh-250px)]", "rounded-tr-2xl rounded-tl-2xl" ) }>
+                <ScrollArea className={ cn( isShort ? "h-[calc(30vh)] md:h-[calc(30dvh)]" : "h-[calc(80vh-280px)] md:h-[calc(90dvh-250px)]", "rounded-tr-2xl rounded-tl-2xl" ) }>
                     {/* Conditionally render skeleton or actual table based on loading state */ }
                     { isLoading ? (
                         <TableSkeleton columns={ columns } pageSize={ pageSize } />
