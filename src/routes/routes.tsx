@@ -68,7 +68,8 @@ const MenuPage = Loadable( lazy( () => import( "@/pages/menu/list-menu" ) ) );
 const MenuCreatePage = Loadable( lazy( () => import( "@/pages/menu/create-menu" ) ) );
 const MenuEditPage = Loadable( lazy( () => import( "@/pages/menu/edit-menu" ) ) );
 
-const PromotionPage = Loadable( lazy( () => import( "@/pages/promotion" ) ) );
+const PromotionPage = Loadable( lazy( () => import( "@/pages/promotion/list" ) ) );
+const CreatePromotionPage = Loadable( lazy( () => import( "@/pages/promotion/create" ) ) );
 // const CampaignPage = Loadable(lazy(() => import("@/pages/campaign")));
 
 const BrandPage = Loadable( lazy( () => import( "@/pages/brand" ) ) );
@@ -174,6 +175,10 @@ export const AppRoutes = () =>
         {
           path: "promotion",
           element: <PromotionPage />,
+        },
+        {
+          path: "promotion/new",
+          element: <CreatePromotionPage />,
         },
         {
           path: "campaign",
