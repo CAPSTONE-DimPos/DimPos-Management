@@ -312,9 +312,9 @@ const CategoryEditPage = () => {
                     <div className="lg:col-span-1">
                       <Card className="shadow-none border-none bg-white">
                         <CardHeader>
-                          <CardTitle className="flex justify-between items-center">
+                          {/* <CardTitle className="flex justify-between items-center">
                             Hình Ảnh
-                          </CardTitle>
+                          </CardTitle> */}
                         </CardHeader>
                         <CardContent>
                           <input

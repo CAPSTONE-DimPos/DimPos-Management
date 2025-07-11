@@ -18,6 +18,7 @@ export const API_SUFFIX = {
   AUTH_API: "/authentication/login",
   CATEGORY_API: "/categories",
   PRODUCT_API: "/products",
+  STORE_API: "/stores",
   PRODUCT_VARIANT_API: "/product-variants",
   MODIFIER_GROUP_API: "/modifier-groups",
   MODIFIER_OPTION_API: "/modifier-options",

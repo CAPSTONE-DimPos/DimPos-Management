@@ -86,6 +86,8 @@ export const PATH_BRAND_DASHBOARD = {
   },
   store: {
     root: path(ROOTS_BRAND_DASHBOARD, '/store'),
+    create: path(ROOTS_BRAND_DASHBOARD, '/store/new'),
+    edit: (id: string) => path(ROOTS_BRAND_DASHBOARD, `/store/${id}`),
   },
   role: {
     root: path(ROOTS_BRAND_DASHBOARD, '/role'),

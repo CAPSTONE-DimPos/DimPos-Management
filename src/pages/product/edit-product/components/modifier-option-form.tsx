@@ -37,9 +37,8 @@ const ModifierGroupForm = ( { productId }: Props ) =>
     }
     return (
         <Form { ...form }>
-            <form onSubmit={ form.handleSubmit( onSubmit ) } noValidate>
+            <form onSubmit={ form.handleSubmit( onSubmit ) }>
                 <div className="relative">
-
                     <Card className='shadow-none border-none bg-white h-fit'>
                         <CardHeader>
                             <CardTitle>Tùy chọn sản phẩm</CardTitle>

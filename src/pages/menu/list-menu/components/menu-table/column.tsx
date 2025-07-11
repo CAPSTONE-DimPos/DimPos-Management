@@ -6,7 +6,6 @@ import {
 } from "@/components/ui/tooltip";
 import { PATH_BRAND_DASHBOARD } from "@/routes/path";
 import type { TBrandMenu } from "@/schema/menu.schema";
-import { AppColors } from "@/themes/colors";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -64,15 +63,9 @@ export const columns: ColumnDef<TBrandMenu>[] = [
       return (
         <div className="flex justify-center">
           <div
-            className="flex items-center gap-1.5 px-3 py-1 rounded text-sm"
-            style={{
-              backgroundColor: isActiveByBrand
-                ? AppColors.greenMint[10]
-                : AppColors.rambutan[10],
-              color: isActiveByBrand
-                ? AppColors.greenMint[100]
-                : AppColors.rambutan[90],
-            }}
+            className={`flex items-center gap-1.5 px-3 py-1 rounded text-sm ${
+              isActiveByBrand ? "bg-green-mint-10 text-green-mint-100" : "bg-rambutan-10 text-rambutan-100"
+            }`}
           >
             {isActiveByBrand ? <>Hiển thị</> : <>Ẩn</>}
           </div>

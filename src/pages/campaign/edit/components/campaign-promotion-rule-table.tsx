@@ -1,11 +1,11 @@
 import { DataTable } from "@/components/table/data-table";
 import { useQueryParams } from "@/hooks/use-query-params";
 import { columns } from "./promotion-rule-table/column";
-import type { TPromotionRuleBaseSchema } from "@/schema/promotion-rule.schema";
+import type { TPromotionRuleResponse } from "@/schema/promotion-rule.schema";
 
 
 type Props = {
-    initialData: TPromotionRuleBaseSchema[]
+    initialData: TPromotionRuleResponse[]
 }
 
 const PromotionRuleTable = ({ initialData }: Props) => {

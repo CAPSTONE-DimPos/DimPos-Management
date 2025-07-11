@@ -21,7 +21,6 @@ import {
   FolderOpen,
   MoreHorizontal,
 } from "lucide-react";
-import { AppColors } from "@/themes/colors";
 import { PATH_BRAND_DASHBOARD } from "@/routes/path";
 
 // Enhanced sortable header component that provides visual feedback for all sorting states
@@ -97,15 +96,11 @@ export const columns: ColumnDef<TCategoryResponse>[] = [
       return (
         <div className="flex justify-center">
           <div
-            className="flex items-center gap-1.5 px-3 py-1 rounded text-sm"
-            style={{
-              backgroundColor: isParentCategory
-                ? AppColors.indigo[10]
-                : AppColors.blueberry[10],
-              color: isParentCategory
-                ? AppColors.indigo[100]
-                : AppColors.blueberry[90],
-            }}
+            className={`flex items-center gap-1.5 px-3 py-1 rounded text-sm ${
+              isParentCategory
+                ? "bg-indigo-10 text-indigo-100"
+                : "bg-blueberry-10 text-blueberry-100"
+            }`}
           >
             {isParentCategory ? (
               <>
@@ -147,15 +142,11 @@ export const columns: ColumnDef<TCategoryResponse>[] = [
         <div className="flex justify-center">
           <div
             // variant={ isVisible ? "default" : "secondary" }
-            className={`flex items-center gap-1.5 px-3 py-1 rounded text-sm`}
-            style={{
-              backgroundColor: isVisible
-                ? AppColors.greenMint[10]
-                : AppColors.neutral[10],
-              color: isVisible
-                ? AppColors.greenMint[100]
-                : AppColors.neutral[90],
-            }}
+            className={`flex items-center gap-1.5 px-3 py-1 rounded text-sm ${
+              isVisible
+                ? "bg-green-mint-10 text-green-mint-100"
+                : "bg-neutral-10 text-neutral-100 "
+            }`}
           >
             {/* Status indicator with both visual and text cues */}
             {isVisible ? <>Hoạt động</> : <>Không hoạt động</>}

@@ -9,7 +9,6 @@ import
 import { copyToClipboard } from "@/lib/utils";
 import { PATH_BRAND_DASHBOARD } from "@/routes/path";
 import type { TProductResponse } from "@/schema/product.schema";
-import { AppColors } from "@/themes/colors";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Copy, Eye } from "lucide-react";
@@ -65,15 +64,9 @@ export const columns: ColumnDef<TProductResponse>[] = [
       return (
         <div className="flex justify-center">
           <div
-            className="flex items-center gap-1.5 px-3 py-1 rounded text-sm font-normal"
-            style={ {
-              backgroundColor: hasVariants
-                ? AppColors.cempedak[ 10 ]
-                : AppColors.neutral[ 10 ],
-              color: hasVariants
-                ? AppColors.cempedak[ 100 ]
-                : AppColors.neutral[ 90 ],
-            } }
+            className={`flex items-center gap-1.5 px-3 py-1 rounded text-sm font-normal ${
+              hasVariants? "bg-cempedak-10 text-cempedak-100" : "bg-neutral-10 text-neutral-100"
+            }`}
           >
             { hasVariants ? <>Có biến thể</> : <>Không biến thể</> }
           </div>
@@ -94,15 +87,9 @@ export const columns: ColumnDef<TProductResponse>[] = [
       return (
         <div className="flex justify-center">
           <div
-            className="flex items-center gap-1.5 px-3 py-1 rounded text-sm font-normal"
-            style={ {
-              backgroundColor: isActive
-                ? AppColors.greenMint[ 10 ]
-                : AppColors.rambutan[ 10 ],
-              color: isActive
-                ? AppColors.greenMint[ 100 ]
-                : AppColors.rambutan[ 90 ],
-            } }
+            className={`flex items-center gap-1.5 px-3 py-1 rounded text-sm font-normal ${
+              isActive? "bg-green-mint-10 text-green-mint-100" : "bg-rambutan-10 text-rambutan-100"
+            }`}
           >
             { isActive ? <>Hoạt động</> : <>Không hoạt động</> }
           </div>

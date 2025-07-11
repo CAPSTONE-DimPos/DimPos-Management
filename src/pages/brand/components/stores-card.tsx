@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import StoreTable from "@/pages/store/components/store-table";
+import StoreTable from "@/pages/store/list-stores/components/store-table";
 
 type Props = {}
 

@@ -1,8 +1,12 @@
 import { Button } from "@/components/ui/button";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
-import { ArrowDown, ArrowUp, ArrowUpDown, Eye } from "lucide-react";
-import type { TCampaignResponse } from "@/schema/campaign.schema";
+import { ArrowDown, ArrowUp, ArrowUpDown, Copy, Eye, MapPin, Phone } from "lucide-react";
+import { PATH_BRAND_DASHBOARD } from "@/routes/path";
+import type { TStore } from "@/schema/store.schema";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { copyToClipboard } from "@/lib/utils";
 
 // Enhanced sortable header component that provides visual feedback for all sorting states
 const SortableHeader = ({
@@ -33,11 +37,33 @@ const SortableHeader = ({
   );
 };
 
-export const columns: ColumnDef<TCampaignResponse>[] = [
+export const columns: ColumnDef<TStore>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: "name",
     header: ({ column }) => (
-      <SortableHeader column={column}>Tên chiến dịch</SortableHeader>
+      <SortableHeader column={column}>Tên cửa hàng</SortableHeader>
     ),
     cell: (info) => {
       const name = info.getValue() as string;
@@ -54,48 +80,74 @@ export const columns: ColumnDef<TCampaignResponse>[] = [
     },
   },
   {
-    accessorKey: "description",
-    header: () => <div className="font-semibold text-base">Mô tả</div>,
+    accessorKey: "address",
+    header: () => <div className="font-semibold">Địa Chỉ</div>,
     cell: (info) => {
-      const description = info.getValue() as string;
+      const address = info.getValue() as string;
+      const row = info.row.original;
+      const hasCoordinates = row.latitude && row.longitude;
+
       return (
-        <div className="flex justify-start">
-          <div
-            // variant="secondary"
-            className={`flex items-center gap-1.5 max-w-[400px] truncate text-sm font-normal`}
-            title={description}
-          >
-            {description}
+        <div className="max-w-[250px]">
+          <div className="flex items-start gap-2">
+            <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+            <div className="flex-1 min-w-0">
+              <div className="text-sm text-foreground truncate" title={address}>
+                {address}
+              </div>
+              {hasCoordinates && (
+                <Badge variant="outline" className="mt-1 text-xs">
+                  Có tọa độ
+                </Badge>
+              )}
+            </div>
           </div>
         </div>
       );
     },
   },
   {
-    accessorKey: "priority",
-    // header: () => <div className="font-semibold text-base">Độ ưu tiên</div>,
-    header: ({ column }) => (
-      <SortableHeader column={column}>Độ ưu tiên</SortableHeader>
-    ),
-    cell: (info) => {
-      const priority = info.getValue() as string;
-      return (
-        <div className="flex justify-center">
-          <div
-            // variant="secondary"
-            className={`flex items-center gap-1.5 max-w-[400px] truncate text-sm font-normal`}
-            title={priority}
-          >
-            {priority}
-          </div>
-        </div>
-      );
+        accessorKey: "phone",
+        header: () => (
+            <div className="font-semibold">
+                Số Điện Thoại
+            </div>
+        ),
+        cell: ( info ) =>
+        {
+            const phone = info.getValue() as string;
+
+            if ( !phone )
+            {
+                return (
+                    <Badge variant="outline" className="text-muted-foreground">
+                        Chưa có
+                    </Badge>
+                );
+            }
+
+            return (
+                <div className="flex items-center gap-2 max-w-[140px]">
+                    <div className="flex items-center gap-1 flex-1 min-w-0">
+                        <Phone className="h-3 w-3 text-muted-foreground flex-shrink-0" />
+                        <span className="font-mono text-sm truncate" title={ phone }>{ phone }</span>
+                    </div>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 w-6 p-0 hover:bg-muted flex-shrink-0"
+                        onClick={ () => copyToClipboard( phone, "Số điện thoại" ) }
+                    >
+                        <Copy className="h-3 w-3" />
+                    </Button>
+                </div>
+            );
+        },
     },
-  },
   {
-    accessorKey: "status",
+    accessorKey: "isActive",
     header: () => (
-      <div className="text-center font-semibold text-base">Trạng Thái</div>
+      <div className="text-center font-semibold text-base">Trạng thái</div>
     ),
     cell: (info) => {
       const status = info.getValue() as number;
@@ -105,7 +157,6 @@ export const columns: ColumnDef<TCampaignResponse>[] = [
       return (
         <div className="flex justify-center">
           <div
-            // variant={ isVisible ? "default" : "secondary" }
             className={`flex items-center gap-1.5 px-3 py-1 rounded text-sm ${
               isVisible
                 ? "bg-green-mint-10 text-green-mint-100"
@@ -132,7 +183,9 @@ export const columns: ColumnDef<TCampaignResponse>[] = [
         <div className="flex justify-center">
           <div
             className="group relative flex items-center cursor-pointer"
-            onClick={() => navigate(`/dashboard/campaign/${campaign.id}`)}
+            onClick={() =>
+              navigate(PATH_BRAND_DASHBOARD.campaign.editCampaign(campaign.id))
+            }
           >
             <Eye className="h-4 w-4 text-blue-600" />
 
@@ -151,7 +204,7 @@ export const columns: ColumnDef<TCampaignResponse>[] = [
 ];
 
 // Enhanced table configuration with campaign-specific optimizations
-export const campaignTableConfig = {
+export const campaignStoreTableConfig = {
   // Enable sorting for columns that benefit from it
   enableSorting: true,
   sortableColumns: ["description", "name", "priority"],

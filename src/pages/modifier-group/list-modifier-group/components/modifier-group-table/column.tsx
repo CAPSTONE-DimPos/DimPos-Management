@@ -1,9 +1,12 @@
-import type { TModifierGroupResponse} from "@/schema/product.schema";
+import type { TModifierGroupResponse } from "@/schema/product.schema";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
-import { AppColors } from "@/themes/colors";
 
 export const columns = (
   onViewOption: (data: TModifierGroupResponse) => void
@@ -57,22 +60,18 @@ export const columns = (
   },
   {
     accessorKey: "isActive",
-    header: () => <div className="text-center font-semibold text-base ">Trạng Thái</div>,
+    header: () => (
+      <div className="text-center font-semibold text-base ">Trạng Thái</div>
+    ),
     cell: (info) => {
       const status = info.getValue() as boolean;
 
       return (
         <div className="flex justify-center">
           <div
-            className="flex items-center gap-1.5 px-3 py-1 rounded text-sm"
-            style={{
-              backgroundColor: status
-                ? AppColors.greenMint[10]
-                : AppColors.neutral[10],
-              color: status
-                ? AppColors.greenMint[100]
-                : AppColors.neutral[90],
-            }}
+            className={`flex items-center gap-1.5 px-3 py-1 rounded text-sm ${
+              status ? "bg-green-mint-10 text-green-mint-100" : "bg-neutral-100 text-neutral-100"
+            }`}
           >
             {status ? <>Hiển thị</> : <>Ẩn</>}
           </div>
@@ -97,7 +96,9 @@ export const columns = (
   },
   {
     id: "actions",
-    header: () => <div className="text-center font-semibold text-base">Thao Tác</div>,
+    header: () => (
+      <div className="text-center font-semibold text-base">Thao Tác</div>
+    ),
     cell: ({ row }) => {
       const option = row.original;
 

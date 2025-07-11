@@ -58,7 +58,7 @@ export const useProductVariant = () =>
       data,
     }: {
       id: string;
-      data: { name: string; displayOrder?: number; isActive: boolean; sku: string; price: number };
+      data: { name: string; displayOrder?: number; isActive: boolean; sku?: string; price: number };
     } ) => productVariantApi.updateProductVariantApi( id, data ),
     onSuccess: ( _res, { id } ) =>
     {

@@ -89,21 +89,21 @@ const brandRoutes = {
       },
     ],
   },
-  ingredientRecipeManagement: {
-    mainTitle: "Nguyên liệu và công thức",
-    items: [
-      {
-        title: "Nguyên liệu",
-        url: PATH_BRAND_DASHBOARD.ingredient.root,
-        icon: GeneralAppIcon,
-      },
-      {
-        title: "Công thức",
-        url: PATH_BRAND_DASHBOARD.recipe.root,
-        icon: GeneralAppIcon,
-      },
-    ],
-  },
+  // ingredientRecipeManagement: {
+  //   mainTitle: "Nguyên liệu và công thức",
+  //   items: [
+  //     {
+  //       title: "Nguyên liệu",
+  //       url: PATH_BRAND_DASHBOARD.ingredient.root,
+  //       icon: GeneralAppIcon,
+  //     },
+  //     {
+  //       title: "Công thức",
+  //       url: PATH_BRAND_DASHBOARD.recipe.root,
+  //       icon: GeneralAppIcon,
+  //     },
+  //   ],
+  // },
   taxManagement: {
     mainTitle: "Thuế",
     items: [
@@ -137,11 +137,11 @@ const brandRoutes = {
         url: PATH_BRAND_DASHBOARD.store.root,
         icon: GeneralAppIcon,
       },
-      {
-        title: "Tài khoản cửa hàng",
-        url: PATH_BRAND_DASHBOARD.accountStore.root,
-        icon: GeneralAppIcon,
-      },
+      // {
+      //   title: "Tài khoản cửa hàng",
+      //   url: PATH_BRAND_DASHBOARD.accountStore.root,
+      //   icon: GeneralAppIcon,
+      // },
       {
         title: "Đơn hàng",
         url: PATH_BRAND_DASHBOARD.order.root,
@@ -162,11 +162,11 @@ const brandRoutes = {
         url: PATH_BRAND_DASHBOARD.brand.root,
         icon: HomeIcon,
       },
-      {
-        title: "Quản lý Hóa đơn",
-        url: PATH_BRAND_DASHBOARD.invoice.root,
-        icon: ReceiptIcon,
-      },
+      // {
+      //   title: "Quản lý Hóa đơn",
+      //   url: PATH_BRAND_DASHBOARD.invoice.root,
+      //   icon: ReceiptIcon,
+      // },
     ],
   },
 };
@@ -309,8 +309,8 @@ export function AppSidebar ( { ...props }: React.ComponentProps<typeof Sidebar> 
               <SidebarContent>
                 <NavMain content={ brandRoutes.dashboard } />
                 <NavMain content={ brandRoutes.productManagement } />
-                <NavMain content={ brandRoutes.ingredientRecipeManagement } />
-                <NavMain content={ brandRoutes.taxManagement } />
+                {/* <NavMain content={ brandRoutes.ingredientRecipeManagement } /> */}
+                {/* <NavMain content={ brandRoutes.taxManagement } /> */}
                 <NavMain content={ brandRoutes.promotionCampaignManagement } />
                 <NavMain content={ brandRoutes.storeManagement } />
                 <NavMain content={ brandRoutes.generalManagement } />
