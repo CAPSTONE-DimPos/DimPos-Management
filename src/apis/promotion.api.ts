@@ -8,6 +8,10 @@ const getPromotionRules = async (params: any) =>
         API_SUFFIX.PROMOTION_RULE_API,
         { params }
     );
+const getPromotionRulesById = async (id: string) =>
+    await apiRequest.promotion.get<BaseResponse<TPromotionRuleResponse>>(
+        `${API_SUFFIX.PROMOTION_RULE_API}/${id}`
+    );
 const createPromotionRule = async (data: TCreatePromotionRuleRequest) =>
     await apiRequest.promotion.post(
         API_SUFFIX.PROMOTION_RULE_API,
@@ -16,4 +20,5 @@ const createPromotionRule = async (data: TCreatePromotionRuleRequest) =>
 export const promotionApi = {
     getPromotionRules,
     createPromotionRule,
+    getPromotionRulesById,
 }

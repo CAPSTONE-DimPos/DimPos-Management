@@ -1,5 +1,5 @@
 import { promotionApi } from "@/apis/promotion.api";
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 
 interface UsePromotionParams
 {
@@ -46,6 +46,14 @@ export const usePromotion = () =>
         } );
     }
 
+    const getPromotionById = ( id: string ) =>
+    {
+        return useSuspenseQuery( {
+            queryKey: [ "promotion-rule", id ],
+            queryFn: () => promotionApi.getPromotionRulesById( id ),
+        } );
+    }
+
     const createPromotionMutation = useMutation( {
         mutationFn: promotionApi.createPromotionRule,
         onSuccess: () =>
@@ -55,6 +63,7 @@ export const usePromotion = () =>
     } )
     return {
         getPromotions,
+        getPromotionById,
         createPromotionMutation,
     }
 }
