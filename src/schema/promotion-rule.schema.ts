@@ -20,6 +20,10 @@ export const CreateRuleActionSchema = RuleActionsSchema.omit({ id: true }).exten
     targetCriteriaForItemAction: z.array(z.string().uuid()).nullable().optional(),
 });
 
+export const EditRuleActionSchema = RuleActionsSchema.extend({
+    targetCriteriaForItemAction: z.array(z.string().uuid()).nullable().optional(),
+});
+
 
 export const PromotionRuleBaseSchema = z.object({
     id: z.string().uuid(),
@@ -38,9 +42,12 @@ export const CreatePromotionRuleSchema = PromotionRuleBaseSchema.omit({ id: true
 
 
 export type TPromotionRuleResponse = z.infer<typeof PromotionRuleBaseSchema>;
+export type TRuleActions = z.infer<typeof RuleActionsSchema>;
+export type TRuleConditions = z.infer<typeof RuleConditionsSchema>;
 export type TCreatePromotionRuleRequest = z.infer<typeof CreatePromotionRuleSchema>;
 export type TCreateRuleCondition = z.infer<typeof CreateRuleConditionSchema>;
 export type TCreateRuleAction = z.infer<typeof CreateRuleActionSchema>;
+export type TEditRuleAction = z.infer<typeof EditRuleActionSchema>;
 
 
 export const getActionTypeName = (actionType: number | undefined): string => {

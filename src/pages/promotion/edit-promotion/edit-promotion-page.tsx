@@ -1,34 +1,37 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { usePromotion } from "@/hooks/use-promotion";
-import { CreatePromotionRuleSchema, getActionTypeName, type TCreatePromotionRuleRequest, type TCreateRuleAction, type TCreateRuleCondition } from "@/schema/promotion-rule.schema";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Textarea } from '@/components/ui/textarea';
+import { usePromotion } from '@/hooks/use-promotion';
+import { formatPrice } from '@/lib/utils';
+import { getActionTypeName, PromotionRuleBaseSchema, type TPromotionRuleResponse, type TRuleActions, type TRuleConditions } from '@/schema/promotion-rule.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ScrollArea } from "@radix-ui/react-scroll-area";
-import { CircleArrowOutUpRight, X } from "lucide-react";
-import { useFieldArray, useForm } from "react-hook-form";
-import { toast } from "sonner";
-import RuleActionDialog from "./components/rule-action-dialog";
-import { RuleConditionDialog } from "./components/rule-condition-dialog";
-import { formatPrice } from "@/lib/utils";
-import { useState } from "react";
-import { handleApiError } from "@/lib/error";
+import { CircleArrowOutUpRight, X } from 'lucide-react';
+import { useState } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
+import RuleActionDialog from './components/rule-action-dialog';
+import { RuleConditionDialog } from './components/rule-condition-dialog';
 
-const CreatePromotionPage = () =>
+const EditPromotionPage = () =>
 {
-    const { createPromotionMutation } = usePromotion();
-    const form = useForm<TCreatePromotionRuleRequest>( {
-        resolver: zodResolver( CreatePromotionRuleSchema ),
-        defaultValues: {
+    const { id } = useParams();
+    const { getPromotionById } = usePromotion();
+    const { data } = getPromotionById( id as string );
+    // const { createPromotionMutation } = usePromotion();
+    const form = useForm<TPromotionRuleResponse>( {
+        resolver: zodResolver( PromotionRuleBaseSchema ),
+        defaultValues: data?.data.data || {
             name: "",
             shortDescription: "",
             description: "",
             priority: 0,
             ruleActions: undefined,
-            ruleConditions: []
-        }
+            ruleConditions: [],
+        },
     } )
 
     const {
@@ -53,7 +56,7 @@ const CreatePromotionPage = () =>
         setIsConditionDialogOpen( true );
     };
 
-    const handleSaveCondition = ( data: TCreateRuleCondition ) =>
+    const handleSaveCondition = ( data: TRuleConditions ) =>
     {
         if ( editingConditionIndex !== null )
         {
@@ -75,23 +78,23 @@ const CreatePromotionPage = () =>
         }
     };
 
-    const handleSaveAction = ( data: TCreateRuleAction ) =>
+    const handleSaveAction = ( data: TRuleActions ) =>
     {
         form.setValue( "ruleActions", data, { shouldDirty: true } );
         toast.success( ruleAction ? "Đã cập nhật hành động." : "Đã thêm hành động." );
     };
 
-    const onSubmit = async ( data: TCreatePromotionRuleRequest ) =>
+    const onSubmit = async ( data: TPromotionRuleResponse ) =>
     {
         console.log( "Submitted data:", data );
-        try
-        {
-            await createPromotionMutation.mutateAsync( data );
-            toast.success( "Tạo khuyến mãi thành công!" );
-        } catch ( error )
-        {
-            handleApiError( error );
-        }
+        // try
+        // {
+        //     await createPromotionMutation.mutateAsync( data );
+        //     toast.success( "Tạo khuyến mãi thành công!" );
+        // } catch ( error )
+        // {
+        //     handleApiError( error );
+        // }
     }
     return (
         <Form { ...form }>
@@ -114,7 +117,7 @@ const CreatePromotionPage = () =>
                                             <FormItem>
                                                 <FormLabel>Tên Khuyến Mãi *</FormLabel>
                                                 <FormControl>
-                                                    <Input disabled={ createPromotionMutation.isPending } placeholder="Nhập tên sản phẩm" { ...field } />
+                                                    <Input disabled={ false } placeholder="Nhập tên sản phẩm" { ...field } />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -129,7 +132,7 @@ const CreatePromotionPage = () =>
                                                 <FormControl>
                                                     <Input
                                                         type="number"
-                                                        disabled={ createPromotionMutation.isPending }
+                                                        disabled={ false }
                                                         placeholder="Nhập độ ưu tiên"
                                                         { ...field }
                                                         onChange={ ( e ) => field.onChange( Number( e.target.value ) ) }
@@ -148,7 +151,7 @@ const CreatePromotionPage = () =>
                                             <FormLabel>Tóm tắt *</FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    disabled={ createPromotionMutation.isPending }
+                                                    disabled={ false }
                                                     placeholder="Nhập tóm tắt khuyến mãi"
                                                     { ...field }
                                                 />
@@ -165,7 +168,7 @@ const CreatePromotionPage = () =>
                                             <FormLabel>Mô tả khuyến mãi *</FormLabel>
                                             <FormControl>
                                                 <Textarea
-                                                    disabled={ createPromotionMutation.isPending }
+                                                    disabled={ false }
                                                     placeholder="Nhập mô tả khuyến mãi"
                                                     className="min-h-[100px]"
                                                     { ...field }
@@ -186,9 +189,9 @@ const CreatePromotionPage = () =>
                                         onOpenChange={ setIsConditionDialogOpen }
                                         initialData={ editingConditionIndex !== null ? ruleConditions[ editingConditionIndex ] : undefined }
                                         onSave={ handleSaveCondition }
-                                        isSubmitting={ createPromotionMutation.isPending }
+                                        isSubmitting={ false }
                                     >
-                                        <Button variant="outline" size="sm" className="ml-auto" type="button" disabled={ createPromotionMutation.isPending } onClick={ () => handleOpenConditionDialog() }>
+                                        <Button variant="outline" size="sm" className="ml-auto" type="button" disabled={ false } onClick={ () => handleOpenConditionDialog() }>
                                             Thêm
                                             <CircleArrowOutUpRight className="ml-2 h-4 w-4" />
                                         </Button>
@@ -258,19 +261,21 @@ const CreatePromotionPage = () =>
                             <Card className='shadow-none border-none bg-white '>
                                 <CardHeader className='grid grid-cols-1 md:grid-cols-2 items-center gap-4'>
                                     <CardTitle>Hành động khuyến mãi</CardTitle>
-                                    <RuleActionDialog
-                                        isOpen={ isActionDialogOpen }
-                                        onOpenChange={ setIsActionDialogOpen }
-                                        initialData={ ruleAction }
-                                        onSave={ handleSaveAction }
-                                        isSubmitting={ createPromotionMutation.isPending }
-                                    >
-                                        <Button variant="outline" size="sm" className="ml-auto" type="button" disabled={ createPromotionMutation.isPending } onClick={ () => setIsActionDialogOpen( true ) }>
-                                            Thêm
-                                            <CircleArrowOutUpRight className="ml-2 h-4 w-4" />
-                                        </Button>
-
-                                    </RuleActionDialog>
+                                    {
+                                        !ruleAction &&
+                                        <RuleActionDialog
+                                            isOpen={ isActionDialogOpen }
+                                            onOpenChange={ setIsActionDialogOpen }
+                                            initialData={ ruleAction }
+                                            onSave={ handleSaveAction }
+                                            isSubmitting={ false }
+                                        >
+                                            <Button variant="outline" size="sm" className="ml-auto" type="button" disabled={ false } onClick={ () => setIsActionDialogOpen( true ) }>
+                                                Thêm
+                                                <CircleArrowOutUpRight className="ml-2 h-4 w-4" />
+                                            </Button>
+                                        </RuleActionDialog>
+                                    }
                                 </CardHeader>
                                 <CardContent className="space-y-4">
                                     { ruleAction ? (
@@ -334,8 +339,8 @@ const CreatePromotionPage = () =>
                     </div>
                 </div>
                 <div className="flex justify-end h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear sticky bottom-0 bg-transparent z-10">
-                    <Button form="promotion-form" className='mr-8 py-5 px-10' type="submit" disabled={ createPromotionMutation.isPending }>
-                        Tạo
+                    <Button form="promotion-form" className='mr-8 py-5 px-10' type="submit" disabled={ false }>
+                        Lưu
                     </Button>
                 </div>
             </form>
@@ -343,4 +348,4 @@ const CreatePromotionPage = () =>
     )
 }
 
-export default CreatePromotionPage
+export default EditPromotionPage

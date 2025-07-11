@@ -1,8 +1,10 @@
 import { SortableHeader } from "@/components/table/sortable-header";
 import { Badge } from "@/components/ui/badge";
+import { PATH_BRAND_DASHBOARD } from "@/routes/path";
 import type { TPromotionRuleResponse } from "@/schema/promotion-rule.schema";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const columns: ColumnDef<TPromotionRuleResponse>[] = [
     {
@@ -57,24 +59,25 @@ export const columns: ColumnDef<TPromotionRuleResponse>[] = [
         header: () => (
             <div className="text-center font-semibold text-base">Thao Tác</div>
         ),
-        cell: ( { } ) =>
+        cell: ( { row } ) =>
         {
-            // const promotion = row.original;
+            const promotion = row.original;
             return (
                 <div className="flex justify-center">
-                    <div
-                        className="group relative flex items-center cursor-pointer"
-                        onClick={ () => { } }
-                    >
-                        <Eye className="h-4 w-4 text-blue-600" />
-
-                        <span
-                            className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded bg-gray-800 text-white text-xs
-                          whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-10"
+                    <Link to={ PATH_BRAND_DASHBOARD.promotion.editPromotion( promotion.id ) }>
+                        <div
+                            className="group relative flex items-center cursor-pointer"
                         >
-                            Xem chi tiết
-                        </span>
-                    </div>
+                            <Eye className="h-4 w-4 text-blue-600" />
+
+                            <span
+                                className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded bg-gray-800 text-white text-xs
+                          whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-10"
+                            >
+                                Xem chi tiết
+                            </span>
+                        </div>
+                    </Link>
                 </div>
             )
         },
