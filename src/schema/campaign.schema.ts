@@ -14,7 +14,8 @@ export const CampaignResponseSchema = z.object({
   maxTotalUsageLimit: z.number().int(),
   maxUsagePerCustomerLimit: z.number().int(),
   status: z.nativeEnum(CampaignStatusEnum),
-  promotionRules: z.array(z.lazy(() => PromotionRuleBaseSchema)).optional(),
+  promotionRules: z.array(z.lazy(() => PromotionRuleBaseSchema)).nullable(),
+  storeIds: z.array(z.string()).nullable(),
 });
 
 
@@ -22,21 +23,14 @@ const BaseCampaignSchema = z.object({
   name: z.string()
     .min(1, { message: "Tên của chiến dịch không được ít hơn 1 ký tự" })
     .max(200, { message: "Tên của chiến dịch không được quá 200 ký tự" }),
-
   description: z.string()
     .max(1000, { message: "Mô tả của chiến dịch không được quá 1000 ký tự" })
-    .optional(),
-
+    .nullable(),
   startDate: z.date(),
-
   endDate: z.date(),
-
   priority: z.number().int().min(0, { message: "Độ ưu tiên không được để trống" }),
-
-  maxTotalUsageLimit: z.number().int(),
-
+  maxTotalUsageLimit: z.number().int().nullable(),
   maxUsagePerCustomerLimit: z.number().int(),
-
   status: z.nativeEnum(CampaignStatusEnum),
 });
 

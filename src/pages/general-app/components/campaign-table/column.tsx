@@ -1,14 +1,8 @@
 import { Button } from "@/components/ui/button";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
-import {
-  ArrowDown,
-  ArrowUp,
-  ArrowUpDown,
-  Eye,
-} from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown, Eye } from "lucide-react";
 import type { TCampaignResponse } from "@/schema/campaign.schema";
-import { AppColors } from "@/themes/colors";
 
 // Enhanced sortable header component that provides visual feedback for all sorting states
 const SortableHeader = ({
@@ -112,15 +106,11 @@ export const columns: ColumnDef<TCampaignResponse>[] = [
         <div className="flex justify-center">
           <div
             // variant={ isVisible ? "default" : "secondary" }
-            className={`flex items-center gap-1.5 px-3 py-1 rounded text-sm`}
-            style={{
-              backgroundColor: isVisible
-                ? AppColors.greenMint[10]
-                : AppColors.neutral[10],
-              color: isVisible
-                ? AppColors.greenMint[100]
-                : AppColors.neutral[90],
-            }}
+            className={`flex items-center gap-1.5 px-3 py-1 rounded text-sm ${
+              isVisible
+                ? "bg-green-mint-10 text-green-mint-100"
+                : "bg-neutral-10 text-neutral-100"
+            }`}
           >
             {/* Status indicator with both visual and text cues */}
             {isVisible ? <>Hoạt động</> : <>Không hoạt động</>}
@@ -140,7 +130,10 @@ export const columns: ColumnDef<TCampaignResponse>[] = [
 
       return (
         <div className="flex justify-center">
-          <div className="group relative flex items-center cursor-pointer" onClick={() => navigate(`/dashboard/campaign/${campaign.id}`)}>
+          <div
+            className="group relative flex items-center cursor-pointer"
+            onClick={() => navigate(`/dashboard/campaign/${campaign.id}`)}
+          >
             <Eye className="h-4 w-4 text-blue-600" />
 
             <span

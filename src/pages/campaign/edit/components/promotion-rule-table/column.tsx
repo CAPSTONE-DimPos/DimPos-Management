@@ -2,9 +2,8 @@ import { Button } from "@/components/ui/button";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
 import { ArrowDown, ArrowUp, ArrowUpDown, Eye } from "lucide-react";
-import { AppColors } from "@/themes/colors";
 import { PATH_BRAND_DASHBOARD } from "@/routes/path";
-import type { TPromotionRuleBaseSchema } from "@/schema/promotion-rule.schema";
+import type { TPromotionRuleResponse } from "@/schema/promotion-rule.schema";
 
 // Enhanced sortable header component that provides visual feedback for all sorting states
 const SortableHeader = ({
@@ -35,7 +34,7 @@ const SortableHeader = ({
   );
 };
 
-export const columns: ColumnDef<TPromotionRuleBaseSchema>[] = [
+export const columns: ColumnDef<TPromotionRuleResponse>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => (
@@ -107,16 +106,11 @@ export const columns: ColumnDef<TPromotionRuleBaseSchema>[] = [
       return (
         <div className="flex justify-center">
           <div
-            // variant={ isVisible ? "default" : "secondary" }
-            className={`flex items-center gap-1.5 px-3 py-1 rounded text-sm`}
-            style={{
-              backgroundColor: isVisible
-                ? AppColors.greenMint[10]
-                : AppColors.neutral[10],
-              color: isVisible
-                ? AppColors.greenMint[100]
-                : AppColors.neutral[90],
-            }}
+            className={`flex items-center gap-1.5 px-3 py-1 rounded text-sm ${
+              isVisible
+                ? "bg-green-mint-10 text-green-mint-100"
+                : "bg-neutral-10 text-neutral-90"
+            }`}
           >
             {/* Status indicator with both visual and text cues */}
             {isVisible ? <>Hoạt động</> : <>Không hoạt động</>}

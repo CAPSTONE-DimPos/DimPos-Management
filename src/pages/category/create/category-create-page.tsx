@@ -158,9 +158,9 @@ const CreateCategoryPage = () =>
         <div className="lg:col-span-1 lg:order-first">
           <Card className="shadow-none border-none bg-white">
             <CardHeader>
-              <CardTitle className="flex justify-between items-center">
+              {/* <CardTitle className="flex justify-between items-center">
                 Hình Ảnh
-              </CardTitle>
+              </CardTitle> */}
             </CardHeader>
             <CardContent>
               <input

@@ -2,7 +2,7 @@ import { useBrand } from "@/hooks/use-brand";
 import { handleApiError } from "@/lib/error";
 import AvatarCard from "./components/avatar-card";
 import DetailCard from "./components/detail-card";
-import StoresCard from "./components/stores-card";
+import InvoiceCard from "./components/invoice-cart";
 
 type Props = {}
 
@@ -29,7 +29,8 @@ const BrandPage = ( _: Props ) =>
         <AvatarCard />
         <DetailCard initialData={ data.data.data } />
       </div>
-      <StoresCard />
+      {/* <StoresCard /> */}
+      <InvoiceCard />
     </div>
   );
 };

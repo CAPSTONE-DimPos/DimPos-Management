@@ -1,7 +1,6 @@
 import { SortableHeader } from "@/components/table/sortable-header";
 import { PATH_BRAND_DASHBOARD } from "@/routes/path";
 import type { TCampaignResponse } from "@/schema/campaign.schema";
-import { AppColors } from "@/themes/colors";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -83,15 +82,11 @@ export const columns: ColumnDef<TCampaignResponse>[] = [
         <div className="flex justify-center">
           <div
             // variant={ isVisible ? "default" : "secondary" }
-            className={ `flex items-center gap-1.5 px-3 py-1 rounded text-sm` }
-            style={ {
-              backgroundColor: isVisible
-                ? AppColors.greenMint[ 10 ]
-                : AppColors.neutral[ 10 ],
-              color: isVisible
-                ? AppColors.greenMint[ 100 ]
-                : AppColors.neutral[ 90 ],
-            } }
+            className={ `flex items-center gap-1.5 px-3 py-1 rounded text-sm ${
+              isVisible
+                ? "bg-green-mint-10 text-green-mint-100"
+                : "bg-neutral-10 text-neutral-100"
+            }` }
           >
             {/* Status indicator with both visual and text cues */ }
             { isVisible ? <>Hoạt động</> : <>Không hoạt động</> }

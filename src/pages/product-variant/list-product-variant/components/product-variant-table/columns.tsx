@@ -1,16 +1,14 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import
-  {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-  } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { copyToClipboard, formatPrice } from "@/lib/utils";
 import { PATH_BRAND_DASHBOARD } from "@/routes/path";
 import type { TProductVariantResponse } from "@/schema/product-variant.schema";
-import { AppColors } from "@/themes/colors";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Copy, Eye } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -19,19 +17,18 @@ export const columns: ColumnDef<TProductVariantResponse>[] = [
   {
     accessorKey: "code",
     header: () => <div className="font-semibold text-base">Mã sản phẩm</div>,
-    cell: ( info ) =>
-    {
+    cell: (info) => {
       const code = info.getValue() as string;
       return (
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="font-normal text-sm">
-            { code }
+            {code}
           </Badge>
           <Button
             variant="ghost"
             size="sm"
             className="h-6 w-6 p-0 hover:bg-muted"
-            onClick={ () => copyToClipboard( code, "Mã sản phẩm" ) }
+            onClick={() => copyToClipboard(code, "Mã sản phẩm")}
           >
             <Copy className="h-3 w-3" />
           </Button>
@@ -42,13 +39,12 @@ export const columns: ColumnDef<TProductVariantResponse>[] = [
   {
     accessorKey: "name",
     header: () => <div className="font-semibold text-base">Tên sản phẩm</div>,
-    cell: ( info ) =>
-    {
+    cell: (info) => {
       const name = info.getValue() as string;
       return (
         <div className="max-w-[200px]">
           <div className="font-normal text-sm text-foreground truncate cursor-pointer hover:text-primary transition-colors">
-            { name }
+            {name}
           </div>
         </div>
       );
@@ -59,12 +55,11 @@ export const columns: ColumnDef<TProductVariantResponse>[] = [
     header: () => (
       <div className="text-right font-semibold text-base">Giá bán</div>
     ),
-    cell: ( info ) =>
-    {
+    cell: (info) => {
       const price = info.getValue() as number;
       return (
         <div className="text-right font-normal text-sm">
-          { formatPrice( price ) }
+          {formatPrice(price)}
           {/* <Badge
                         variant="default"
                         className="bg-green-100 text-green-800 hover:bg-green-200 font-mono"
@@ -80,25 +75,20 @@ export const columns: ColumnDef<TProductVariantResponse>[] = [
     header: () => (
       <div className="text-center font-semibold text-base">Trạng Thái</div>
     ),
-    cell: ( info ) =>
-    {
+    cell: (info) => {
       const status = info.getValue() as number;
       const isActive = status === 0;
 
       return (
         <div className="flex justify-center">
           <div
-            className="flex items-center gap-1.5 px-3 py-1 rounded text-sm"
-            style={ {
-              backgroundColor: isActive
-                ? AppColors.greenMint[ 10 ]
-                : AppColors.neutral[ 10 ],
-              color: isActive
-                ? AppColors.greenMint[ 100 ]
-                : AppColors.neutral[ 90 ],
-            } }
+            className={`flex items-center gap-1.5 px-3 py-1 rounded text-sm ${
+              isActive
+                ? "bg-green-mint-10 text-green-mint-100"
+                : "bg-neutral-10 text-neutral-100"
+            }`}
           >
-            { isActive ? <>Kích hoạt</> : <>Không kích hoạt</> }
+            {isActive ? <>Kích hoạt</> : <>Không kích hoạt</>}
           </div>
           {/* <Badge
             variant={isActive ? "default" : "destructive"}
@@ -124,14 +114,13 @@ export const columns: ColumnDef<TProductVariantResponse>[] = [
     header: () => (
       <div className="text-center font-semibold text-base">Thao Tác</div>
     ),
-    cell: ( { row } ) =>
-    {
+    cell: ({ row }) => {
       const variant = row.original;
       return (
         <div className="flex justify-center">
           <TooltipProvider>
             <Tooltip>
-              <Link to={ PATH_BRAND_DASHBOARD.product.editVariant( variant.id ) }>
+              <Link to={PATH_BRAND_DASHBOARD.product.editVariant(variant.id)}>
                 <TooltipTrigger>
                   <Eye className="h-4 w-4 hover:cursor-pointer" />
                   <TooltipContent>
@@ -209,7 +198,7 @@ export const columns: ColumnDef<TProductVariantResponse>[] = [
 export const tableConfig = {
   // Enable sorting for specific columns
   enableSorting: true,
-  sortableColumns: [ "name", "code", "price" ],
+  sortableColumns: ["name", "code", "price"],
 
   // Default column sizing
   defaultColumnSizing: {
@@ -225,6 +214,6 @@ export const tableConfig = {
   // Pagination settings
   pagination: {
     pageSize: 10,
-    pageSizeOptions: [ 10, 20, 50, 100 ],
+    pageSizeOptions: [10, 20, 50, 100],
   },
 };

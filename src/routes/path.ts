@@ -79,8 +79,9 @@ export const PATH_BRAND_DASHBOARD = {
     root: path(ROOTS_BRAND_DASHBOARD, '/store-account'),
   },
 
-  order:{
-    root:path(ROOTS_BRAND_DASHBOARD, '/order'),
+  order: {
+    root: path(ROOTS_BRAND_DASHBOARD, '/brand-order'),
+    edit: (id: string) => path(ROOTS_BRAND_DASHBOARD, `/brand-order/${id}`),
   },
 
   brand: {
@@ -88,6 +89,8 @@ export const PATH_BRAND_DASHBOARD = {
   },
   store: {
     root: path(ROOTS_BRAND_DASHBOARD, '/store'),
+    create: path(ROOTS_BRAND_DASHBOARD, '/store/new'),
+    edit: (id: string) => path(ROOTS_BRAND_DASHBOARD, `/store/${id}`),
   },
   role: {
     root: path(ROOTS_BRAND_DASHBOARD, '/role'),
@@ -109,6 +112,20 @@ export const PATH_ADMIN_DASHBOARD = {
     root: path(ROOTS_ADMIN_DASHBOARD, "/brand"),
     create: path(ROOTS_ADMIN_DASHBOARD, "/brand/new"),
     edit: (id: string) => path(ROOTS_ADMIN_DASHBOARD, `/brand/${id}`),
+  },
+
+  brandAccount:{
+    root: path(ROOTS_ADMIN_DASHBOARD, "/brand-account"),
+    create: path(ROOTS_ADMIN_DASHBOARD, "/brand-account/new"),
+    edit: (id: string) => path(ROOTS_ADMIN_DASHBOARD, `/brand-account/${id}`),
+  },
+
+  systemPaymentMethod: {
+    root: path(ROOTS_ADMIN_DASHBOARD, "/payment-method"),
+    edit: path(ROOTS_ADMIN_DASHBOARD, "/payment-method/edit"),
+  },
+  systemLog: {
+    root: path(ROOTS_ADMIN_DASHBOARD, "/system-log"),
   },
 };
 

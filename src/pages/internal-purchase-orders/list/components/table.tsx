@@ -2,7 +2,7 @@
 // import { useInternalPurchaseOrders } from "@/hooks/use-internal-purchase-orders";
 // import { useQueryParams } from "@/hooks/use-query-params";
 // import { handleApiError } from "@/lib/error";
-// import { columns } from "./column";
+// import { columns } from "./purchase-order/column";
 // import type { TStorePurchaseOrderListItem } from "@/schema/internal-purchase-orders.schema";
 
 // const InternalPOListTable = () => {
@@ -37,8 +37,8 @@
 //     pageSize,
 //     sortBy,
 //     isAsc,
-//     purchaseOrderNumber:
-//       filter.find((f) => f.id === "purchaseOrderNumber")?.value || "",
+//     // purchaseOrderNumber:
+//     //   filter.find((f) => f.id === "purchaseOrderNumber")?.value || "",
 //   });
 
 //   if (isError && error) {

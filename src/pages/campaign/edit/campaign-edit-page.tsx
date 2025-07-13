@@ -1,38 +1,41 @@
 // src/pages/campaign/edit/campaign-edit-page.tsx
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import type { SubmitHandler } from "react-hook-form";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
-
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-
+import { useParams } from "react-router-dom";
 import { useCampaign } from "@/hooks/use-campaign";
-import { campaignApi } from "@/apis/campaign.api";
-import { handleApiError } from "@/lib/error";
-import {
-  UpdateCampaignSchema,
-  type TUpdateCampaignRequest,
-} from "@/schema/campaign.schema";
-import PromotionRuleTable from "./components/promotion-rule-table";
-import type { TPromotionRuleBaseSchema } from "@/schema/promotion-rule.schema";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
+import PromotionRuleTable from "./components/campaign-promotion-rule-table";
+import type { TPromotionRuleResponse } from "@/schema/promotion-rule.schema";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EditCampaignForm from "./components/overview-campaign-form";
+// import CampaignStoreTable from "./components/campaign-store-table";
 
 const CampaignEditPage = () => {
   const { id } = useParams<{ id: string }>();
   const [promotionRulesOfCampaign, setPromotionRulesOfCampaign] = useState<
-    TPromotionRuleBaseSchema[]
+    TPromotionRuleResponse[]
   >([]);
+  // const [storeIds, setStoreIds] = useState<string[]>([]);
 
   const { getCampaignById } = useCampaign();
-  const { data: campaignData } = getCampaignById(id!);
+  const { data: campaignData } = getCampaignById(id as string);
+  useEffect(() => {
+    if (
+      campaignData &&
+      campaignData.data &&
+      campaignData.data.data &&
+      campaignData.data.data.promotionRules
+    ) {
+      setPromotionRulesOfCampaign(campaignData.data.data.promotionRules);
+    }
+    //  if (
+    //   campaignData &&
+    //   campaignData.data &&
+    //   campaignData.data.data &&
+    //   campaignData.data.data.storeIds
+    // ) {
+    //   setStoreIds(campaignData.data.data.storeIds ?? []);
+    // }
+   
+  }, [campaignData]);
   return (
     <div>
       <div className="mb-6">
@@ -44,7 +47,7 @@ const CampaignEditPage = () => {
           <TabsTrigger value="promotionRulesOfCampaign">
             Các khuyến mãi
           </TabsTrigger>
-          <TabsTrigger value="storesApplied">Cửa hàng áp dụng</TabsTrigger>
+          <TabsTrigger value="storesAppli ed">Cửa hàng áp dụng</TabsTrigger>
         </TabsList>
         <TabsContent value="overview">
           <EditCampaignForm initialData={campaignData?.data.data as any} />
@@ -52,7 +55,9 @@ const CampaignEditPage = () => {
         <TabsContent value="promotionRulesOfCampaign">
           <PromotionRuleTable initialData={promotionRulesOfCampaign} />
         </TabsContent>
-        <TabsContent value="storesApplied"></TabsContent>
+        <TabsContent value="storesApplied">
+          {/* <CampaignStoreTable storeIds={storeIds}/> */}
+        </TabsContent>
       </Tabs>
     </div>
   );

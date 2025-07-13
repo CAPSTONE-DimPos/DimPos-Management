@@ -15,13 +15,16 @@ const EditProductPage = () =>
             <div className="mb-6">
                 <h1 className="text-2xl font-semibold">{ data?.data.data.name }</h1>
             </div>
-            <Tabs defaultValue="overview">
+            `<Tabs defaultValue="overview">
                 <TabsList>
                     <TabsTrigger value="overview">Tổng quan</TabsTrigger>
                     { data?.data.data.isHasVariants && (
                         <TabsTrigger value="variants">Biến thể</TabsTrigger>
                     ) }
                     <TabsTrigger value="modifierOptions">Tùy chọn</TabsTrigger>
+                    {!data?.data.data.isHasVariants && ( 
+                        <TabsTrigger value="recipe">Công thức</TabsTrigger>
+                    )}
                 </TabsList>
                 <TabsContent value="overview">
                     <OverviewProductForm
@@ -38,7 +41,8 @@ const EditProductPage = () =>
                         productId={ id as string }
                     />
                 </TabsContent>
-            </Tabs>
+                <TabsContent value="recipe"></TabsContent>
+            </Tabs>`
         </div>
     )
 }

@@ -1,6 +1,6 @@
 
 import { campaignApi } from "@/apis/campaign.api";
-import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface UseCampaignParams
 {
@@ -12,6 +12,8 @@ interface UseCampaignParams
 
 export const useCampaign = () =>
 {
+    const queryClient = useQueryClient();
+
     const getCampaigns = ( params: UseCampaignParams = {} ) =>
     {
         const {
@@ -48,10 +50,23 @@ export const useCampaign = () =>
         useMutation( {
             mutationFn: ( request: FormData ) => campaignApi.createCampaign( request ),
         } );
-    const updateCampaign = () =>
-        useMutation( {
-            mutationFn: ( params: { id: string; data: FormData } ) =>
-                campaignApi.updateCampaign( params.id, params.data ),
+    // const updateCampaign = () =>
+    //     useMutation( {
+    //         mutationFn: ( params: { id: string; data: FormData } ) =>
+    //             campaignApi.updateCampaign( params.id, params.data ),
+    //     } );
+    const updateCampaign = useMutation( {
+            mutationFn: ( {
+                id,
+                data,
+            }: {
+                id: string;
+                data: FormData;
+            } ) => campaignApi.updateCampaign( id, data ),
+            onSuccess: ( _res, { id } ) =>
+            {
+                queryClient.invalidateQueries( { queryKey: [ "campaign", id ] } );
+            },
         } );
     return {
         getCampaigns,

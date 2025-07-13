@@ -1,14 +1,10 @@
 import { DataTable } from "@/components/table/data-table";
+import { handleApiError } from "@/lib/error";
+import { columns } from "./order-table/colums";
 import { useQueryParams } from "@/hooks/use-query-params";
-import { columns } from "./promotion-rule-table/column";
-import type { TPromotionRuleBaseSchema } from "@/schema/promotion-rule.schema";
+import { useOrder } from "@/hooks/use-order";
 
-
-type Props = {
-    initialData: TPromotionRuleBaseSchema[]
-}
-
-const PromotionRuleTable = ({ initialData }: Props) => {
+const OrderTable = () => {
   const {
     currentPage,
     pageSize,
@@ -17,17 +13,32 @@ const PromotionRuleTable = ({ initialData }: Props) => {
     setSort,
     setPage,
     setPageSize,
-    filter,
     setFilter,
   } = useQueryParams({
     defaultSortBy: "priority",
+    defaultFilter: [
+      {
+        id: "name",
+        value: "",
+      },
+    ],
   });
 
+  const { getOrders } = useOrder();
+  const { data, isLoading, isError, error } = getOrders({
+    size: pageSize,
+    page: currentPage,
+    sortBy: sortBy,
+    isAsc: isAsc,
+  });
 
-  const searchValues = filter.map((f) => ({
-    ...f,
-    searchPlaceholder: f.id === "name" ? "Tìm kiếm theo tên chiến dịch" : "",
-  }));
+  if (isError && error) {
+    handleApiError(error);
+  }
+
+  const items = data?.data.data.items || [];
+  const total = data?.data.data.total || 0;
+
   const sortValue = {
     id: sortBy,
     desc: !isAsc,
@@ -35,14 +46,14 @@ const PromotionRuleTable = ({ initialData }: Props) => {
   return (
     <DataTable
       columns={columns}
-      data={initialData}
-      totalItems={initialData.length}
+      data={items}
+      totalItems={total}
       currentPage={currentPage}
       pageSize={pageSize}
       onPageChange={setPage}
       onPageSizeChange={setPageSize}
+      isLoading={isLoading}
       onSearchChange={setFilter}
-      searchValues={searchValues}
       sortValues={[sortValue]}
       onSortChange={(newSort) => {
         setSort(newSort[0].id, !newSort[0].desc);
@@ -51,4 +62,4 @@ const PromotionRuleTable = ({ initialData }: Props) => {
   );
 };
 
-export default PromotionRuleTable;
+export default OrderTable;
