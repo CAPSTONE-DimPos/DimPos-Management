@@ -6,14 +6,14 @@ import PromotionRuleTable from "./components/campaign-promotion-rule-table";
 import type { TPromotionRuleResponse } from "@/schema/promotion-rule.schema";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EditCampaignForm from "./components/overview-campaign-form";
-import CampaignStoreTable from "./components/campaign-store-table";
+// import CampaignStoreTable from "./components/campaign-store-table";
 
 const CampaignEditPage = () => {
   const { id } = useParams<{ id: string }>();
   const [promotionRulesOfCampaign, setPromotionRulesOfCampaign] = useState<
     TPromotionRuleResponse[]
   >([]);
-  const [storeIds, setStoreIds] = useState<string[]>([]);
+  // const [storeIds, setStoreIds] = useState<string[]>([]);
 
   const { getCampaignById } = useCampaign();
   const { data: campaignData } = getCampaignById(id as string);
@@ -26,14 +26,14 @@ const CampaignEditPage = () => {
     ) {
       setPromotionRulesOfCampaign(campaignData.data.data.promotionRules);
     }
-     if (
-      campaignData &&
-      campaignData.data &&
-      campaignData.data.data &&
-      campaignData.data.data.storeIds
-    ) {
-      setStoreIds(campaignData.data.data.storeIds ?? []);
-    }
+    //  if (
+    //   campaignData &&
+    //   campaignData.data &&
+    //   campaignData.data.data &&
+    //   campaignData.data.data.storeIds
+    // ) {
+    //   setStoreIds(campaignData.data.data.storeIds ?? []);
+    // }
    
   }, [campaignData]);
   return (
@@ -56,7 +56,7 @@ const CampaignEditPage = () => {
           <PromotionRuleTable initialData={promotionRulesOfCampaign} />
         </TabsContent>
         <TabsContent value="storesApplied">
-          <CampaignStoreTable storeIds={storeIds}/>
+          {/* <CampaignStoreTable storeIds={storeIds}/> */}
         </TabsContent>
       </Tabs>
     </div>

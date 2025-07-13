@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import type { SubmitHandler } from "react-hook-form";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
-import { productVariantApi } from "@/apis/product-variant.api";
 import ImageNotFound from "@/assets/illustration/image-not-found";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";

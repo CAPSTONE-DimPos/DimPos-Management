@@ -23,7 +23,8 @@ export const API_SUFFIX = {
   MODIFIER_GROUP_API: "/modifier-groups",
   MODIFIER_OPTION_API: "/modifier-options",
   CAMPAIGN_API: "/campaigns",
-  PROMOTION_RULE_API: "promotion-rules",
+  PROMOTION_RULE_API: "/promotion-rules",
+  ORDER_API: "/orders",
 
   BRAND_API: {
     BRAND: "/brands",      

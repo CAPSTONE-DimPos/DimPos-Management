@@ -10,8 +10,7 @@ import ProductIcon from "@/assets/icons/product-icon";
 import ReceiptIcon from "@/assets/icons/receipt-icon";
 import DimposLogo from "@/assets/logo/dimpos-logo";
 import { NavMain } from "@/components/nav-main";
-import
-{
+import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
@@ -19,8 +18,7 @@ import
   useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import
-{
+import {
   PATH_BRAND_DASHBOARD,
   PATH_ADMIN_DASHBOARD,
   PATH_STORE_DASHBOARD,
@@ -180,16 +178,40 @@ const adminRoutes = {
         url: PATH_ADMIN_DASHBOARD.general.app,
         icon: GeneralAppIcon,
       },
+
+    ],
+  },
+  brand: {
+    mainTitle: "Quản lý thương hiệu",
+    items: [
       {
-        title: "Quản lí Thương hiệu",
+        title: "Danh sách thương hiệu",
         url: PATH_ADMIN_DASHBOARD.brand.root,
+        icon: GeneralAppIcon,
+      },
+      {
+        title: "Danh sách tài khoản",
+        url: PATH_ADMIN_DASHBOARD.brandAccount.root,
         icon: HomeIcon,
       },
     ],
   },
-
-
-}
+  systemManagement: {
+    mainTitle: "Quản lý hệ thống",
+    items: [
+      {
+        title: "Phương thức thanh toán",
+        url: PATH_ADMIN_DASHBOARD.systemPaymentMethod.root,
+        icon: GeneralAppIcon,
+      },
+      {
+        title: "Nhật ký hệ thống",
+        url: PATH_ADMIN_DASHBOARD.systemLog.root,
+        icon: HomeIcon,
+      },
+    ],
+  }
+};
 
 const storeRoutes = {
   dashboard: {
@@ -274,69 +296,64 @@ const storeRoutes = {
   },
 };
 
-
-
-
-export function AppSidebar ( { ...props }: React.ComponentProps<typeof Sidebar> )
-{
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { toggleSidebar, open } = useSidebar();
-  const { role } = useSelector( ( state: RootState ) => state.user );
+  const { role } = useSelector((state: RootState) => state.user);
   return (
-    <Sidebar variant="sidebar" collapsible="icon" { ...props }>
+    <Sidebar variant="sidebar" collapsible="icon" {...props}>
       <SidebarHeader>
         <div className="flex items-center justify-between my-4 ml-2">
           <div
             className="cursor-pointer"
-            onClick={ open ? undefined : toggleSidebar }
+            onClick={open ? undefined : toggleSidebar}
           >
             <DimposLogo
-              className={ cn( open ? "size-15" : "size-6", "duration-300" ) }
+              className={cn(open ? "size-15" : "size-6", "duration-300")}
             />
           </div>
-          { open && (
-            <div className="cursor-pointer" onClick={ toggleSidebar }>
+          {open && (
+            <div className="cursor-pointer" onClick={toggleSidebar}>
               <CollapseIcon className="size-6 cursor-pointer text-gray-500 hover:text-gray-700 transition-colors duration-200" />
             </div>
-          ) }
+          )}
         </div>
       </SidebarHeader>
-      { ( () =>
-      {
-        switch ( role )
-        {
+      {(() => {
+        switch (role) {
           case "BrandAdmin":
             return (
               <SidebarContent>
-                <NavMain content={ brandRoutes.dashboard } />
-                <NavMain content={ brandRoutes.productManagement } />
+                <NavMain content={brandRoutes.dashboard} />
+                <NavMain content={brandRoutes.productManagement} />
                 {/* <NavMain content={ brandRoutes.ingredientRecipeManagement } /> */}
                 {/* <NavMain content={ brandRoutes.taxManagement } /> */}
-                <NavMain content={ brandRoutes.promotionCampaignManagement } />
-                <NavMain content={ brandRoutes.storeManagement } />
-                <NavMain content={ brandRoutes.generalManagement } />
+                <NavMain content={brandRoutes.promotionCampaignManagement} />
+                <NavMain content={brandRoutes.storeManagement} />
+                <NavMain content={brandRoutes.generalManagement} />
               </SidebarContent>
             );
 
-          case 'StoreAdmin':
+          case "StoreAdmin":
             return (
               <SidebarContent>
-                <NavMain content={ storeRoutes.dashboard } />
-                <NavMain content={ storeRoutes.sales } />
-                <NavMain content={ storeRoutes.operation } />
-                <NavMain content={ storeRoutes.settings } />
+                <NavMain content={storeRoutes.dashboard} />
+                <NavMain content={storeRoutes.sales} />
+                <NavMain content={storeRoutes.operation} />
+                <NavMain content={storeRoutes.settings} />
               </SidebarContent>
             );
-          case 'SystemAdmin':
+          case "SystemAdmin":
             return (
               <SidebarContent>
-                <NavMain content={ adminRoutes.dashboard } />
+                <NavMain content={adminRoutes.dashboard} />
+                <NavMain content={adminRoutes.brand} />
+                <NavMain content={adminRoutes.systemManagement} />
               </SidebarContent>
             );
           default:
             return null;
         }
-      } )()
-      }
+      })()}
       <SidebarRail />
     </Sidebar>
   );

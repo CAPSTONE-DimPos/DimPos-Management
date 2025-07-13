@@ -4,7 +4,7 @@ export const ProductVariantSchema = z.object({
     id: z.string().uuid(),
     code: z.string(),
     name: z.string(),
-    description: z.string().nullable().optional(),
+    description: z.string().nullable(),
     price: z.number( {message: "Giá phải là số"} ).min(0),    
     isActive: z.boolean(),
     size: z.string().nullable(),

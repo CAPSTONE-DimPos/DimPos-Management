@@ -16,7 +16,6 @@ import {
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import { ErrorBoundary } from "react-error-boundary";
 import { ErrorFallback } from "@/components/error-fallback";
-// import CreateModifierGroupPage from "@/pages/create-modifier-group";
 
 const Loadable = (Component: ElementType) => (props: any) => {
   return (
@@ -42,6 +41,29 @@ const GeneralEcommercePage = Loadable(
   lazy(() => import("@/pages/general-ecommerce"))
 );
 
+//System admin
+const BrandManagementPage = Loadable(
+  lazy(() => import("@/pages/brand-management"))
+);
+const CreateBrandPage = Loadable(
+  lazy(
+    () => import("@/pages/brand-management/create/brand-management-create-page")
+  )
+);
+const BrandAccountPage = Loadable(
+  lazy(() => import("@/pages/brand-account"))
+);
+const SystemPaymentMethodPage = Loadable(
+  lazy(() => import("@/pages/system-payment-method"))
+);
+const SystemLogPage = Loadable(
+  lazy(() => import("@/pages/system-log"))
+);
+
+
+
+//Brand admin
+const BrandOrderEditPage = Loadable(lazy(() => import("@/pages/brand-order/edit-order")));
 // Product routes
 const CategoryPage = Loadable(lazy(() => import("@/pages/category")));
 const CategoryCreatePage = Loadable(
@@ -79,15 +101,6 @@ const BrandPage = Loadable(lazy(() => import("@/pages/brand")));
 const RolePage = Loadable(lazy(() => import("@/pages/role")));
 const InvoicePage = Loadable(lazy(() => import("@/pages/invoice")));
 
-const BrandManagementPage = Loadable(
-  lazy(() => import("@/pages/brand-management"))
-);
-const CreateBrandPage = Loadable(
-  lazy(
-    () => import("@/pages/brand-management/create/brand-management-create-page")
-  )
-);
-
 const CampaignPage = Loadable(lazy(() => import("@/pages/campaign")));
 const CampaignEditPage = Loadable(lazy(() => import("@/pages/campaign/edit")));
 
@@ -96,7 +109,10 @@ const StoreEditPage = Loadable(
   lazy(() => import("@/pages/store/edit-stores/edit-store-page"))
 );
 
-const InternalPurchaseOrderPage = Loadable(lazy(() => import("@/pages/internal-purchase-orders/list")))
+const OrderPage = Loadable(
+  lazy(() => import("@/pages/brand-order/list-order"))
+);
+// const InternalPurchaseOrderPage = Loadable(lazy(() => import("@/pages/internal-purchase-orders/list")))
 
 const Page404 = Loadable(lazy(() => import("@/pages/page-404")));
 
@@ -233,9 +249,17 @@ export const AppRoutes = () =>
           element: <InvoicePage />,
         },
         {
-          path: "internal-purchase-orders",
-          element: <InternalPurchaseOrderPage/>
-        }
+          path: "brand-order",
+          element: <OrderPage />,
+        },
+        {
+          path: "brand-order/:id",
+          element: <BrandOrderEditPage />,
+        },
+        // {
+        //   path: "internal-purchase-orders",
+        //   element: <InternalPurchaseOrderPage/>
+        // }
       ],
     },
     // System Admin Dashboard routes
@@ -263,6 +287,26 @@ export const AppRoutes = () =>
           path: "brand/new",
           element: <CreateBrandPage />,
         },
+        {
+          path: "brand-account",
+          element: <BrandAccountPage />,
+        },
+        {
+          path: "brand/account/new",
+          element: <BrandAccountPage />,
+        },
+        {
+          path: "payment-method",
+          element: <SystemPaymentMethodPage />,
+        },
+        {
+          path: "system-log",
+          element: <SystemLogPage />,
+        },
+        // {
+        //   path: "brand/account/:id",
+        //   element: < />,
+        // },
       ],
     },
     // Store Admin Dashboard routes
