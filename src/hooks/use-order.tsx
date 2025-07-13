@@ -1,16 +1,19 @@
-import { orderApi, storeOrderApi } from "@/apis/order.api";
+import { orderApi, } from "@/apis/order.api";
 import { useQuery, useSuspenseQuery, keepPreviousData } from "@tanstack/react-query";
 import type { TGetStoreOrdersQuery } from "@/schema/order.schema";
 
-interface UseOrderParams {
+interface UseOrderParams
+{
   page?: number;
   size?: number;
   sortBy?: string;
   isAsc?: boolean;
 }
 
-export const useStoreOrder = () => {
-  const getStoreOrders = (params: TGetStoreOrdersQuery = {}) => {
+export const useStoreOrder = () =>
+{
+  const getStoreOrders = ( params: TGetStoreOrdersQuery = {} ) =>
+  {
     const {
       page = 1,
       pageSize = 30,
@@ -19,8 +22,8 @@ export const useStoreOrder = () => {
       status = null,
       type = null,
     } = params;
-    
-    return useQuery({
+
+    return useQuery( {
       queryKey: [
         "orders",
         {
@@ -33,24 +36,25 @@ export const useStoreOrder = () => {
         },
       ],
       queryFn: () =>
-        storeOrderApi.getStoreOrders({
+        orderApi.getStoreOrders( {
           page,
           pageSize,
           sortBy,
           isAsc,
           status,
           type,
-        }),
+        } ),
       // Adding keepPreviousData from your branch for better UX
       placeholderData: keepPreviousData,
-    });
+    } );
   };
 
-  const getStoreOrderById = (id: string) => {
-    return useSuspenseQuery({
-      queryKey: ["order", id],
-      queryFn: () => storeOrderApi.getStoreOrderById(id),
-    });
+  const getStoreOrderById = ( id: string ) =>
+  {
+    return useSuspenseQuery( {
+      queryKey: [ "order", id ],
+      queryFn: () => orderApi.getStoreOrderById( id ),
+    } );
   };
 
   return {
@@ -59,38 +63,40 @@ export const useStoreOrder = () => {
   };
 };
 
-export const useOrder = () => {
-  
-  const getOrders = (params: UseOrderParams = {}) => {
+export const useOrder = () =>
+{
+
+  const getOrders = ( params: UseOrderParams = {} ) =>
+  {
     const {
       page = params.page || 1,
       size = params.size || 10,
     } = params;
 
-    return useQuery({
+    return useQuery( {
       queryKey: [
         "orders",
         {
           page,
-          pageSize:size,
+          pageSize: size,
           // isAsc,
         },
       ],
       queryFn: () =>
-        orderApi.getBrandOrders({
+        orderApi.getBrandOrders( {
           page: page,
           pageSize: size,
           // isAsc: isAsc,
-        }),
+        } ),
       placeholderData: keepPreviousData,
-    });
+    } );
   };
 
-  const getOrderById = (id: string) =>
-    useQuery({
-      queryKey: ["order", id],
-      queryFn: () => orderApi.getBrandOrderById(id),
-    });
+  const getOrderById = ( id: string ) =>
+    useQuery( {
+      queryKey: [ "order", id ],
+      queryFn: () => orderApi.getBrandOrderById( id ),
+    } );
 
   //   const updateOrder = () =>
   //     useMutation({
