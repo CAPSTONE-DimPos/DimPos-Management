@@ -1,23 +1,21 @@
 import { apiRequest } from "@/lib/http";
 import { API_SUFFIX } from "./util.api";
 
-import type { TOrderResponse } from "@/schema/order.schema";
+import type { TStoreOrderResponse } from "@/schema/order.schema";
 import type { BaseResponse, PaginationResponse } from "@/types/response.type";
 
-
-const getOrders = async (params?: any) =>
-  await apiRequest.order.get<BaseResponse<PaginationResponse<TOrderResponse>>>(
+const getStoreOrders = async (params?: any) =>
+  await apiRequest.order.get<BaseResponse<PaginationResponse<TStoreOrderResponse>>>(
     API_SUFFIX.ORDER_API,
     { params }
   );
 
-
-const getOrderById = async (id: string) =>
-  await apiRequest.order.get<BaseResponse<TOrderResponse>>(
+const getStoreOrderById = async (id: string) =>
+  await apiRequest.order.get<BaseResponse<TStoreOrderResponse>>(
     `${API_SUFFIX.ORDER_API}/${id}`
   );
 
-export const orderApi = {
-  getOrders,
-  getOrderById,
+export const storeOrderApi = {
+  getStoreOrders,
+  getStoreOrderById,
 };

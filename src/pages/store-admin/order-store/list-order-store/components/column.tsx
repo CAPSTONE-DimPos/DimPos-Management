@@ -6,7 +6,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
-import type { TOrderResponse } from "@/schema/order.schema";
+import type { TStoreOrderResponse } from "@/schema/order.schema";
 
 // Hàm ánh xạ trạng thái đơn hàng sang nhãn và class tương ứng
 const mapStatusToClass = (status: number) => {
@@ -40,8 +40,8 @@ const mapStatusToClass = (status: number) => {
 };
 
 export const columns = (
-  onViewOrder: (data: TOrderResponse) => void
-): ColumnDef<TOrderResponse>[] => [
+  onViewOrder: (data: TStoreOrderResponse) => void
+): ColumnDef<TStoreOrderResponse>[] => [
   {
     accessorKey: "id",
     header: () => (
