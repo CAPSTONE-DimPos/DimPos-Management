@@ -136,6 +136,14 @@
   --sidebar-ring: oklch(0.708 0 0);
   --sidebar-label: oklch(0.6195 0.0473 276.35);
   --table-header: oklch(0.8935 0.0236 275.34);
+    --order-status-pending-bg: oklch(0.97 0.05 60); 
+  --order-status-pending-fg: oklch(0.68 0.2 60); 
+
+  --order-status-completed-bg: oklch(0.95 0.1 150); 
+  --order-status-completed-fg: oklch(0.4 0.18 150); 
+
+  --order-status-cancelled-bg: oklch(0.94 0.01 270);
+  --order-status-cancelled-fg: oklch(0.4 0 0);
 }
 
 .dark {
@@ -210,4 +218,18 @@
  
 ::-webkit-scrollbar-thumb {
     @apply  rounded-full bg-border border-[1px] border-transparent border-solid bg-clip-padding;
+}
+@layer utilities {
+  .status-pending {
+    background-color: var(--order-status-pending-bg);
+    color: var(--order-status-pending-fg);
+  }
+  .status-completed {
+    background-color: var(--order-status-completed-bg);
+    color: var(--order-status-completed-fg);
+  }
+  .status-cancelled {
+    background-color: var(--order-status-cancelled-bg);
+    color: var(--order-status-cancelled-fg);
+  }
 }

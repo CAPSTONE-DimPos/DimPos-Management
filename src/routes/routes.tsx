@@ -84,7 +84,11 @@ const CreateBrandPage = Loadable( lazy( () => import( "@/pages/brand-management/
 const CampaignPage = Loadable( lazy( () => import( "@/pages/campaign" ) ) );
 const CampaignEditPage = Loadable( lazy( () => import( "@/pages/campaign/edit" ) ) );
 
-const Page404 = Loadable( lazy( () => import( "@/pages/page-404" ) ) );
+const OrderListPage = Loadable(lazy(() => import("@/pages/store-admin/order-store/order-list-page")));
+
+const AccountPage = Loadable(lazy(() => import("@/pages/store-admin/store-account/account")));
+
+const Page404 = Loadable(lazy(() => import("@/pages/page-404")));
 
 export const AppRoutes = () =>
   useRoutes( [
@@ -279,11 +283,11 @@ export const AppRoutes = () =>
         { path: 'promotion/:id', element: <GeneralAppPage /> },
 
         // Orders
-        { path: 'orders', element: <GeneralAppPage /> },
+        { path: 'orders', element: <OrderListPage /> },
         { path: 'orders/:id', element: <GeneralAppPage /> },
 
         // Store Accounts
-        { path: 'accounts', element: <GeneralAppPage /> },
+        { path: 'accounts', element: <AccountPage /> },
         { path: 'accounts/:id', element: <GeneralAppPage /> },
 
         // Purchase Requests
