@@ -17,6 +17,7 @@ import
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import { ErrorBoundary } from "react-error-boundary";
 import { ErrorFallback } from "@/components/error-fallback";
+
 // import CreateModifierGroupPage from "@/pages/create-modifier-group";
 
 const Loadable = ( Component: ElementType ) => ( props: any ) =>
@@ -78,9 +79,8 @@ const StorePage = Loadable( lazy( () => import( "@/pages/store" ) ) );
 const RolePage = Loadable( lazy( () => import( "@/pages/role" ) ) );
 const InvoicePage = Loadable( lazy( () => import( "@/pages/invoice" ) ) );
 
-const BrandManagementPage = Loadable( lazy( () => import( "@/pages/brand-management" ) ) );
-const CreateBrandPage = Loadable( lazy( () => import( "@/pages/brand-management/create/brand-management-create-page" ) ) );
-
+const BrandManagementPage = Loadable( lazy( () => import( "@/pages/system-admin" ) ) );
+const CreateBrandPage = Loadable( lazy( () => import( "@/pages/system-admin/create/brand-management-create-page" ) ) );
 const CampaignPage = Loadable( lazy( () => import( "@/pages/campaign" ) ) );
 const CampaignEditPage = Loadable( lazy( () => import( "@/pages/campaign/edit" ) ) );
 
