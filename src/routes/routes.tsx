@@ -94,25 +94,29 @@ const MenuPage = Loadable(lazy(() => import("@/pages/menu/list-menu")));
 const MenuCreatePage = Loadable(lazy(() => import("@/pages/menu/create-menu")));
 const MenuEditPage = Loadable(lazy(() => import("@/pages/menu/edit-menu")));
 
-const PromotionPage = Loadable(lazy(() => import("@/pages/promotion")));
+const PromotionPage = Loadable( lazy( () => import( "@/pages/promotion/list" ) ) );
+const CreatePromotionPage = Loadable( lazy( () => import( "@/pages/promotion/create-promotion" ) ) );
+const EditPromotionPage = Loadable( lazy( () => import( "@/pages/promotion/edit-promotion" ) ) );
 // const CampaignPage = Loadable(lazy(() => import("@/pages/campaign")));
 
 const BrandPage = Loadable(lazy(() => import("@/pages/brand")));
 const RolePage = Loadable(lazy(() => import("@/pages/role")));
 const InvoicePage = Loadable(lazy(() => import("@/pages/invoice")));
-
-const CampaignPage = Loadable(lazy(() => import("@/pages/campaign")));
-const CampaignEditPage = Loadable(lazy(() => import("@/pages/campaign/edit")));
-
+const BrandManagementPage = Loadable( lazy( () => import( "@/pages/system-admin" ) ) );
+const CreateBrandPage = Loadable( lazy( () => import( "@/pages/system-admin/create/brand-management-create-page" ) ) );
+const CampaignPage = Loadable( lazy( () => import( "@/pages/campaign" ) ) );
+const CampaignEditPage = Loadable( lazy( () => import( "@/pages/campaign/edit" ) ) );
 const StorePage = Loadable(lazy(() => import("@/pages/store")));
 const StoreEditPage = Loadable(
   lazy(() => import("@/pages/store/edit-stores/edit-store-page"))
 );
 
+const OrderListPage = Loadable(lazy(() => import("@/pages/store-admin/order-store/order-list-page")));
 const OrderPage = Loadable(
   lazy(() => import("@/pages/brand-order/list-order"))
 );
-// const InternalPurchaseOrderPage = Loadable(lazy(() => import("@/pages/internal-purchase-orders/list")))
+
+const AccountPage = Loadable(lazy(() => import("@/pages/store-admin/store-account/account")));
 
 const Page404 = Loadable(lazy(() => import("@/pages/page-404")));
 
@@ -203,10 +207,20 @@ export const AppRoutes = () =>
           path: "modifier-group",
           element: <ModifierGroupPage />,
         },
+        // Promotion routes
         {
           path: "promotion",
           element: <PromotionPage />,
         },
+        {
+          path: "promotion/new",
+          element: <CreatePromotionPage />,
+        },
+        {
+          path: "promotion/:id",
+          element: <EditPromotionPage />,
+        },
+
         {
           path: "campaign",
           element: <CampaignPage />,
@@ -338,12 +352,12 @@ export const AppRoutes = () =>
         { path: "promotion/:id", element: <GeneralAppPage /> },
 
         // Orders
-        { path: "orders", element: <GeneralAppPage /> },
-        { path: "orders/:id", element: <GeneralAppPage /> },
+        { path: 'orders', element: <OrderListPage /> },
+        { path: 'orders/:id', element: <GeneralAppPage /> },
 
         // Store Accounts
-        { path: "accounts", element: <GeneralAppPage /> },
-        { path: "accounts/:id", element: <GeneralAppPage /> },
+        { path: 'accounts', element: <AccountPage /> },
+        { path: 'accounts/:id', element: <GeneralAppPage /> },
 
         // Purchase Requests
         { path: "purchase-requests", element: <GeneralAppPage /> },

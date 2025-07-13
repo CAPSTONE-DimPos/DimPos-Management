@@ -8,6 +8,7 @@ interface UseProductVariantParams
   sortBy?: string;
   isAsc?: boolean;
   name?: string;
+  sku?: string;
 }
 
 export const useProductVariant = () =>
@@ -21,6 +22,7 @@ export const useProductVariant = () =>
       sortBy = params.sortBy || "id",
       isAsc = params.isAsc || true,
       name = params.name || "",
+      sku = params.sku || "",
     } = params;
 
     return useQuery( {
@@ -32,6 +34,7 @@ export const useProductVariant = () =>
           sortBy,
           isAsc,
           name,
+          sku,
         },
       ],
       queryFn: () =>
@@ -41,6 +44,7 @@ export const useProductVariant = () =>
           sortBy: sortBy,
           isAsc: isAsc,
           name: name,
+          sku: sku,
         } ),
       // placeholderData: keepPreviousData,
     } );

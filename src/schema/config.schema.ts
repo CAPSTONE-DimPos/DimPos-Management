@@ -8,7 +8,6 @@ const configSchema = z.object({
     VITE_API_STORE_URL: z.string(),
     VITE_API_PROMOTION_URL: z.string(),
     VITE_API_ORDER_URL: z.string(),
-    //  VITE_API_INVENTORY_URL: z.string(),
 });
 
 const configProject = configSchema.safeParse({

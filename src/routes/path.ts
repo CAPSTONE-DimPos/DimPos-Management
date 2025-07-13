@@ -66,6 +66,8 @@ export const PATH_BRAND_DASHBOARD = {
   },
   promotion: {
     root: path(ROOTS_BRAND_DASHBOARD, '/promotion'),
+    create: path(ROOTS_BRAND_DASHBOARD, '/promotion/new'),
+    editPromotion: (id: string) => path(ROOTS_BRAND_DASHBOARD, `/promotion/${id}`),
   },
   campaign: {
     root: path(ROOTS_BRAND_DASHBOARD, '/campaign'),

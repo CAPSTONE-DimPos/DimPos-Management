@@ -1,13 +1,24 @@
 import { apiRequest } from "@/lib/http";
 import { API_SUFFIX } from "./util.api";
 import type { BaseResponse, PaginationResponse } from "@/types/response.type";
-import type { TPromotionRuleResponse } from "@/schema/promotion-rule.schema";
+import type { TCreatePromotionRuleRequest, TPromotionRuleResponse } from "@/schema/promotion-rule.schema";
 
 const getPromotionRules = async (params: any) =>
     await apiRequest.promotion.get<BaseResponse<PaginationResponse<TPromotionRuleResponse>>>(
         API_SUFFIX.PROMOTION_RULE_API,
         { params }
     );
+const getPromotionRulesById = async (id: string) =>
+    await apiRequest.promotion.get<BaseResponse<TPromotionRuleResponse>>(
+        `${API_SUFFIX.PROMOTION_RULE_API}/${id}`
+    );
+const createPromotionRule = async (data: TCreatePromotionRuleRequest) =>
+    await apiRequest.promotion.post(
+        API_SUFFIX.PROMOTION_RULE_API,
+        data
+    );
 export const promotionApi = {
     getPromotionRules,
+    createPromotionRule,
+    getPromotionRulesById,
 }

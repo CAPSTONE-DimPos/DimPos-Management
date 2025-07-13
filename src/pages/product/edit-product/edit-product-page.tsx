@@ -1,21 +1,15 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useProduct } from '@/hooks/use-product';
-import { handleApiError } from '@/lib/error';
 import { useParams } from 'react-router-dom';
+import ModifierGroupForm from './components/modifier-option-form';
 import OverviewProductForm from './components/overview-product-form';
 import VariantsProductSection from './components/variants-product-section';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import ModifierGroupForm from './components/modifier-option-form';
 
 const EditProductPage = () =>
 {
     const { id } = useParams();
     const { getProductById } = useProduct();
-    const { data, isError, error } = getProductById( id as string );
-    // const { data, isLoading, isError, error } = getProducts();
-    if ( isError && error )
-    {
-        handleApiError( error );
-    }
+    const { data } = getProductById( id as string );
     return (
         <div>
             <div className="mb-6">
@@ -24,9 +18,9 @@ const EditProductPage = () =>
             `<Tabs defaultValue="overview">
                 <TabsList>
                     <TabsTrigger value="overview">Tổng quan</TabsTrigger>
-                    {data?.data.data.isHasVariants && ( 
+                    { data?.data.data.isHasVariants && (
                         <TabsTrigger value="variants">Biến thể</TabsTrigger>
-                    )}
+                    ) }
                     <TabsTrigger value="modifierOptions">Tùy chọn</TabsTrigger>
                     {!data?.data.data.isHasVariants && ( 
                         <TabsTrigger value="recipe">Công thức</TabsTrigger>

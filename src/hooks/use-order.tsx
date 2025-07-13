@@ -1,8 +1,6 @@
-import { orderApi } from "@/apis/order.api";
-import {
-  keepPreviousData,
-    //  useMutation,
-     useQuery } from "@tanstack/react-query";
+import { orderApi, storeOrderApi } from "@/apis/order.api";
+import { useQuery, useSuspenseQuery, keepPreviousData } from "@tanstack/react-query";
+import type { TGetStoreOrdersQuery } from "@/schema/order.schema";
 
 interface UseOrderParams {
   page?: number;
@@ -10,6 +8,56 @@ interface UseOrderParams {
   sortBy?: string;
   isAsc?: boolean;
 }
+
+export const useStoreOrder = () => {
+  const getStoreOrders = (params: TGetStoreOrdersQuery = {}) => {
+    const {
+      page = 1,
+      pageSize = 30,
+      sortBy = null,
+      isAsc = true,
+      status = null,
+      type = null,
+    } = params;
+    
+    return useQuery({
+      queryKey: [
+        "orders",
+        {
+          page,
+          pageSize,
+          sortBy,
+          isAsc,
+          status,
+          type,
+        },
+      ],
+      queryFn: () =>
+        storeOrderApi.getStoreOrders({
+          page,
+          pageSize,
+          sortBy,
+          isAsc,
+          status,
+          type,
+        }),
+      // Adding keepPreviousData from your branch for better UX
+      placeholderData: keepPreviousData,
+    });
+  };
+
+  const getStoreOrderById = (id: string) => {
+    return useSuspenseQuery({
+      queryKey: ["order", id],
+      queryFn: () => storeOrderApi.getStoreOrderById(id),
+    });
+  };
+
+  return {
+    getStoreOrders,
+    getStoreOrderById,
+  };
+};
 
 export const useOrder = () => {
   
