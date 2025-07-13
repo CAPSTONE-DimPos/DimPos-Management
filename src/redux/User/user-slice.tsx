@@ -48,6 +48,7 @@ const setAuthorizationHeaders = ( token: string ) =>
     apiRequest.brand.defaults.headers.common.Authorization = authHeader;
     apiRequest.store.defaults.headers.common.Authorization = authHeader;
     apiRequest.promotion.defaults.headers.common.Authorization = authHeader;
+    apiRequest.order.defaults.headers.common.Authorization = authHeader;
 };
 
 const clearAuthorizationHeaders = () =>
@@ -58,6 +59,7 @@ const clearAuthorizationHeaders = () =>
     apiRequest.brand.defaults.headers.common.Authorization = null;
     apiRequest.store.defaults.headers.common.Authorization = null;
     apiRequest.promotion.defaults.headers.common.Authorization = null;
+    apiRequest.order.defaults.headers.common.Authorization = null;
 };
 
 const clearStoredAuthData = () =>
