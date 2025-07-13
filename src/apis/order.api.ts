@@ -23,7 +23,7 @@ const getStoreOrderById = async (id: string) =>
     `${API_SUFFIX.ORDER_API}/${id}`
   );
 
-export const storeOrderApi = {
+export const orderApi = {
   getStoreOrders,
   getStoreOrderById,
   getBrandOrders,
