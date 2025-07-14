@@ -1,71 +1,47 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import type { TStoreOrderResponse } from "@/schema/order.schema";
-
-// Hàm ánh xạ trạng thái đơn hàng sang nhãn và class tương ứng
-const mapStatusToClass = (status: number) => {
-  switch (status) {
-    case 0:
-      return {
-        label: "Chờ xử lý",
-        className: "bg-yellow-100 text-yellow-800",
-      };
-    case 1:
-      return {
-        label: "Đang xử lý",
-        className: "bg-blue-100 text-blue-800",
-      };
-    case 2:
-      return {
-        label: "Hoàn tất",
-        className: "bg-green-100 text-green-800",
-      };
-    case 3:
-      return {
-        label: "Đã huỷ",
-        className: "bg-red-100 text-red-800",
-      };
-    default:
-      return {
-        label: "Không xác định",
-        className: "bg-gray-200 text-gray-700",
-      };
-  }
-};
-
-export const columns = (
-  onViewOrder: (data: TStoreOrderResponse) => void
-): ColumnDef<TStoreOrderResponse>[] => [
+import { format } from "date-fns";
+import { vi } from "date-fns/locale";
+import {
+  getOrderTypeLabel,
+  type TOrderTypeEnum,
+} from "@/types/enums/order-type.enum";
+import {
+  getOrderStatusLabel,
+  type TOrderStatusEnum,
+} from "@/types/enums/order-status.enum";
+import { PATH_STORE_DASHBOARD } from "@/routes/path";
+import { Link } from "react-router-dom";
+export const storeOrderColumns = (): ColumnDef<TStoreOrderResponse>[] => [
   {
-    accessorKey: "id",
+    accessorKey: "index",
     header: () => (
-      <div className="font-semibold text-base text-left">Mã đơn hàng</div>
+      <div className="flex font-semibold text-base justify-center max-w-[50px]">STT</div>
     ),
-    cell: (info) => {
-      const id = info.getValue() as string;
+    cell: ({ row, table }) => {
+      const currentPage = table.getState().pagination.pageIndex;
+      const currentSize = table.getState().pagination.pageSize;
       return (
-        <div className="text-sm font-medium text-left text-foreground truncate max-w-[160px]">
-          {id}
+        <div className="flex items-center justify-center text-base max-w-[50px]">
+          {row.index + 1 + currentPage * currentSize}
         </div>
       );
     },
   },
   {
-    accessorKey: "totalAmount",
+    accessorKey: "type",
     header: () => (
-      <div className="font-semibold text-base text-right">Tổng tiền</div>
+      <div className="text-center font-semibold text-base">Loại đơn hàng</div>
     ),
     cell: (info) => {
-      const amount = info.getValue() as number;
+      const type = info.getValue() as TOrderTypeEnum;
+      const label = getOrderTypeLabel(type);
       return (
-        <div className="text-sm text-right text-foreground">
-          {amount.toLocaleString("vi-VN")} ₫
+        <div className="flex justify-center">
+          <div className="px-3 py-1 rounded text-sm font-normal">{label}</div>
         </div>
       );
     },
@@ -73,12 +49,33 @@ export const columns = (
   {
     accessorKey: "createdDate",
     header: () => (
-      <div className="font-semibold text-base text-left">Ngày tạo</div>
+      <div className="text-center font-semibold text-base">Thời gian tạo</div>
     ),
     cell: (info) => {
-      const raw = info.getValue() as string;
-      const date = new Date(raw).toLocaleString("vi-VN");
-      return <div className="text-sm text-left text-foreground">{date}</div>;
+      const date = new Date(info.getValue() as string);
+      return (
+        <div className="flex justify-center">
+          <div className="px-3 py-1 rounded text-sm font-normal">
+            {format(date, "dd/MM/yyyy hh:mm aa", { locale: vi })}
+          </div>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "totalAmount",
+    header: () => (
+      <div className="max-w-[100px] flex font-semibold text-base justify-center">
+        Tổng đơn hàng
+      </div>
+    ),
+    cell: (info) => {
+      const total = info.getValue() as number;
+      return (
+        <div className="max-w-[100px] font-medium text-center text-sm text-foreground">
+          {total.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}
+        </div>
+      );
     },
   },
   {
@@ -87,12 +84,11 @@ export const columns = (
       <div className="text-center font-semibold text-base">Trạng thái</div>
     ),
     cell: (info) => {
-      const status = info.getValue() as number;
-      const { label, className } = mapStatusToClass(status);
-
+      const status = info.getValue() as TOrderStatusEnum;
+      const { label, colorClassName, backgroundColorName } = getOrderStatusLabel(status);
       return (
         <div className="flex justify-center">
-          <div className={`px-3 py-1 rounded text-sm font-medium ${className}`}>
+          <div className={`px-3 py-1 rounded text-sm font-medium ${colorClassName} ${backgroundColorName}`}>
             {label}
           </div>
         </div>
@@ -100,30 +96,30 @@ export const columns = (
     },
   },
   {
-    id: "actions",
-    header: () => (
-      <div className="text-center font-semibold text-base">Thao tác</div>
-    ),
-    cell: ({ row }) => {
-      const order = row.original;
-      return (
-        <div className="flex justify-center">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Eye
-                  className="h-4 w-4 hover:cursor-pointer"
-                  onClick={() => onViewOrder(order)}
-                />
+  id: "actions",
+  header: () => (
+    <div className="text-center font-semibold text-base">Thao tác</div>
+  ),
+  cell: ({ row }) => {
+    const order = row.original;
+
+    return (
+      <div className="flex justify-center">
+        <TooltipProvider>
+          <Tooltip>
+            <Link to={PATH_STORE_DASHBOARD.order.detail(order.id)}>
+              <TooltipTrigger>
+                <Eye className="h-4 w-4 hover:cursor-pointer" />
               </TooltipTrigger>
               <TooltipContent>
                 <div className="text-sm">Xem chi tiết</div>
               </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-      );
-    },
-    size: 80,
+            </Link>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+    );
   },
+  size: 80,
+}
 ];

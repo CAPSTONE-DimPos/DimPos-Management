@@ -18,6 +18,7 @@ import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import { ErrorBoundary } from "react-error-boundary";
 import { ErrorFallback } from "@/components/error-fallback";
 
+
 const Loadable = ( Component: ElementType ) => ( props: any ) =>
 {
   return (
@@ -57,6 +58,9 @@ const SystemLogPage = Loadable(
 
 //Brand admin
 const BrandOrderEditPage = Loadable( lazy( () => import( "@/pages/brand-order/edit-order" ) ) );
+const OrderPage = Loadable(
+  lazy( () => import( "@/pages/brand-order/list-order" ) )
+);
 // Product routes
 const CategoryPage = Loadable( lazy( () => import( "@/pages/category" ) ) );
 const CategoryCreatePage = Loadable(
@@ -105,10 +109,7 @@ const StoreEditPage = Loadable(
 );
 
 const OrderListPage = Loadable( lazy( () => import( "@/pages/store-admin/order-store/order-list-page" ) ) );
-const OrderPage = Loadable(
-  lazy( () => import( "@/pages/brand-order/list-order" ) )
-);
-
+const StoreOrderDetailPage = Loadable( lazy( () => import( "@/pages/store-admin/order-store/order-detail-store" ) ) );
 const AccountPage = Loadable( lazy( () => import( "@/pages/store-admin/store-account/account" ) ) );
 
 const Page404 = Loadable( lazy( () => import( "@/pages/page-404" ) ) );
@@ -346,7 +347,7 @@ export const AppRoutes = () =>
 
         // Orders
         { path: 'orders', element: <OrderListPage /> },
-        { path: 'orders/:id', element: <GeneralAppPage /> },
+        { path: 'orders/:id', element: <StoreOrderDetailPage /> },
 
         // Store Accounts
         { path: 'accounts', element: <AccountPage /> },
