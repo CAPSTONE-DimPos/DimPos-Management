@@ -9,11 +9,13 @@ import { PATH_AUTH } from "@/routes/path"
 import { ChevronLeft, LogOut } from "lucide-react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useSidebar } from "./ui/sidebar"
+import { useTheme } from "@/providers/theme-provider"
 
 const HeaderMain = () =>
 {
     const pathname = useLocation().pathname;
     const navigate = useNavigate();
+    const { setTheme } = useTheme();
     const { isMobile, toggleSidebar } = useSidebar();
     // //console.log( "HeaderMain: ", pathname );
     const shouldShowBack = () =>
@@ -76,13 +78,13 @@ const HeaderMain = () =>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={ () => setTheme( "light" ) }>
                                 Light
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={ () => setTheme( "dark" ) }>
                                 Dark
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={ () => setTheme( "system" ) }>
                                 System
                             </DropdownMenuItem>
                         </DropdownMenuContent>
