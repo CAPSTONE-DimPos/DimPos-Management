@@ -1,11 +1,11 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import
-  {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-  } from "@/components/ui/tooltip";
+{
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { copyToClipboard } from "@/lib/utils";
 import { PATH_BRAND_DASHBOARD } from "@/routes/path";
 import type { TProductResponse } from "@/schema/product.schema";
@@ -13,8 +13,39 @@ import { TooltipProvider } from "@radix-ui/react-tooltip";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Copy, Eye } from "lucide-react";
 import { Link } from "react-router-dom";
+import { PhotoView, PhotoProvider } from 'react-photo-view';
 
 export const columns: ColumnDef<TProductResponse>[] = [
+  {
+    accessorKey: "productImages",
+    header: () => <div className="font-semibold text-base">Ảnh</div>,
+    cell: ( info ) =>
+    {
+      const productImages = info.getValue() as TProductResponse[ "productImages" ];
+      const mainImage = productImages?.find( img => img.isMainImage );
+
+      return (
+        <div className="flex items-center gap-2">
+          { mainImage ? (
+            <PhotoProvider>
+              <PhotoView src={ mainImage.imageUrl }>
+
+                <img
+                  src={ mainImage.imageUrl }
+                  alt={ mainImage.altText || "Ảnh sản phẩm" }
+                  className="w-10 h-10 object-cover rounded hover:cursor-pointer"
+                />
+              </PhotoView>
+            </PhotoProvider>
+          ) : (
+            <Badge variant="outline" className="text-sm font-normal">
+              Chưa có ảnh
+            </Badge>
+          ) }
+        </div>
+      );
+    }
+  },
   {
     accessorKey: "code",
     header: () => <div className="font-semibold text-base">SKU</div>,
@@ -64,9 +95,8 @@ export const columns: ColumnDef<TProductResponse>[] = [
       return (
         <div className="flex justify-center">
           <div
-            className={`flex items-center gap-1.5 px-3 py-1 rounded text-sm font-normal ${
-              hasVariants? "bg-cempedak-10 text-cempedak-100" : "bg-neutral-10 text-neutral-100"
-            }`}
+            className={ `flex items-center gap-1.5 px-3 py-1 rounded text-sm font-normal ${ hasVariants ? "bg-cempedak-10 text-cempedak-100" : "bg-neutral-10 text-neutral-100"
+              }` }
           >
             { hasVariants ? <>Có biến thể</> : <>Không biến thể</> }
           </div>
@@ -87,9 +117,8 @@ export const columns: ColumnDef<TProductResponse>[] = [
       return (
         <div className="flex justify-center">
           <div
-            className={`flex items-center gap-1.5 px-3 py-1 rounded text-sm font-normal ${
-              isActive? "bg-green-mint-10 text-green-mint-100" : "bg-rambutan-10 text-rambutan-100"
-            }`}
+            className={ `flex items-center gap-1.5 px-3 py-1 rounded text-sm font-normal ${ isActive ? "bg-green-mint-10 text-green-mint-100" : "bg-rambutan-10 text-rambutan-100"
+              }` }
           >
             { isActive ? <>Hoạt động</> : <>Không hoạt động</> }
           </div>
