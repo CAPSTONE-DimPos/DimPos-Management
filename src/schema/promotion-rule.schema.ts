@@ -9,13 +9,14 @@ export const RuleActionsSchema = z.object({
 })
 
 export const RuleConditionsSchema = z.object({
-    id: z.string().uuid(),
+    id: z.string(),
     conditionType: z.number().int(),
     operator: z.number().int(),
     value: z.string().min(1, { message: "Giá trị không được để trống" }),
 })
 
 export const CreateRuleConditionSchema = RuleConditionsSchema.omit({ id: true });
+export const EditRuleConditionSchema = RuleConditionsSchema.omit({ id: true, conditionType: true });
 export const CreateRuleActionSchema = RuleActionsSchema.omit({ id: true }).extend({
     targetCriteriaForItemAction: z.array(z.string().uuid()).nullable().optional(),
 });
@@ -35,6 +36,8 @@ export const PromotionRuleBaseSchema = z.object({
     ruleConditions: z.array(RuleConditionsSchema).optional(),
 })
 
+export const UpdatePromotionRuleSchema = PromotionRuleBaseSchema.omit({ruleActions: true, ruleConditions: true, id: true });
+
 export const CreatePromotionRuleSchema = PromotionRuleBaseSchema.omit({ id: true }).extend({
     ruleActions: CreateRuleActionSchema.optional(),
     ruleConditions: z.array(CreateRuleConditionSchema).optional(),
@@ -44,10 +47,12 @@ export const CreatePromotionRuleSchema = PromotionRuleBaseSchema.omit({ id: true
 export type TPromotionRuleResponse = z.infer<typeof PromotionRuleBaseSchema>;
 export type TRuleActions = z.infer<typeof RuleActionsSchema>;
 export type TRuleConditions = z.infer<typeof RuleConditionsSchema>;
+export type TUpdatePromotionRule = z.infer<typeof UpdatePromotionRuleSchema>;
 export type TCreatePromotionRuleRequest = z.infer<typeof CreatePromotionRuleSchema>;
 export type TCreateRuleCondition = z.infer<typeof CreateRuleConditionSchema>;
 export type TCreateRuleAction = z.infer<typeof CreateRuleActionSchema>;
 export type TEditRuleAction = z.infer<typeof EditRuleActionSchema>;
+export type TEditRuleCondition = z.infer<typeof EditRuleConditionSchema>;
 
 
 export const getActionTypeName = (actionType: number | undefined): string => {

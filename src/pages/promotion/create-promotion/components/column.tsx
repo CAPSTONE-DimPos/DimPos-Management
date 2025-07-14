@@ -2,9 +2,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { copyToClipboard, formatPrice } from "@/lib/utils";
+import { cn, copyToClipboard, formatPrice } from "@/lib/utils";
 import type { TProductVariantResponse } from "@/schema/product-variant.schema";
-import { AppColors } from "@/themes/colors";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Copy } from "lucide-react";
 import type { TProductQuantity } from "./rule-condition-dialog";
@@ -131,15 +130,7 @@ export const columns: ColumnDef<TProductVariantResponse>[] = [
             return (
                 <div className="flex justify-center">
                     <div
-                        className="flex items-center gap-1.5 px-3 py-1 rounded text-sm"
-                        style={ {
-                            backgroundColor: isActive
-                                ? AppColors.greenMint[ 10 ]
-                                : AppColors.neutral[ 10 ],
-                            color: isActive
-                                ? AppColors.greenMint[ 100 ]
-                                : AppColors.neutral[ 90 ],
-                        } }
+                        className={ cn( isActive ? "bg-green-mint-10 text-green-mint-100" : "bg-neutral-10 text-neutral-100", "flex items-center gap-1.5 px-3 py-1 rounded text-sm" ) }
                     >
                         { isActive ? <>Kích hoạt</> : <>Không kích hoạt</> }
                     </div>

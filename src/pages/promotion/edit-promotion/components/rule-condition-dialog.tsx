@@ -24,7 +24,7 @@ interface RuleConditionDialogProps
     isOpen: boolean;
     onOpenChange: ( open: boolean ) => void;
     initialData?: TRuleConditions;
-    onSave: ( data: TRuleConditions ) => void;
+    onSave: ( data: TRuleConditions ) => Promise<void>;
     isSubmitting?: boolean;
 }
 
@@ -38,6 +38,7 @@ export const RuleConditionDialog = (
         onSave,
     }: RuleConditionDialogProps ) =>
 {
+    console.log( "RuleConditionDialog initialData:", initialData );
     const {
         currentPage,
         pageSize,
@@ -87,6 +88,7 @@ export const RuleConditionDialog = (
     const form = useForm<TRuleConditions>( {
         resolver: zodResolver( RuleConditionsSchema ),
         defaultValues: {
+            id: "00000000-0000-0000-0000-000000000000",
             conditionType: 0,
             operator: 0,
             value: "",
@@ -98,6 +100,7 @@ export const RuleConditionDialog = (
         if ( isOpen )
         {
             form.reset( initialData || {
+                id: "00000000-0000-0000-0000-000000000000",
                 conditionType: 0,
                 operator: 0,
                 value: "",
@@ -105,7 +108,7 @@ export const RuleConditionDialog = (
         }
     }, [ isOpen, initialData, form ] );
     const watchedConditionType = form.watch( 'conditionType' );
-    const handleFormSubmit = ( data: TRuleConditions ) =>
+    const handleFormSubmit = async ( data: TRuleConditions ) =>
     {
         console.log( "Form submitted with data:", data );
         if ( data.conditionType === 0 )
@@ -162,8 +165,8 @@ export const RuleConditionDialog = (
                 return;
             }
         }
+        await onSave( data );
         form.reset();
-        onSave( data );
         onOpenChange( false );
     };
 
@@ -312,7 +315,7 @@ export const RuleConditionDialog = (
                                     <FormItem>
                                         <FormLabel>Loại điều kiện *</FormLabel>
                                         <Select
-                                            disabled={ isSubmitting }
+                                            disabled={ isSubmitting || form.watch( 'id' ) !== "00000000-0000-0000-0000-000000000000" }
                                             onValueChange={ ( value ) =>
                                             {
                                                 field.onChange( Number( value ) );
@@ -458,7 +461,9 @@ export const RuleConditionDialog = (
                 </Form>
                 <DialogFooter>
                     <Button type="button" variant="outline" onClick={ () => onOpenChange( false ) }>Hủy</Button>
-                    <Button type="button" form="add-condition-form" disabled={ isSubmitting } onClick={ form.handleSubmit( handleFormSubmit ) }>Thêm điều kiện</Button>
+                    <Button type="button" form="add-condition-form" disabled={ isSubmitting } onClick={ form.handleSubmit( handleFormSubmit ) }>
+                        { ( initialData || form.getValues( "id" ) != "00000000-0000-0000-0000-000000000000" ) ? 'Cập nhật' : 'Thêm' } điều kiện
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

@@ -32,6 +32,7 @@ const RuleActionDialog = ( {
     onSave,
 }: RuleConditionDialogProps ) =>
 {
+    console.log( "RuleActionDialog initialData:", initialData );
     const {
         currentPage,
         pageSize,
