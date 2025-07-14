@@ -1,7 +1,7 @@
 // import { Button } from "@/components/ui/button";
 import type { ColumnDef } from "@tanstack/react-table";
 // import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
+// import { Checkbox } from "@/components/ui/checkbox";
 import type { TOrderItem } from "@/schema/order-item.schema";
 
 // Enhanced sortable header component that provides visual feedback for all sorting states
@@ -34,35 +34,34 @@ import type { TOrderItem } from "@/schema/order-item.schema";
 // };
 
 export const columns: ColumnDef<TOrderItem>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+  // {
+  //   id: "select",
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={
+  //         table.getIsAllPageRowsSelected() ||
+  //         (table.getIsSomePageRowsSelected() && "indeterminate")
+  //       }
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label="Select row"
+  //     />
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
   {
     accessorKey: "index",
     header: () => (
       <div className="flex items-center justify-center max-w-[50px]">STT</div>
     ),
     cell: (info) => {
-      const name = info.getValue() as string;
       const table = info.table;
       const row = info.row;
       const currentPage = table.getState().pagination.pageIndex;
@@ -71,7 +70,6 @@ export const columns: ColumnDef<TOrderItem>[] = [
         <div className="">
           <div
             className="font-medium text-foreground truncate cursor-pointer hover:text-primary transition-colors text-sm font-normal flex justify-center max-w-[50px]"
-            title={name} // Tooltip for full name on hover
           >
             {row.index + currentPage * currentSize + 1}
           </div>

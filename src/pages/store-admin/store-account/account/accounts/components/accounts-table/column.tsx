@@ -5,14 +5,15 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import type { TStore } from "@/schema/store.schema";
-import { AppColors } from "@/themes/colors";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
 
 export const columns: ColumnDef<TStore>[] = [
   {
     accessorKey: "index",
-    header: () => (<div className="text-center font-semibold text-base">STT</div>),
+    header: () => (
+      <div className="text-center font-semibold text-base">STT</div>
+    ),
     cell: ({ row }) => {
       return (
         <div className="text-center font-medium">{row.getValue("index")}</div>
@@ -22,23 +23,18 @@ export const columns: ColumnDef<TStore>[] = [
   },
   {
     accessorKey: "code",
-    header: () => (<div className="font-semibold text-base">Mã cửa hàng</div>),
+    header: () => <div className="font-semibold text-base">Mã cửa hàng</div>,
     cell: ({ row }) => {
       const code = row.getValue("code") as string;
       return (
-        <div
-          className="font-normal font-medium"
-          style={{ color: AppColors.blueberry[100] }}
-        >
-          {code}
-        </div>
+        <div className="font-normal font-medium text-blueberry-100">{code}</div>
       );
     },
     size: 120,
   },
   {
     accessorKey: "name",
-    header: () => (<div className="font-semibold text-base">Tên cửa hàng</div>),
+    header: () => <div className="font-semibold text-base">Tên cửa hàng</div>,
     cell: ({ row }) => {
       const name = row.getValue("name") as string;
       const shortName = row.original.shortName;
@@ -53,7 +49,7 @@ export const columns: ColumnDef<TStore>[] = [
   },
   {
     accessorKey: "phone",
-    header: () => (<div className="font-semibold text-base">Số điện thoại</div>),
+    header: () => <div className="font-semibold text-base">Số điện thoại</div>,
     cell: ({ row }) => {
       const phone = row.getValue("phone") as string;
       return <div className="font-normal text-gray-700">{phone}</div>;
@@ -62,7 +58,7 @@ export const columns: ColumnDef<TStore>[] = [
   },
   {
     accessorKey: "email",
-    header: () =>  (<div className="font-semibold text-base">Email</div>),
+    header: () => <div className="font-semibold text-base">Email</div>,
     cell: ({ row }) => {
       const email = row.getValue("email") as string;
       return <div className="font-normal text-gray-700">{email}</div>;
@@ -71,7 +67,7 @@ export const columns: ColumnDef<TStore>[] = [
   },
   {
     accessorKey: "managerName",
-    header: () => (<div className="font-semibold text-base">Quản lý</div>),
+    header: () => <div className="font-semibold text-base">Quản lý</div>,
     cell: ({ row }) => {
       const managerName = row.getValue("managerName") as string;
       return (
@@ -86,7 +82,9 @@ export const columns: ColumnDef<TStore>[] = [
   },
   {
     id: "actions",
-    header: () => (<div className="text-center font-semibold text-base">Thao tác</div>),
+    header: () => (
+      <div className="text-center font-semibold text-base">Thao tác</div>
+    ),
     cell: ({}) => {
       // const store = row.original;
 

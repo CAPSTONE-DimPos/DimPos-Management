@@ -32,5 +32,5 @@ export const API_SUFFIX = {
   },
   BRAND_MENU_API: "/brand-menus",
 
-  INTERNAL_PURCHASE_ORDER_API: "/internal-purchase-orders",
+  INTERNAL_PURCHASE_ORDER_API: "/store-purchase-orders",
 };
