@@ -166,6 +166,7 @@ const CreateProductPage = () =>
         formData.append( 'Price', data.price?.toString() || "0" );
         formData.append( 'Description', data.description );
         formData.append( 'CategoryId', data.categoryId );
+        formData.append( 'Sku', data.sku || '' );
 
         if ( data.displayOrder !== undefined )
         {

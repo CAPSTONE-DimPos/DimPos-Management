@@ -111,6 +111,7 @@ const EditProductForm = ( { initialData }: Props ) =>
   const { fields: imageFields, remove: removeImage } = useFieldArray( {
     control: form.control,
     name: "productImages",
+    keyName: "_id",
   } );
 
   const {
