@@ -1,5 +1,5 @@
 import { promotionApi } from "@/apis/promotion.api";
-import type { TEditRuleCondition, TUpdatePromotionRule } from "@/schema/promotion-rule.schema";
+import type { TCreateRuleCondition, TEditRuleCondition, TUpdatePromotionRule, TUpdateRuleAction } from "@/schema/promotion-rule.schema";
 import { keepPreviousData, useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 
 interface UsePromotionParams
@@ -71,6 +71,23 @@ export const usePromotion = () =>
         },
     } );
 
+    const createConditionRuleMutation = useMutation( {
+        mutationFn: ( { promotionRuleId, data }: { promotionRuleId: string; data: TCreateRuleCondition } ) =>
+            promotionApi.createConditionRule( promotionRuleId, data ),
+        onSuccess: () =>
+        {
+            queryClient.invalidateQueries( { queryKey: [ 'promotion-rules' ] } );
+        }
+    } );
+
+    const updateConditionRuleMutation = useMutation( {
+        mutationFn: ( { promotionRuleId, conditionRuleId, data }: { promotionRuleId: string; conditionRuleId: string; data: TEditRuleCondition } ) =>
+            promotionApi.updateConditionRule( promotionRuleId, conditionRuleId, data ),
+        onSuccess: () =>
+        {
+            queryClient.invalidateQueries( { queryKey: [ 'promotion-rules' ] } );
+        },
+    } );
     const deleteConditionRuleMutation = useMutation( {
         mutationFn: ( { promotionRuleId, conditionRuleId }: { promotionRuleId: string; conditionRuleId: string } ) =>
             promotionApi.deleteConditionRule( promotionRuleId, conditionRuleId ),
@@ -79,9 +96,10 @@ export const usePromotion = () =>
             queryClient.invalidateQueries( { queryKey: [ 'promotion-rules' ] } );
         },
     } );
-    const updateConditionRuleMutation = useMutation( {
-        mutationFn: ( { promotionRuleId, conditionRuleId, data }: { promotionRuleId: string; conditionRuleId: string; data: TEditRuleCondition } ) =>
-            promotionApi.updateConditionRule( promotionRuleId, conditionRuleId, data ),
+
+    const updateActionRuleMutation = useMutation( {
+        mutationFn: ( { promotionRuleId, actionRuleId, data }: { promotionRuleId: string; actionRuleId: string; data: TUpdateRuleAction } ) =>
+            promotionApi.updateActionRule( promotionRuleId, actionRuleId, data ),
         onSuccess: () =>
         {
             queryClient.invalidateQueries( { queryKey: [ 'promotion-rules' ] } );
@@ -93,7 +111,10 @@ export const usePromotion = () =>
         createPromotionMutation,
         updatePromotionMutation,
 
-        deleteConditionRuleMutation,
+        createConditionRuleMutation,
         updateConditionRuleMutation,
+        deleteConditionRuleMutation,
+
+        updateActionRuleMutation,
     }
 }

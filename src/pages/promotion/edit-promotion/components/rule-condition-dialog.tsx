@@ -421,7 +421,7 @@ export const RuleConditionDialog = (
                         }
                         {
                             ( watchedConditionType === 1 || watchedConditionType === 2 ) &&
-                            <>
+                            <div className="space-x-2">
                                 <div className="flex items-center justify-between">
                                     <label className="block text-sm font-medium">
                                         Chọn sản phẩm áp dụng *
@@ -455,7 +455,7 @@ export const RuleConditionDialog = (
                                         quantityValues: quantityValues,
                                     } }
                                 />
-                            </>
+                            </div>
                         }
                     </form>
                 </Form>

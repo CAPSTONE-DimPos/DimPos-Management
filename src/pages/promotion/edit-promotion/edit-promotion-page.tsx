@@ -6,7 +6,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { usePromotion } from '@/hooks/use-promotion';
 import { formatPrice } from '@/lib/utils';
-import { getActionTypeName, PromotionRuleBaseSchema, type TEditRuleCondition, type TPromotionRuleResponse, type TRuleActions, type TRuleConditions, type TUpdatePromotionRule } from '@/schema/promotion-rule.schema';
+import { getActionTypeName, PromotionRuleBaseSchema, type TCreateRuleCondition, type TEditRuleCondition, type TPromotionRuleResponse, type TRuleActions, type TRuleConditions, type TUpdatePromotionRule, type TUpdateRuleAction } from '@/schema/promotion-rule.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CircleArrowOutUpRight, X } from 'lucide-react';
 import { useState } from 'react';
@@ -20,7 +20,7 @@ import { handleApiError } from '@/lib/error';
 const EditPromotionPage = () =>
 {
     const { id } = useParams();
-    const { getPromotionById, updatePromotionMutation, deleteConditionRuleMutation, updateConditionRuleMutation } = usePromotion();
+    const { getPromotionById, updatePromotionMutation, deleteConditionRuleMutation, updateConditionRuleMutation, updateActionRuleMutation, createConditionRuleMutation } = usePromotion();
     const { data } = getPromotionById( id as string );
     console.log( "EditPromotionPage data:", data.data.data );
     // const { createPromotionMutation } = usePromotion();
@@ -37,7 +37,6 @@ const EditPromotionPage = () =>
     } = useFieldArray( {
         control: form.control,
         name: 'ruleConditions',
-
         keyName: '_id'
     } );
     console.log( "EditPromotionPage ruleConditions:", ruleConditions );
@@ -58,23 +57,25 @@ const EditPromotionPage = () =>
     {
         if ( data.id === "00000000-0000-0000-0000-000000000000" )
         {
-            if ( editingConditionIndex !== null )
+            const newCondition: TCreateRuleCondition = {
+                conditionType: data.conditionType,
+                operator: data.operator,
+                value: data.value,
+            }
+            try
             {
-                // We are editing an existing condition
-                updateCondition( editingConditionIndex, data );
-                toast.success( "Đã cập nhật điều kiện." );
-            } else
-            {
-                // We are adding a new condition
-                // Your existing check for duplicates
-                const existing = ruleConditions.find( c => c.conditionType === data.conditionType );
-                if ( existing )
-                {
-                    toast.warning( "Điều kiện này đã tồn tại. Vui lòng chọn điều kiện khác." );
-                    return;
-                }
-                appendCondition( data );
+                const response = await createConditionRuleMutation.mutateAsync( {
+                    promotionRuleId: id as string,
+                    data: newCondition,
+                } );
+                appendCondition( {
+                    ...newCondition,
+                    id: response.data.data,
+                } );
                 toast.success( "Đã thêm điều kiện." );
+            } catch ( error )
+            {
+                handleApiError( error );
             }
         } else
         {
@@ -98,10 +99,31 @@ const EditPromotionPage = () =>
         }
     };
 
-    const handleSaveAction = ( data: TRuleActions ) =>
+    const handleSaveAction = async ( data: TRuleActions ) =>
     {
-        form.setValue( "ruleActions", data, { shouldDirty: true } );
-        toast.success( ruleAction ? "Đã cập nhật hành động." : "Đã thêm hành động." );
+        console.log( "Saving action data:", data );
+        const updatedRuleAction: TUpdateRuleAction = {
+            value: data.value,
+            type: data.actionType,
+            targetCriteriaForItemAction: ( JSON.parse( data.targetCriteriaForItemAction! ) as string[] )?.length !== 0 ? JSON.parse( data.targetCriteriaForItemAction! ) as string[] : null,
+            maxDiscountAmountForPercentage: data.maxDiscountAmountForPercentage ? Number( data.maxDiscountAmountForPercentage ) : null,
+        }
+        try
+        {
+            await updateActionRuleMutation.mutateAsync( {
+                promotionRuleId: id as string,
+                actionRuleId: data.id,
+                data: updatedRuleAction,
+            } );
+            form.setValue( "ruleActions", {
+                ...data,
+                targetCriteriaForItemAction: ( JSON.parse( data.targetCriteriaForItemAction! ) as string[] )?.length !== 0 ? JSON.stringify( data.targetCriteriaForItemAction ) : null,
+            }, { shouldDirty: true } );
+            toast.success( "Đã cập nhật hành động." );
+        } catch ( error )
+        {
+            handleApiError( error );
+        }
     };
 
     const handleDeleteCondition = async ( index: number ) =>
@@ -134,6 +156,22 @@ const EditPromotionPage = () =>
 
     const onSubmit = async ( data: TPromotionRuleResponse ) =>
     {
+        if ( data?.ruleConditions?.length === 0 )
+        {
+            form.setError( "ruleConditions", {
+                type: "manual",
+                message: "Vui lòng thêm ít nhất một điều kiện khuyến mãi."
+            } );
+            return;
+        }
+        if ( !data.ruleActions )
+        {
+            form.setError( "ruleActions", {
+                type: "manual",
+                message: "Vui lòng thêm hành động khuyến mãi trước khi tạo."
+            } );
+            return;
+        }
         console.log( "Submitted data:", data );
         const updatedData: TUpdatePromotionRule = {
             name: data.name,
@@ -158,7 +196,7 @@ const EditPromotionPage = () =>
             <form id="promotion-form" className='relative' onSubmit={ form.handleSubmit( onSubmit ) } noValidate>
                 <div>
                     <div className="mb-6">
-                        <h1 className="text-2xl font-semibold">Tạo Khuyến Mãi Mới</h1>
+                        <h1 className="text-2xl font-semibold">{ data.data.data.name }</h1>
                     </div>
                     <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-4">
                         <Card className='shadow-none border-none bg-white lg:col-span-2 xl:col-span-2'>
@@ -240,7 +278,12 @@ const EditPromotionPage = () =>
                         <div className="space-y-4 lg:col-span-1 xl:col-span-1">
                             <Card className='shadow-none border-none bg-white '>
                                 <CardHeader className='grid grid-cols-1 md:grid-cols-2 items-center gap-4'>
-                                    <CardTitle>Điều kiện khuyến mãi</CardTitle>
+                                    <CardTitle>
+                                        Điều kiện khuyến mãi
+                                        <FormMessage className="text-red-500 text-sm font-normal mt-2">
+                                            { form.formState.errors.ruleConditions?.message }
+                                        </FormMessage>
+                                    </CardTitle>
                                     <RuleConditionDialog
                                         isOpen={ isConditionDialogOpen }
                                         onOpenChange={ setIsConditionDialogOpen }
@@ -256,7 +299,7 @@ const EditPromotionPage = () =>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
                                     <ScrollArea className="max-h-[300px] overflow-y-auto w-full">
-                                        <div className='mx-1 space-y-3 pr-4'>
+                                        <div className='mx-1'>
                                             { ruleConditions.map( ( _, index ) => (
                                                 <div key={ index } className="p-3 border rounded-lg relative group bg-secondary/30 hover:cursor-pointer" onClick={ () => handleOpenConditionDialog( index ) }>
                                                     <Button
@@ -318,40 +361,30 @@ const EditPromotionPage = () =>
                             </Card>
                             <Card className='shadow-none border-none bg-white '>
                                 <CardHeader className='grid grid-cols-1 md:grid-cols-2 items-center gap-4'>
-                                    <CardTitle>Hành động khuyến mãi</CardTitle>
-                                    {
-                                        !ruleAction &&
-                                        <RuleActionDialog
-                                            isOpen={ isActionDialogOpen }
-                                            onOpenChange={ setIsActionDialogOpen }
-                                            initialData={ ruleAction }
-                                            onSave={ handleSaveAction }
-                                            isSubmitting={ false }
-                                        >
-                                            <Button variant="outline" size="sm" className="ml-auto" type="button" disabled={ false } onClick={ () => setIsActionDialogOpen( true ) }>
-                                                Thêm
-                                                <CircleArrowOutUpRight className="ml-2 h-4 w-4" />
-                                            </Button>
-                                        </RuleActionDialog>
-                                    }
+                                    <CardTitle>
+                                        Hành động khuyến mãi
+                                        <FormMessage className="text-red-500 text-sm font-normal mt-2">
+                                            { form.formState.errors.ruleActions?.message }
+                                        </FormMessage>
+                                    </CardTitle>
+                                    <RuleActionDialog
+                                        isOpen={ isActionDialogOpen }
+                                        onOpenChange={ setIsActionDialogOpen }
+                                        initialData={ ruleAction }
+                                        onSave={ handleSaveAction }
+                                        isSubmitting={ updateActionRuleMutation.isPending }
+                                    >
+                                        <Button variant="outline" size="sm" className="ml-auto" type="button" disabled={ false } onClick={ () => setIsActionDialogOpen( true ) }>
+                                            {
+                                                ruleAction ? "Cập nhật hành động" : "Thêm hành động"
+                                            }
+                                            <CircleArrowOutUpRight className="ml-2 h-4 w-4" />
+                                        </Button>
+                                    </RuleActionDialog>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
                                     { ruleAction ? (
                                         <div className="p-3 border rounded-lg relative group bg-secondary/30 hover:cursor-pointer" onClick={ () => setIsActionDialogOpen( true ) }>
-                                            <Button
-                                                type="button"
-                                                variant="ghost"
-                                                size="icon"
-                                                className="absolute top-1 right-1 h-6 w-6 text-muted-foreground opacity-50 group-hover:opacity-100 transition-opacity"
-                                                onClick={ ( e ) =>
-                                                {
-                                                    e.stopPropagation(); // Prevent opening the dialog
-                                                    form.resetField( "ruleActions" );
-                                                } }
-                                            >
-                                                <X className="h-4 w-4" />
-                                                <span className="sr-only">Remove action</span>
-                                            </Button>
                                             <p className="text-sm font-semibold pr-6">
                                                 { getActionTypeName( ruleAction.actionType ) }
                                             </p>
