@@ -9,14 +9,16 @@ import { Textarea } from '@/components/ui/textarea';
 import { useCategory } from '@/hooks/use-category';
 import { useProduct } from '@/hooks/use-product';
 import { handleApiError } from '@/lib/error';
+import { getImagePreviewUrl } from '@/lib/utils';
 import { handleChangeModalState, handleSetCreatedId } from '@/redux/modal/modal-slice';
 import type { RootState } from '@/redux/store';
 import { PATH_BRAND_DASHBOARD } from '@/routes/path';
 import { CreateProductSchema, type TProductRequest } from '@/schema/product.schema';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload, X } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -39,8 +41,6 @@ const CreateProductPage = () =>
         handleApiError( cateError );
     }
 
-    const [ imagePreview, setImagePreview ] = useState<string[]>( [] );
-
     const form = useForm<TProductRequest>( {
         resolver: zodResolver( CreateProductSchema ),
         defaultValues: {
@@ -62,11 +62,57 @@ const CreateProductPage = () =>
         name: 'productImages',
     } );
 
-    const handleImageUpload = ( event: React.ChangeEvent<HTMLInputElement>, index?: number ) =>
+    const [ imagePreviewUrls, setImagePreviewUrls ] = useState<string[]>( [] );
+
+    useEffect( () =>
+    {
+        const updatePreviews = async () =>
+        {
+            const urls = await Promise.all(
+                imageFields.map( async ( field ) =>
+                {
+                    if ( field.image instanceof File )
+                    {
+                        return await getImagePreviewUrl( field.image );
+                    }
+                    return ''; // fallback for non-File objects
+                } )
+            );
+            setImagePreviewUrls( urls );
+        };
+
+        updatePreviews();
+    }, [ imageFields ] );
+
+    const handleMainImageChange = ( selectedIndex: number, isChecked: boolean ) =>
+    {
+        if ( !isChecked )
+        {
+            if ( imageFields.length === 1 )
+            {
+                toast.error( 'Phải có ít nhất một ảnh chính.' );
+                return;
+            }
+
+            imageFields.forEach( ( _, index ) =>
+            {
+                form.setValue( `productImages.${ index }.isMainImage`, index === 0 );
+            } );
+        } else
+        {
+            imageFields.forEach( ( _, index ) =>
+            {
+                form.setValue( `productImages.${ index }.isMainImage`, index === selectedIndex );
+            } );
+        }
+    };
+
+    const handleImageUpload = ( event: React.ChangeEvent<HTMLInputElement> ) =>
     {
         const files = event.target.files;
         if ( !files ) return;
-        if ( imageFields.length >= 4 )
+
+        if ( imageFields.length + files.length > 4 )
         {
             toast.error( 'Bạn chỉ có thể tải lên tối đa 4 hình ảnh.' );
             return;
@@ -74,32 +120,39 @@ const CreateProductPage = () =>
 
         Array.from( files ).forEach( ( file ) =>
         {
-            const reader = new FileReader();
-            reader.onload = ( e ) =>
-            {
-                const result = e.target?.result as string;
-                setImagePreview( prev => [ ...prev, result ] );
-            };
-            reader.readAsDataURL( file );
-
-            if ( index !== undefined )
-            {
-                form.setValue( `productImages.${ index }.image`, file );
-            } else
-            {
-                appendImage( {
-                    image: file,
-                    isMainImage: imageFields.length === 0,
-                    altText: '',
-                } );
-            }
+            appendImage( {
+                image: file,
+                isMainImage: imageFields.length === 0,
+                altText: '',
+            } );
         } );
+
+        event.target.value = '';
     };
+
 
     const removeImagePreview = ( index: number ) =>
     {
-        setImagePreview( prev => prev.filter( ( _, i ) => i !== index ) );
+        const currentImages = form.getValues( 'productImages' );
+        const isRemovedImageMain = currentImages?.[ index ]?.isMainImage;
+
         removeImage( index );
+
+        if ( isRemovedImageMain && imageFields.length > 1 )
+        {
+            setTimeout( () =>
+            {
+                const updatedImages = form.getValues( 'productImages' );
+                if ( updatedImages && updatedImages.length > 0 )
+                {
+                    form.setValue( 'productImages.0.isMainImage', true );
+                    for ( let i = 1; i < updatedImages.length; i++ )
+                    {
+                        form.setValue( `productImages.${ i }.isMainImage`, false );
+                    }
+                }
+            }, 0 );
+        }
     };
 
     const onSubmit = async ( data: TProductRequest ) =>
@@ -113,6 +166,7 @@ const CreateProductPage = () =>
         formData.append( 'Price', data.price?.toString() || "0" );
         formData.append( 'Description', data.description );
         formData.append( 'CategoryId', data.categoryId );
+        formData.append( 'Sku', data.sku || '' );
 
         if ( data.displayOrder !== undefined )
         {
@@ -131,18 +185,17 @@ const CreateProductPage = () =>
                 // Append the actual file
                 if ( imageData.image )
                 {
-                    formData.append( `ProductImages[${ index }].[Image]`, imageData.image );
+                    formData.append( `ProductImages[${ index }].Image`, imageData.image );
                 }
 
-                formData.append( `ProductImages[${ index }].[IsMainImage]`, imageData.isMainImage.toString() );
+                formData.append( `ProductImages[${ index }].IsMainImage`, imageData.isMainImage.toString() );
 
                 if ( imageData.altText )
                 {
-                    formData.append( `ProductImages[${ index }].[AltText]`, imageData.altText );
+                    formData.append( `ProductImages[${ index }].AltText`, imageData.altText );
                 }
             } );
         }
-
         // //console.log( "Submitting form data:", formData );
         try
         {
@@ -350,73 +403,99 @@ const CreateProductPage = () =>
                                                 type="file"
                                                 multiple
                                                 accept="image/*"
-                                                onChange={ ( e ) => handleImageUpload( e ) }
+                                                onChange={ ( e ) =>
+                                                {
+                                                    console.log( "File input changed:", e.target.files );
+                                                    handleImageUpload( e )
+                                                } }
                                                 className="hidden"
                                                 id="image-upload"
                                             />
                                         </div>
+                                        <Button
+                                            type='button'
+                                            disabled={ createProductMutation.isPending }
+                                            variant="outline"
+                                            size="sm"
+                                            className="h-8"
+                                            onClick={ () =>
+                                            {
+                                                console.log( "Upload button clicked" );
+                                                document.getElementById( 'image-upload' )?.click();
+                                            } }
+                                        >
+                                            <Upload className="w-4 h-4 mr-2" />
+                                            Tải lên ảnh
+                                        </Button>
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     { imageFields.length > 0 ? (
                                         <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
-                                            { imageFields.map( ( field, index ) => (
-                                                <div key={ field.id } className="relative">
-                                                    <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                                                        { imagePreview[ index ] && (
-                                                            <img
-                                                                src={ imagePreview[ index ] }
-                                                                alt={ `Preview ${ index }` }
-                                                                className="w-full h-full object-cover"
+                                            <PhotoProvider>
+                                                { imageFields.map( ( field, index ) => (
+                                                    <div key={ field.id } className="relative">
+                                                        <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                                                            { imagePreviewUrls[ index ] && (
+                                                                <PhotoView src={ imagePreviewUrls[ index ] }>
+                                                                    <img
+                                                                        src={ imagePreviewUrls[ index ] }
+                                                                        alt={ `Preview ${ index }` }
+                                                                        className="w-full h-full object-cover hover:cursor-pointer"
+                                                                    />
+                                                                </PhotoView>
+                                                            ) }
+                                                        </div>
+                                                        <Button
+                                                            disabled={ createProductMutation.isPending }
+                                                            type="button"
+                                                            variant="destructive"
+                                                            size="sm"
+                                                            className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0"
+                                                            onClick={ () => removeImagePreview( index ) }
+                                                        >
+                                                            <X className="w-3 h-3" />
+                                                        </Button>
+                                                        <div className="mt-2 space-y-2">
+                                                            <FormField
+                                                                control={ form.control }
+                                                                name={ `productImages.${ index }.isMainImage` }
+                                                                render={ ( { field } ) => (
+                                                                    <FormItem className="flex flex-row items-start space-x-2 space-y-0">
+                                                                        <FormControl>
+                                                                            <Checkbox
+                                                                                disabled={ createProductMutation.isPending }
+                                                                                checked={ field.value }
+                                                                                onCheckedChange={ ( checked ) =>
+                                                                                {
+                                                                                    handleMainImageChange( index, checked as boolean );
+                                                                                } }
+                                                                            />
+                                                                        </FormControl>
+                                                                        <FormLabel className="text-xs">Ảnh chính</FormLabel>
+                                                                    </FormItem>
+                                                                ) }
                                                             />
-                                                        ) }
+                                                            <FormField
+                                                                control={ form.control }
+                                                                name={ `productImages.${ index }.altText` }
+                                                                render={ ( { field } ) => (
+                                                                    <FormItem>
+                                                                        <FormControl>
+                                                                            <Input
+                                                                                disabled={ createProductMutation.isPending }
+                                                                                placeholder="Alt text"
+                                                                                className="text-xs"
+                                                                                { ...field }
+                                                                            />
+                                                                        </FormControl>
+                                                                    </FormItem>
+                                                                ) }
+                                                            />
+                                                        </div>
                                                     </div>
-                                                    <Button
-                                                        disabled={ createProductMutation.isPending }
-                                                        type="button"
-                                                        variant="destructive"
-                                                        size="sm"
-                                                        className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0"
-                                                        onClick={ () => removeImagePreview( index ) }
-                                                    >
-                                                        <X className="w-3 h-3" />
-                                                    </Button>
-                                                    <div className="mt-2 space-y-2">
-                                                        <FormField
-                                                            control={ form.control }
-                                                            name={ `productImages.${ index }.isMainImage` }
-                                                            render={ ( { field } ) => (
-                                                                <FormItem className="flex flex-row items-start space-x-2 space-y-0">
-                                                                    <FormControl>
-                                                                        <Checkbox
-                                                                            disabled={ createProductMutation.isPending }
-                                                                            checked={ field.value }
-                                                                            onCheckedChange={ field.onChange }
-                                                                        />
-                                                                    </FormControl>
-                                                                    <FormLabel className="text-xs">Ảnh chính</FormLabel>
-                                                                </FormItem>
-                                                            ) }
-                                                        />
-                                                        <FormField
-                                                            control={ form.control }
-                                                            name={ `productImages.${ index }.altText` }
-                                                            render={ ( { field } ) => (
-                                                                <FormItem>
-                                                                    <FormControl>
-                                                                        <Input
-                                                                            disabled={ createProductMutation.isPending }
-                                                                            placeholder="Alt text"
-                                                                            className="text-xs"
-                                                                            { ...field }
-                                                                        />
-                                                                    </FormControl>
-                                                                </FormItem>
-                                                            ) }
-                                                        />
-                                                    </div>
-                                                </div>
-                                            ) ) }
+                                                ) ) }
+                                            </PhotoProvider>
                                         </div>
                                     ) : (
                                         <div
@@ -443,7 +522,7 @@ const CreateProductPage = () =>
                     </Button>
                 </div>
             </form>
-        </Form>
+        </Form >
     );
 };
 

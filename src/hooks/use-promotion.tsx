@@ -1,4 +1,5 @@
 import { promotionApi } from "@/apis/promotion.api";
+import type { TEditRuleCondition, TUpdatePromotionRule } from "@/schema/promotion-rule.schema";
 import { keepPreviousData, useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 
 interface UsePromotionParams
@@ -61,9 +62,38 @@ export const usePromotion = () =>
             queryClient.invalidateQueries( { queryKey: [ 'promotion-rules' ] } );
         },
     } )
+
+    const updatePromotionMutation = useMutation( {
+        mutationFn: ( { id, data }: { id: string; data: TUpdatePromotionRule } ) => promotionApi.updatePromotionRule( id, data ),
+        onSuccess: () =>
+        {
+            queryClient.invalidateQueries( { queryKey: [ 'promotion-rules' ] } );
+        },
+    } );
+
+    const deleteConditionRuleMutation = useMutation( {
+        mutationFn: ( { promotionRuleId, conditionRuleId }: { promotionRuleId: string; conditionRuleId: string } ) =>
+            promotionApi.deleteConditionRule( promotionRuleId, conditionRuleId ),
+        onSuccess: () =>
+        {
+            queryClient.invalidateQueries( { queryKey: [ 'promotion-rules' ] } );
+        },
+    } );
+    const updateConditionRuleMutation = useMutation( {
+        mutationFn: ( { promotionRuleId, conditionRuleId, data }: { promotionRuleId: string; conditionRuleId: string; data: TEditRuleCondition } ) =>
+            promotionApi.updateConditionRule( promotionRuleId, conditionRuleId, data ),
+        onSuccess: () =>
+        {
+            queryClient.invalidateQueries( { queryKey: [ 'promotion-rules' ] } );
+        },
+    } );
     return {
         getPromotions,
         getPromotionById,
         createPromotionMutation,
+        updatePromotionMutation,
+
+        deleteConditionRuleMutation,
+        updateConditionRuleMutation,
     }
 }

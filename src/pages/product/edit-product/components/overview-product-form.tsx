@@ -32,6 +32,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { PhotoProvider, PhotoView } from "react-photo-view";
 // import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -85,7 +86,7 @@ const EditProductForm = ( { initialData }: Props ) =>
     resolver: zodResolver( UpdateProductSchema ),
     defaultValues: initialData,
   } );
-  console.log( "formState", form.formState );
+  // console.log( "formState", form.formState );
   const { getCategories } = useCategory();
 
   //Cần chỉnh sửa
@@ -104,12 +105,13 @@ const EditProductForm = ( { initialData }: Props ) =>
     handleApiError( cateError );
   }
 
-  const [ previewUrls, setPreviewUrls ] = useState<string[]>( [] );
-  const [ blobUrls, setBlobUrls ] = useState<string[]>( [] );
+  const [ newImagePreviewUrls, setNewImagePreviewUrls ] = useState<string[]>( [] );
+
 
   const { fields: imageFields, remove: removeImage } = useFieldArray( {
     control: form.control,
     name: "productImages",
+    keyName: "_id",
   } );
 
   const {
@@ -121,45 +123,25 @@ const EditProductForm = ( { initialData }: Props ) =>
     name: "newProductImages",
   } );
 
-  // Initialize preview URLs when component mounts or fields change
   useEffect( () =>
   {
-    const urls: string[] = [];
-    const newBlobUrls: string[] = [];
-
-    // Add existing image URLs
-    imageFields.forEach( ( field ) =>
+    const updateNewImagePreviews = async () =>
     {
-      const url = getImagePreviewUrl( field );
-      if ( url )
-      {
-        urls.push( url );
-      }
-    } );
-
-    // Add new image URLs (create blob URLs for File objects)
-    newImageFields.forEach( ( field ) =>
-    {
-      if ( field.image instanceof File )
-      {
-        const blobUrl = URL.createObjectURL( field.image );
-        urls.push( blobUrl );
-        newBlobUrls.push( blobUrl );
-      }
-    } );
-
-    setPreviewUrls( urls );
-
-    // Clean up old blob URLs
-    blobUrls.forEach( ( url ) => URL.revokeObjectURL( url ) );
-    setBlobUrls( newBlobUrls );
-
-    // Cleanup function to revoke blob URLs when component unmounts
-    return () =>
-    {
-      newBlobUrls.forEach( ( url ) => URL.revokeObjectURL( url ) );
+      const urls = await Promise.all(
+        newImageFields.map( async ( field ) =>
+        {
+          if ( field.image instanceof File )
+          {
+            return await getImagePreviewUrl( field.image );
+          }
+          return '';
+        } )
+      );
+      setNewImagePreviewUrls( urls );
     };
-  }, [ imageFields, newImageFields ] );
+
+    updateNewImagePreviews();
+  }, [ newImageFields ] );
 
   const handleImageUpload = ( event: React.ChangeEvent<HTMLInputElement> ) =>
   {
@@ -171,7 +153,7 @@ const EditProductForm = ( { initialData }: Props ) =>
 
     if ( availableSlots <= 0 )
     {
-      toast.error( "Bạn chỉ có thể tải lên tối đa 4 hình ảnh." );
+      toast.error( 'Bạn chỉ có thể tải lên tối đa 4 hình ảnh.' );
       return;
     }
 
@@ -188,60 +170,98 @@ const EditProductForm = ( { initialData }: Props ) =>
       }
 
       // Determine if this should be the main image
-      // (first image uploaded when no existing main image)
       const isMainImage = totalImages === 0 && newImageFields.length === 0;
 
       appendNewImage( {
         image: file,
         isMainImage,
-        altText: "",
+        altText: '',
       } );
     } );
 
-    // Reset the input value so the same file can be selected again if needed
-    event.target.value = "";
+    // Reset the input value
+    event.target.value = '';
   };
 
   const removeExistingImage = ( index: number ) =>
   {
+    const wasMainImage = form.getValues( `productImages.${ index }.isMainImage` );
     removeImage( index );
-    toast.success( "Ảnh đã được xóa" );
+
+    if ( wasMainImage )
+    {
+      if ( imageFields.length > 1 )
+      {
+        const nextIndex = index === 0 ? 1 : 0;
+        form.setValue( `productImages.${ nextIndex }.isMainImage`, true );
+      } else if ( newImageFields.length > 0 )
+      {
+        form.setValue( `newProductImages.0.isMainImage`, true );
+      }
+    }
   };
 
   const removeNewImage = ( index: number ) =>
   {
+    const wasMainImage = form.getValues( `newProductImages.${ index }.isMainImage` );
     removeUpdatedImage( index );
-    toast.success( "Ảnh đã được xóa" );
+
+    if ( wasMainImage )
+    {
+      if ( newImageFields.length > 1 )
+      {
+        const nextIndex = index === 0 ? 1 : 0;
+        form.setValue( `newProductImages.${ nextIndex }.isMainImage`, true );
+      } else if ( imageFields.length > 0 )
+      {
+        form.setValue( `productImages.0.isMainImage`, true );
+      }
+    }
   };
 
-  // Handle main image selection - ensure only one image is marked as main
   const handleMainImageChange = (
     imageIndex: number,
     isExisting: boolean,
     isChecked: boolean
   ) =>
   {
+    if ( !isChecked )
+    {
+      const totalImages = imageFields.length + newImageFields.length;
+      if ( totalImages === 1 )
+      {
+        toast.error( 'Phải có ít nhất một ảnh chính.' );
+        return;
+      }
+    }
+
     if ( isChecked )
     {
-      // Uncheck all existing images
       imageFields.forEach( ( _, index ) =>
       {
         form.setValue( `productImages.${ index }.isMainImage`, false );
       } );
 
-      // Uncheck all new images
       newImageFields.forEach( ( _, index ) =>
       {
         form.setValue( `newProductImages.${ index }.isMainImage`, false );
       } );
 
-      // Check the selected image
       if ( isExisting )
       {
         form.setValue( `productImages.${ imageIndex }.isMainImage`, true );
       } else
       {
         form.setValue( `newProductImages.${ imageIndex }.isMainImage`, true );
+      }
+    } else
+    {
+      if ( imageFields.length > 0 )
+      {
+        form.setValue( `productImages.0.isMainImage`, true );
+      } else if ( newImageFields.length > 0 )
+      {
+        form.setValue( `newProductImages.0.isMainImage`, true );
       }
     }
   };
@@ -274,6 +294,35 @@ const EditProductForm = ( { initialData }: Props ) =>
       formProductData.append( "note", data.note ?? "" );
       formProductData.append( "status", data.status.toString() );
       formProductData.append( "categoryId", data.category?.id ?? "" );
+      if ( data.productImages && data.productImages.length > 0 )
+      {
+        data.productImages.forEach( ( imageData, index ) =>
+        {
+          formProductData.append( `ExistProductImages[${ index }].ID`, imageData.id.toString() );
+          formProductData.append( `ExistProductImages[${ index }].IsMainImage`, imageData.isMainImage.toString() );
+
+          if ( imageData.altText )
+          {
+            formProductData.append( `ProductImages[${ index }].AltText`, imageData.altText );
+          }
+        } );
+      }
+      if ( data.newProductImages && data.newProductImages.length > 0 )
+      {
+        data.newProductImages.forEach( ( imageData, index ) =>
+        {
+          if ( imageData.image )
+          {
+            formProductData.append( `NewProductImages[${ index }].Image`, imageData.image );
+          }
+          formProductData.append( `NewProductImages[${ index }].IsMainImage`, imageData.isMainImage.toString() );
+
+          if ( imageData.altText )
+          {
+            formProductData.append( `NewProductImages[${ index }].AltText`, imageData.altText );
+          }
+        } );
+      }
       try
       {
         let productVariantResult;
@@ -319,7 +368,35 @@ const EditProductForm = ( { initialData }: Props ) =>
       formProductData.append( "note", data.note ?? "" );
       formProductData.append( "status", data.status.toString() );
       formProductData.append( "categoryId", data.category?.id ?? "" );
+      if ( data.productImages && data.productImages.length > 0 )
+      {
+        data.productImages.forEach( ( imageData, index ) =>
+        {
+          formProductData.append( `ExistProductImages[${ index }].Id`, imageData.id.toString() );
+          formProductData.append( `ExistProductImages[${ index }].IsMainImage`, imageData.isMainImage.toString() );
 
+          if ( imageData.altText )
+          {
+            formProductData.append( `ProductImages[${ index }].AltText`, imageData.altText );
+          }
+        } );
+      }
+      if ( data.newProductImages && data.newProductImages.length > 0 )
+      {
+        data.newProductImages.forEach( ( imageData, index ) =>
+        {
+          if ( imageData.image )
+          {
+            formProductData.append( `NewProductImages[${ index }].Image`, imageData.image );
+          }
+          formProductData.append( `NewProductImages[${ index }].IsMainImage`, imageData.isMainImage.toString() );
+
+          if ( imageData.altText )
+          {
+            formProductData.append( `NewProductImages[${ index }].AltText`, imageData.altText );
+          }
+        } );
+      }
       try
       {
         const productResult = await updateProductMutation.mutateAsync( {
@@ -370,7 +447,7 @@ const EditProductForm = ( { initialData }: Props ) =>
                         <FormLabel>Mã sản phẩm *</FormLabel>
                         <FormControl>
                           <Input
-                            disabled={ false }
+                            disabled={ updateProductMutation.isPending || updateProductVariantMutation.isPending }
                             placeholder="Nhập mã sản phẩm"
                             { ...field }
                           />
@@ -389,7 +466,7 @@ const EditProductForm = ( { initialData }: Props ) =>
                           <FormLabel>Mã SKU</FormLabel>
                           <FormControl>
                             <Input
-                              disabled={ false }
+                              disabled={ updateProductMutation.isPending || updateProductVariantMutation.isPending }
                               placeholder="Nhập mã SKU"
                               { ...field }
                               value={ field.value ?? "" }
@@ -421,7 +498,7 @@ const EditProductForm = ( { initialData }: Props ) =>
                           <FormItem className="grid grid-cols-1 lg:grid-cols-1 items-center">
                             <FormLabel>Danh mục *</FormLabel>
                             <Select
-                              disabled={ false || isLoading }
+                              disabled={ updateProductMutation.isPending || updateProductVariantMutation.isPending || isLoading }
                               onValueChange={ field.onChange }
                               defaultValue={ field.value }
                             >
@@ -480,7 +557,7 @@ const EditProductForm = ( { initialData }: Props ) =>
                       <FormLabel>Tên sản phẩm *</FormLabel>
                       <FormControl>
                         <Input
-                          disabled={ false }
+                          disabled={ updateProductMutation.isPending || updateProductVariantMutation.isPending }
                           placeholder="Nhập tên sản phẩm"
                           { ...field }
                         />
@@ -510,7 +587,7 @@ const EditProductForm = ( { initialData }: Props ) =>
                           <FormItem className="grid grid-cols-1 lg:grid-cols-1 items-center">
                             <FormLabel>Danh mục *</FormLabel>
                             <Select
-                              disabled={ false || isLoading }
+                              disabled={ updateProductMutation.isPending || updateProductVariantMutation.isPending || isLoading }
                               onValueChange={ field.onChange }
                               defaultValue={ field.value }
                             >
@@ -538,24 +615,6 @@ const EditProductForm = ( { initialData }: Props ) =>
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent className="h-60 overflow-y-auto">
-                                {/* <div
-                                  className="bg-white px-2 py-1 border-b"
-                                  onMouseDown={(e) => e.stopPropagation()}
-                                  onPointerDown={(e) => e.stopPropagation()}
-                                >
-                                  <input
-                                    type="text"
-                                    placeholder="Tìm danh mục..."
-                                    value={searchTerm}
-                                    onChange={(e) =>
-                                      setSearchTerm(e.target.value)
-                                    }
-                                    className="w-full text-sm border rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    onClick={(e) => e.stopPropagation()}
-                                    onFocus={(e) => e.stopPropagation()}
-                                  />
-                                </div> */}
-
                                 { filteredCategories.length > 0 ? (
                                   filteredCategories.map( ( category ) => (
                                     <SelectItem
@@ -586,6 +645,7 @@ const EditProductForm = ( { initialData }: Props ) =>
                         <FormLabel>Thứ tự hiển thị</FormLabel>
                         <FormControl>
                           <Input
+                            disabled={ updateProductMutation.isPending || updateProductVariantMutation.isPending }
                             type="number"
                             placeholder="Nhập thứ tự"
                             { ...field }
@@ -613,7 +673,7 @@ const EditProductForm = ( { initialData }: Props ) =>
                           <FormControl>
                             <Input
                               type="number"
-                              disabled={ false }
+                              disabled={ updateProductMutation.isPending || updateProductVariantMutation.isPending }
                               placeholder="0"
                               { ...field }
                               onChange={ ( e ) => field.onChange( Number( e.target.value ) ) }
@@ -634,7 +694,7 @@ const EditProductForm = ( { initialData }: Props ) =>
                         <FormLabel>Mô tả *</FormLabel>
                         <FormControl>
                           <Textarea
-                            disabled={ false }
+                            disabled={ updateProductMutation.isPending || updateProductVariantMutation.isPending }
                             placeholder="Nhập mô tả sản phẩm"
                             className="min-h-[100px]"
                             { ...field }
@@ -652,7 +712,7 @@ const EditProductForm = ( { initialData }: Props ) =>
                         <FormLabel>Ghi chú</FormLabel>
                         <FormControl>
                           <Textarea
-                            disabled={ false }
+                            disabled={ updateProductMutation.isPending || updateProductVariantMutation.isPending }
                             placeholder="Nhập ghi chú cho sản phẩm"
                             className="min-h-[100px]"
                             { ...field }
@@ -672,7 +732,7 @@ const EditProductForm = ( { initialData }: Props ) =>
               <Card className="shadow-none border-none bg-white">
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
-                    Ảnh Sản Phẩm ({ totalImages }/4)
+                    Ảnh Sản Phẩm
                     <div>
                       <input
                         type="file"
@@ -681,31 +741,46 @@ const EditProductForm = ( { initialData }: Props ) =>
                         onChange={ handleImageUpload }
                         className="hidden"
                         id="image-upload"
-                        disabled={ totalImages >= 4 }
+                      // disabled={ totalImages >= 4 }
                       />
                     </div>
+                    <Button
+                      type='button'
+                      disabled={ updateProductMutation.isPending || updateProductVariantMutation.isPending }
+                      variant="outline"
+                      size="sm"
+                      className="h-8"
+                      onClick={ () =>
+                      {
+                        console.log( "Upload button clicked" );
+                        document.getElementById( 'image-upload' )?.click();
+                      } }
+                    >
+                      <Upload className="w-4 h-4 mr-2" />
+                      Tải lên ảnh
+                    </Button>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   { totalImages > 0 ? (
                     <div className="space-y-4">
-                      {/* Existing Images */ }
-                      { imageFields.length > 0 && (
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">
-                            Ảnh hiện tại
-                          </h4>
+                      <PhotoProvider>
+                        {/* Existing Images */ }
+                        { ( imageFields.length > 0 || newImageFields.length > 0 ) && (
                           <div className="grid grid-cols-2 gap-4">
                             { imageFields.map( ( field, index ) => (
                               <div key={ field.id } className="relative">
                                 <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                                  <img
-                                    src={ previewUrls[ index ] }
-                                    alt={ `Existing ${ index }` }
-                                    className="w-full h-full object-cover"
-                                  />
+                                  <PhotoView src={ imageFields[ index ].imageUrl }>
+                                    <img
+                                      src={ imageFields[ index ].imageUrl }
+                                      alt={ imageFields[ index ].altText || `Image ${ index + 1 }` }
+                                      className="w-full h-full object-cover hover:cursor-pointer"
+                                    />
+                                  </PhotoView>
                                 </div>
                                 <Button
+                                  disabled={ updateProductMutation.isPending || updateProductVariantMutation.isPending }
                                   type="button"
                                   variant="destructive"
                                   size="sm"
@@ -722,6 +797,7 @@ const EditProductForm = ( { initialData }: Props ) =>
                                       <FormItem className="flex flex-row items-start space-x-2 space-y-0">
                                         <FormControl>
                                           <Checkbox
+                                            disabled={ updateProductMutation.isPending || updateProductVariantMutation.isPending }
                                             checked={ field.value }
                                             onCheckedChange={ ( checked ) =>
                                               handleMainImageChange(
@@ -745,6 +821,7 @@ const EditProductForm = ( { initialData }: Props ) =>
                                       <FormItem>
                                         <FormControl>
                                           <Input
+                                            disabled={ updateProductMutation.isPending || updateProductVariantMutation.isPending }
                                             placeholder="Alt text"
                                             className="text-xs"
                                             { ...field }
@@ -756,28 +833,19 @@ const EditProductForm = ( { initialData }: Props ) =>
                                 </div>
                               </div>
                             ) ) }
-                          </div>
-                        </div>
-                      ) }
-
-                      {/* New Images */ }
-                      { newImageFields.length > 0 && (
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">Ảnh mới</h4>
-                          <div className="grid grid-cols-2 gap-4">
                             { newImageFields.map( ( field, index ) =>
                             {
-                              const previewIndex = imageFields.length + index;
                               return (
                                 <div key={ field.id } className="relative">
                                   <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
                                     <img
-                                      src={ previewUrls[ previewIndex ] }
+                                      src={ newImagePreviewUrls[ index ] }
                                       alt={ `New ${ index }` }
                                       className="w-full h-full object-cover"
                                     />
                                   </div>
                                   <Button
+                                    disabled={ updateProductMutation.isPending || updateProductVariantMutation.isPending }
                                     type="button"
                                     variant="destructive"
                                     size="sm"
@@ -830,23 +898,8 @@ const EditProductForm = ( { initialData }: Props ) =>
                               );
                             } ) }
                           </div>
-                        </div>
-                      ) }
-
-                      {/* Upload button for additional images */ }
-                      { totalImages < 4 && (
-                        <div
-                          className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors cursor-pointer"
-                          onClick={ () =>
-                            document.getElementById( "image-upload" )?.click()
-                          }
-                        >
-                          <Upload className="w-6 h-6 mx-auto mb-1 text-gray-400" />
-                          <p className="text-xs text-gray-600">
-                            Thêm ảnh ({ 4 - totalImages } còn lại)
-                          </p>
-                        </div>
-                      ) }
+                        ) }
+                      </PhotoProvider>
                     </div>
                   ) : (
                     <div
@@ -871,7 +924,7 @@ const EditProductForm = ( { initialData }: Props ) =>
         </div>
 
         <div className="flex justify-end h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear sticky bottom-0 bg-transparent z-10">
-          <Button className="mr-8 py-5 px-10" type="submit" disabled={ false }>
+          <Button className="mr-8 py-5 px-10" type="submit" disabled={ updateProductMutation.isPending || updateProductVariantMutation.isPending }>
             Cập Nhật
           </Button>
         </div>

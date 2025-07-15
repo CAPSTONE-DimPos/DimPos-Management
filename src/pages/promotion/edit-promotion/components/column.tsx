@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { copyToClipboard, formatPrice } from "@/lib/utils";
+import { cn, copyToClipboard, formatPrice } from "@/lib/utils";
 import type { TProductVariantResponse } from "@/schema/product-variant.schema";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Copy } from "lucide-react";
@@ -120,19 +120,14 @@ export const columns: ColumnDef<TProductVariantResponse>[] = [
     cell: (info) => {
       const status = info.getValue() as number;
       const isActive = status === 0;
-
       return (
-        <div className="flex justify-center">
-          <div
-            className={`flex items-center gap-1.5 px-3 py-1 rounded text-sm ${
-              isActive
-                ? "bg-green-mint-10 text-green-mint-100"
-                : "bg-neutral-10 text-neutral-100"
-            }`}
-          >
-            {isActive ? <>Kích hoạt</> : <>Không kích hoạt</>}
+          <div className="flex justify-center">
+              <div
+                  className={ cn( isActive ? "bg-green-mint-10 text-green-mint-100" : "bg-neutral-10 text-neutral-100", "flex items-center gap-1.5 px-3 py-1 rounded text-sm" ) }
+              >
+                  { isActive ? <>Kích hoạt</> : <>Không kích hoạt</> }
+              </div>
           </div>
-        </div>
       );
     },
   },
