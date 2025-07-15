@@ -83,6 +83,22 @@ const CreatePromotionPage = () =>
 
     const onSubmit = async ( data: TCreatePromotionRuleRequest ) =>
     {
+        if ( data?.ruleConditions?.length === 0 )
+        {
+            form.setError( "ruleConditions", {
+                type: "manual",
+                message: "Vui lòng thêm ít nhất một điều kiện khuyến mãi."
+            } );
+            return;
+        }
+        if ( !data.ruleActions )
+        {
+            form.setError( "ruleActions", {
+                type: "manual",
+                message: "Vui lòng thêm hành động khuyến mãi trước khi tạo."
+            } );
+            return;
+        }
         console.log( "Submitted data:", data );
         try
         {
@@ -180,7 +196,12 @@ const CreatePromotionPage = () =>
                         <div className="space-y-4 lg:col-span-1 xl:col-span-1">
                             <Card className='shadow-none border-none bg-white '>
                                 <CardHeader className='grid grid-cols-1 md:grid-cols-2 items-center gap-4'>
-                                    <CardTitle>Điều kiện khuyến mãi</CardTitle>
+                                    <CardTitle>
+                                        Điều kiện khuyến mãi
+                                        <FormMessage className="text-red-500 text-sm font-normal mt-2">
+                                            { form.formState.errors.ruleConditions?.message }
+                                        </FormMessage>
+                                    </CardTitle>
                                     <RuleConditionDialog
                                         isOpen={ isConditionDialogOpen }
                                         onOpenChange={ setIsConditionDialogOpen }
@@ -196,7 +217,7 @@ const CreatePromotionPage = () =>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
                                     <ScrollArea className="max-h-[300px] overflow-y-auto w-full">
-                                        <div className='mx-1 space-y-3 pr-4'>
+                                        <div className='mx-1'>
                                             { ruleConditions.map( ( condition, index ) => (
                                                 <div key={ condition.id } className="p-3 border rounded-lg relative group bg-secondary/30 hover:cursor-pointer" onClick={ () => handleOpenConditionDialog( index ) }>
                                                     <Button
@@ -257,23 +278,29 @@ const CreatePromotionPage = () =>
                             </Card>
                             <Card className='shadow-none border-none bg-white '>
                                 <CardHeader className='grid grid-cols-1 md:grid-cols-2 items-center gap-4'>
-                                    <CardTitle>Hành động khuyến mãi</CardTitle>
+                                    <CardTitle>
+                                        Hành động khuyến mãi
+                                        <FormMessage className="text-red-500 text-sm font-normal mt-2">
+                                            { form.formState.errors.ruleActions?.message }
+                                        </FormMessage>
+                                    </CardTitle>
 
-                                    {
-                                        !ruleAction &&
-                                        <RuleActionDialog
-                                            isOpen={ isActionDialogOpen }
-                                            onOpenChange={ setIsActionDialogOpen }
-                                            initialData={ ruleAction }
-                                            onSave={ handleSaveAction }
-                                            isSubmitting={ createPromotionMutation.isPending }
-                                        >
-                                            <Button variant="outline" size="sm" className="ml-auto" type="button" disabled={ createPromotionMutation.isPending } onClick={ () => setIsActionDialogOpen( true ) }>
-                                                Thêm
-                                                <CircleArrowOutUpRight className="ml-2 h-4 w-4" />
-                                            </Button>
-                                        </RuleActionDialog>
-                                    }
+
+                                    <RuleActionDialog
+                                        isOpen={ isActionDialogOpen }
+                                        onOpenChange={ setIsActionDialogOpen }
+                                        initialData={ ruleAction }
+                                        onSave={ handleSaveAction }
+                                        isSubmitting={ createPromotionMutation.isPending }
+                                    >
+                                        <Button variant="outline" size="sm" className="ml-auto" type="button" disabled={ createPromotionMutation.isPending } onClick={ () => setIsActionDialogOpen( true ) }>
+                                            {
+                                                ruleAction ? "Cập nhật hành động" : "Thêm hành động"
+                                            }
+                                            <CircleArrowOutUpRight className="ml-2 h-4 w-4" />
+                                        </Button>
+                                    </RuleActionDialog>
+
                                 </CardHeader>
                                 <CardContent className="space-y-4">
                                     { ruleAction ? (
@@ -285,8 +312,8 @@ const CreatePromotionPage = () =>
                                                 className="absolute top-1 right-1 h-6 w-6 text-muted-foreground opacity-50 group-hover:opacity-100 transition-opacity"
                                                 onClick={ ( e ) =>
                                                 {
-                                                    e.stopPropagation(); // Prevent opening the dialog
-                                                    form.resetField( "ruleActions" );
+                                                    e.stopPropagation();
+                                                    form.setValue( "ruleActions", undefined );
                                                 } }
                                             >
                                                 <X className="h-4 w-4" />
