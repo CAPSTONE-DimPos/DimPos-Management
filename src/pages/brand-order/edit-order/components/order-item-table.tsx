@@ -37,6 +37,7 @@ const OrderItemTable = ({ initialData }: Props) => {
       pageSize={initialData.length}
       onPageChange={() => {}}
       onPageSizeChange={() => {}}
+      isPagingProp={false}
       //   onPageChange={setPage}
       //   onPageSizeChange={setPageSize}
       //   onSearchChange={setFilter}

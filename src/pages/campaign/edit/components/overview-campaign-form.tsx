@@ -250,12 +250,18 @@ const EditCampaignForm = ({ initialData }: Props) => {
                         <FormControl>
                           <div className="text-sm font-medium flex flex-row items-center gap-x-2">
                             <span>Hoạt động</span>
-                            <Switch
+                            {/* <Switch
+                              // {...field}
                               checked={field.value === 1}
                               onCheckedChange={(checked) =>
                                 field.onChange(checked ? 0 : 1)
                               }
-                              {...field}
+                            /> */}
+                            <Switch
+                              checked={field.value === 1}
+                              onCheckedChange={(checked) =>
+                                field.onChange(checked ? 1 : 0)
+                              }
                             />
                           </div>
                         </FormControl>
