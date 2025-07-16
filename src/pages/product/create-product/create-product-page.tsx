@@ -5,6 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { useCategory } from '@/hooks/use-category';
 import { useProduct } from '@/hooks/use-product';
@@ -62,7 +63,16 @@ const CreateProductPage = () =>
         name: 'productImages',
     } );
 
+    const {
+        fields: variantFields,
+    } = useFieldArray( {
+        control: form.control,
+        name: 'productVariants',
+    } );
+    console.log( "Variant fields:", variantFields );
+
     const [ imagePreviewUrls, setImagePreviewUrls ] = useState<string[]>( [] );
+    const [ isHasVariants, setIsHasVariants ] = useState<boolean>( false );
 
     useEffect( () =>
     {
@@ -157,8 +167,6 @@ const CreateProductPage = () =>
 
     const onSubmit = async ( data: TProductRequest ) =>
     {
-        // toast.success( 'Tạo sản phẩm thành công!' );
-        // //console.log( "Submitting product data:", data );
         if ( createProductMutation.isPending ) return;
         const formData = new FormData();
         formData.append( 'Code', data.code );
@@ -177,12 +185,10 @@ const CreateProductPage = () =>
             formData.append( 'Note', data.note );
         }
 
-        // Handle product images array
         if ( data.productImages && data.productImages.length > 0 )
         {
             data.productImages.forEach( ( imageData, index ) =>
             {
-                // Append the actual file
                 if ( imageData.image )
                 {
                     formData.append( `ProductImages[${ index }].Image`, imageData.image );
@@ -196,7 +202,6 @@ const CreateProductPage = () =>
                 }
             } );
         }
-        // //console.log( "Submitting form data:", formData );
         try
         {
             const result = await createProductMutation.mutateAsync( formData );
@@ -238,6 +243,15 @@ const CreateProductPage = () =>
                         <Card className='shadow-none border-none bg-white lg:col-span-2 xl:col-span-2'>
                             <CardHeader className='grid grid-cols-1 md:grid-cols-2 items-center gap-4'>
                                 <CardTitle>Thông Tin Cơ Bản</CardTitle>
+                                <div className="flex justify-end items-center space-x-2">
+                                    <label className="text-sm font-medium">Có biến thể</label>
+                                    <Switch
+                                        checked={ isHasVariants }
+                                        onCheckedChange={ ( checked ) =>
+                                            setIsHasVariants( checked as boolean )
+                                        }
+                                    />
+                                </div>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

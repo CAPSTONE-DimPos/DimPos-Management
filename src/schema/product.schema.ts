@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ProductVariantSchema } from "./product-variant.schema";
+import { CreateProductVariantSchema, ProductVariantSchema } from "./product-variant.schema";
 
 export const allowedExtensions = [".jpeg", ".png", ".jpg", ".gif", ".bmp", ".webp"];
 export const ProductSchema = z.object({
@@ -125,6 +125,7 @@ export const CreateProductSchema = z.object({
   note: z.string().nullable().optional(),
   categoryId: z.string().uuid({message: "Danh mục không hợp lệ"}),
   productImages: z.array(CreateProductImageSchema).nullable(),
+  productVariants: z.array(CreateProductVariantSchema).nullable().optional(),
 });
 const ProductStatusEnum = z.union([z.literal(0), z.literal(1)]);
 export const UpdateProductSchema = z.object({

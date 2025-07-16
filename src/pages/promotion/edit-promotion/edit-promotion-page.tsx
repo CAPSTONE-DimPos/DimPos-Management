@@ -104,7 +104,7 @@ const EditPromotionPage = () =>
         console.log( "Saving action data:", data );
         const updatedRuleAction: TUpdateRuleAction = {
             value: data.value,
-            type: data.actionType,
+            actionType: data.actionType,
             targetCriteriaForItemAction: ( JSON.parse( data.targetCriteriaForItemAction! ) as string[] )?.length !== 0 ? JSON.parse( data.targetCriteriaForItemAction! ) as string[] : null,
             maxDiscountAmountForPercentage: data.maxDiscountAmountForPercentage ? Number( data.maxDiscountAmountForPercentage ) : null,
         }
