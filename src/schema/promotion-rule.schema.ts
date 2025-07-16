@@ -21,7 +21,7 @@ export const CreateRuleActionSchema = RuleActionsSchema.omit({ id: true }).exten
     targetCriteriaForItemAction: z.array(z.string().uuid()).nullable().optional(),
 });
 export const UpdateRuleActionSchema = CreateRuleActionSchema.omit({ actionType: true }).extend({
-    type: z.number().int(),
+    actionType: z.number().int(),
 });
 
 export const EditRuleActionSchema = RuleActionsSchema.extend({

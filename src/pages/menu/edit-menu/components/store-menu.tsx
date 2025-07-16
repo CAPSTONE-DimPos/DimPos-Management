@@ -15,7 +15,6 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/redux/store";
 import { handleChangeModalState } from "@/redux/modal/modal-slice";
 import ConfirmDialog from "@/components/dialog/confirm-dialog";
-import { error } from "console";
 
 type Props = {
     brandMenuId: string;
@@ -129,8 +128,9 @@ const StoreMenu = ( { brandMenuId, storeIds }: Props ) =>
 
     return (
         <Form { ...form }>
-            <form onSubmit={ form.handleSubmit( onSubmit, (error) => {
-                console.error(error);
+            <form onSubmit={ form.handleSubmit( onSubmit, ( error ) =>
+            {
+                console.error( error );
             } ) }>
                 <ConfirmDialog
                     open={ isOpen }

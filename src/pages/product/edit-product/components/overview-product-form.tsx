@@ -841,7 +841,7 @@ const EditProductForm = ( { initialData }: Props ) =>
                                     <img
                                       src={ newImagePreviewUrls[ index ] }
                                       alt={ `New ${ index }` }
-                                      className="w-full h-full object-cover"
+                                      className="w-full h-full object-cover hover:cursor-pointer"
                                     />
                                   </div>
                                   <Button

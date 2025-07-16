@@ -4,6 +4,9 @@ import { useParams } from 'react-router-dom';
 import ModifierGroupForm from './components/modifier-option-form';
 import OverviewProductForm from './components/overview-product-form';
 import VariantsProductSection from './components/variants-product-section';
+import ProductIcon from '@/assets/icons/product-icon';
+import ProductVariantIcon from '@/assets/icons/product-variant-icon';
+import DocumentFilterIcon from '@/assets/icons/document-filter-icon';
 
 const EditProductPage = () =>
 {
@@ -17,11 +20,20 @@ const EditProductPage = () =>
             </div>
             <Tabs defaultValue="overview">
                 <TabsList>
-                    <TabsTrigger value="overview">Tổng quan</TabsTrigger>
+                    <TabsTrigger value="overview">
+                        <ProductIcon className="w-4 h-4 mr-2" />
+                        Tổng quan
+                    </TabsTrigger>
                     { data?.data.data.isHasVariants && (
-                        <TabsTrigger value="variants">Biến thể</TabsTrigger>
+                        <TabsTrigger value="variants">
+                            <ProductVariantIcon className="w-4 h-4 mr-2" />
+                            Biến thể
+                        </TabsTrigger>
                     ) }
-                    <TabsTrigger value="modifierOptions">Tùy chọn</TabsTrigger>
+                    <TabsTrigger value="modifierOptions">
+                        <DocumentFilterIcon className="w-4 h-4 mr-2" />
+                        Tùy chọn
+                    </TabsTrigger>
                     { !data?.data.data.isHasVariants && (
                         <TabsTrigger value="recipe">Công thức</TabsTrigger>
                     ) }
