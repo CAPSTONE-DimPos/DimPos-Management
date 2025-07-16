@@ -1,5 +1,5 @@
 import { DataTable } from "@/components/table/data-table";
-import { useInternalPurchaseOrders } from "@/hooks/use-internal-purchase-orders";
+import { useInternalPurchaseOrders } from "@/hooks/use-internal-purchase-order";
 import { useQueryParams } from "@/hooks/use-query-params";
 import { handleApiError } from "@/lib/error";
 import { columns } from "./purchase-order/column";
