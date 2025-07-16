@@ -79,7 +79,9 @@ const ModifierGroupPage = Loadable(
 const InternalPurchaseOrderPage = Loadable(
   lazy(() => import("@/pages/brand-purchase-orders/list"))
 );
-const InternalPurchaseOrderEditPage = Loadable(lazy(() => import("@/pages/brand-purchase-orders/edit")));
+const InternalPurchaseOrderEditPage = Loadable(
+  lazy(() => import("@/pages/brand-purchase-orders/edit"))
+);
 
 // Menu routes
 const MenuPage = Loadable(lazy(() => import("@/pages/menu/list-menu")));
@@ -108,7 +110,10 @@ const CampaignPage = Loadable(lazy(() => import("@/pages/campaign")));
 const CampaignEditPage = Loadable(lazy(() => import("@/pages/campaign/edit")));
 const StorePage = Loadable(lazy(() => import("@/pages/store")));
 const StoreEditPage = Loadable(
-  lazy(() => import("@/pages/store/edit-stores/edit-store-page"))
+  lazy(() => import("@/pages/store/edit-store"))
+);
+const StoreCreatePage = Loadable(
+  lazy(() => import("@/pages/store/create-store"))
 );
 
 const OrderListPage = Loadable(
@@ -257,6 +262,10 @@ export const AppRoutes = () =>
         {
           path: "store/:id",
           element: <StoreEditPage />,
+        },
+        {
+          path: "store/new",
+          element: <StoreCreatePage />,
         },
         {
           path: "role",

@@ -282,9 +282,9 @@ export function DataTable<TData, TValue> ( {
   } );
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 ">
       {/* Enhanced Header Section */ }
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between ">
         <div className="flex flex-1 items-center gap-4">
           {/* More Search Input */ }
           { onSearchChange &&

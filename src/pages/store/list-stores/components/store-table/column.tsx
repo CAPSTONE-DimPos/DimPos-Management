@@ -16,9 +16,17 @@ export const columns: ColumnDef<TStore>[] = [
     header: () => (
       <div className="text-center font-semibold text-base">STT</div>
     ),
-    cell: ({ row }) => {
+    cell: (info) => {
+      const table = info.table;
+      const row = info.row;
+      const currentPage = table.getState().pagination.pageIndex;
+      const currentSize = table.getState().pagination.pageSize;
       return (
-        <div className="text-center font-medium">{row.getValue("index")}</div>
+        <div className="">
+          <div className="font-medium text-foreground truncate cursor-pointer hover:text-primary transition-colors text-sm font-normal flex justify-center max-w-[50px]">
+            {row.index + currentPage * currentSize + 1}
+          </div>
+        </div>
       );
     },
     size: 60,
@@ -41,11 +49,11 @@ export const columns: ColumnDef<TStore>[] = [
     header: () => <div className="font-semibold text-base">Tên cửa hàng</div>,
     cell: ({ row }) => {
       const name = row.getValue("name") as string;
-      const shortName = row.original.shortName;
+      // const shortName = row.original.shortName;
       return (
         <div className="space-y-1">
           <div className="font-medium text-gray-900">{name}</div>
-          <div className="text-sm text-gray-500">({shortName})</div>
+          {/* <div className="text-sm text-gray-500">({shortName})</div> */}
         </div>
       );
     },
@@ -89,7 +97,7 @@ export const columns: ColumnDef<TStore>[] = [
     header: () => (
       <div className="text-center font-semibold text-base">Thao tác</div>
     ),
-    cell: ({row}) => {
+    cell: ({ row }) => {
       const store = row.original;
       const navigate = useNavigate();
 
@@ -101,9 +109,7 @@ export const columns: ColumnDef<TStore>[] = [
                 <div
                   className="group relative flex items-center cursor-pointer"
                   onClick={() =>
-                    navigate(
-                      PATH_BRAND_DASHBOARD.store.edit(store.id)
-                    )
+                    navigate(PATH_BRAND_DASHBOARD.store.edit(store.id))
                   }
                 >
                   <Eye className="h-4 w-4 hover:cursor-pointer" />
