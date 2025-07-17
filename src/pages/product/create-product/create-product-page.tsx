@@ -236,8 +236,6 @@ const CreateProductPage = () =>
                     <div className="mb-6">
                         <h1 className="text-2xl font-semibold">Tạo Sản Phẩm Mới</h1>
                     </div>
-
-
                     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4" >
                         {/* Basic Information */ }
                         <Card className='shadow-none border-none bg-white lg:col-span-2 xl:col-span-2'>

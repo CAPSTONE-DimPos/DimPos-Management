@@ -79,6 +79,12 @@ const ModifierGroupPage = Loadable(
 const PurchasableProductListPage = Loadable(
   lazy(() => import("@/pages/purchasable-product/list-purchasable-product"))
 );
+const PurchasableProductCreatePage = Loadable(
+  lazy(() => import("@/pages/purchasable-product/create-purchasable-product"))
+);
+const PurchasableProductEditPage = Loadable(
+  lazy(() => import("@/pages/purchasable-product/edit-purchasable-product"))
+);
 
 const InternalPurchaseOrderPage = Loadable(
   lazy(() => import("@/pages/brand-purchase-orders/list"))
@@ -296,6 +302,14 @@ export const AppRoutes = () =>
         {
           path: "purchase-products",
           element: <PurchasableProductListPage />,
+        },
+        {
+          path: "purchase-products/new",
+          element: <PurchasableProductCreatePage />,
+        },
+        {
+          path: "purchase-products/:id",
+          element: <PurchasableProductEditPage />,
         },
       ],
     },

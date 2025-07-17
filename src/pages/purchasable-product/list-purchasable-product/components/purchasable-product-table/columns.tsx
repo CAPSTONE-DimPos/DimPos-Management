@@ -114,7 +114,7 @@ export const columns: ColumnDef<TPurchasableProduct>[] = [
       <div className="text-center font-semibold text-base">Thao tác</div>
     ),
     cell: ({ row }) => {
-      const store = row.original;
+      const purchasableProduct = row.original;
       const navigate = useNavigate();
 
       return (
@@ -125,7 +125,7 @@ export const columns: ColumnDef<TPurchasableProduct>[] = [
                 <div
                   className="group relative flex items-center cursor-pointer"
                   onClick={() =>
-                    navigate(PATH_BRAND_DASHBOARD.store.edit(store.id))
+                    navigate(PATH_BRAND_DASHBOARD.purchasableProduct.edit(purchasableProduct.id))
                   }
                 >
                   <Eye className="h-4 w-4 hover:cursor-pointer" />

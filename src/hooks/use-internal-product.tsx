@@ -1,4 +1,3 @@
-
 import { purchasableProductApi } from "@/apis/internal-product.api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -27,7 +26,10 @@ export const useInternalProduct = () => {
     } = params;
 
     return useQuery({
-      queryKey: ["internal-products", { page, size, sortBy, isAsc, name, sku, code }],
+      queryKey: [
+        "internal-products",
+        { page, size, sortBy, isAsc, name, sku, code },
+      ],
       queryFn: async () =>
         purchasableProductApi.getPurchasableProducts({
           page: page,
@@ -48,21 +50,21 @@ export const useInternalProduct = () => {
     });
 
   const createInternalProductMutation = useMutation({
-    mutationFn: (data: FormData) => purchasableProductApi.createPurchasableProduct(data),
+    mutationFn: (data: FormData) =>
+      purchasableProductApi.createPurchasableProduct(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["internal-products"] });
     },
   });
 
-  const updateInternalProductMutation = () =>
-    useMutation({
-      mutationFn: (params: { id: string; data: FormData }) =>
-        purchasableProductApi.updatePurchasableProduct(params.id, params.data),
-      onSuccess: (_, { id }) => {
-        queryClient.invalidateQueries({ queryKey: ["internal-product", id] });
-        queryClient.invalidateQueries({ queryKey: ["internal-products"] });
-      },
-    });
+  const updateInternalProductMutation = useMutation({
+    mutationFn: (params: { id: string; data: FormData }) =>
+      purchasableProductApi.updatePurchasableProduct(params.id, params.data),
+    onSuccess: (_, { id }) => {
+      queryClient.invalidateQueries({ queryKey: ["internal-product", id] });
+      queryClient.invalidateQueries({ queryKey: ["internal-products"] });
+    },
+  });
 
   return {
     getInternalProducts,

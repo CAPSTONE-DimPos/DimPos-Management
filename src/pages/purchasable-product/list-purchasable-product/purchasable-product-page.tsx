@@ -11,7 +11,7 @@ const PurchasableProduct = (_: Props) => {
     <div>
       <div className="flex justify-between items-center  mb-6">
         <h1 className="text-2xl font-bold">Danh sách sản phẩm nhập hàng</h1>
-        <Link to={PATH_BRAND_DASHBOARD.internalPurchaseOrders.create}>
+        <Link to={PATH_BRAND_DASHBOARD.purchasableProduct.create}>
           <Button>
             <CirclePlusIcon className="h-6 w-6" />
             Tạo sản phẩm nhập hàng mới

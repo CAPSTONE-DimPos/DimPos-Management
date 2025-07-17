@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { internalPOApi } from "@/apis/internal-purchase-orders.api";
-import type { TGetPurchaseOrderQuery, TStorePurchaseOrder, TUpdateStorePurchaseOrder } from "@/schema/internal-purchase-orders.schema";
+import type { TGetPurchaseOrderQuery, TUpdateStorePurchaseOrder } from "@/schema/internal-purchase-orders.schema";
 
 
 export const useInternalPurchaseOrders = () => {
