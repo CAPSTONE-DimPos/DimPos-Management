@@ -10,19 +10,22 @@ import { Textarea } from '@/components/ui/textarea';
 import { useCategory } from '@/hooks/use-category';
 import { useProduct } from '@/hooks/use-product';
 import { handleApiError } from '@/lib/error';
-import { getImagePreviewUrl } from '@/lib/utils';
+import { formatPrice, getImagePreviewUrl } from '@/lib/utils';
 import { handleChangeModalState, handleSetCreatedId } from '@/redux/modal/modal-slice';
 import type { RootState } from '@/redux/store';
 import { PATH_BRAND_DASHBOARD } from '@/routes/path';
 import { CreateProductSchema, type TProductRequest } from '@/schema/product.schema';
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Upload, X } from 'lucide-react';
+import { CircleArrowOutUpRight, Upload, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import ModifierGroupsDialog from './components/modifier-groups-dialog';
+import type { TCreateProductVariantRequest } from '@/schema/product-variant.schema';
+import ProductVariantDialog from './components/product-variant-dialog';
 
 const CreateProductPage = () =>
 {
@@ -65,14 +68,30 @@ const CreateProductPage = () =>
 
     const {
         fields: variantFields,
+        append: appendVariant,
+        update: updateVariant,
+        remove: removeVariant,
     } = useFieldArray( {
         control: form.control,
         name: 'productVariants',
+    } );
+
+    const {
+        fields: modifierGroupFields,
+        append: appendModifierGroup,
+    } = useFieldArray( {
+        control: form.control,
+        name: 'modifierGroups',
     } );
     console.log( "Variant fields:", variantFields );
 
     const [ imagePreviewUrls, setImagePreviewUrls ] = useState<string[]>( [] );
     const [ isHasVariants, setIsHasVariants ] = useState<boolean>( false );
+
+    const [ isVariantDialogOpen, setIsVariantDialogOpen ] = useState( false );
+    const [ editingVariantIndex, setEditingVariantIndex ] = useState<number | null>( null );
+
+    const [ isModifierGroupsDialogOpen, setIsModifierGroupsDialogOpen ] = useState( false );
 
     useEffect( () =>
     {
@@ -165,6 +184,46 @@ const CreateProductPage = () =>
         }
     };
 
+    const handleSaveModifierGroup = ( groups: { id: string, name: string }[] ) =>
+    {
+
+        form.setValue( 'modifierGroups', [] );
+        groups.forEach( ( item ) =>
+        {
+            appendModifierGroup( {
+                id: item.id,
+                name: item.name,
+            } );
+        } );
+        return;
+
+    }
+
+    const handleOpenVariantDialog = ( index?: number ) =>
+    {
+        setEditingVariantIndex( typeof index === 'number' ? index : null );
+        setIsVariantDialogOpen( true );
+    };
+
+    const handleSaveVariant = ( data: TCreateProductVariantRequest ) =>
+    {
+        if ( editingVariantIndex !== null )
+        {
+            updateVariant( editingVariantIndex, data );
+            toast.success( "Đã cập nhật biến thể." );
+        } else
+        {
+            const exists = variantFields.some( v => v.code === data.code || v.sku === data.sku );
+            if ( exists )
+            {
+                toast.error( "Mã hoặc SKU của biến thể đã tồn tại." );
+                return;
+            }
+            appendVariant( data );
+            toast.success( "Đã thêm biến thể." );
+        }
+    };
+
     const onSubmit = async ( data: TProductRequest ) =>
     {
         if ( createProductMutation.isPending ) return;
@@ -199,6 +258,29 @@ const CreateProductPage = () =>
                 if ( imageData.altText )
                 {
                     formData.append( `ProductImages[${ index }].AltText`, imageData.altText );
+                }
+            } );
+        }
+        if ( data.modifierGroups && data.modifierGroups.length > 0 )
+        {
+            data.modifierGroups.forEach( ( group, index ) =>
+            {
+                formData.append( `ModifierGroupIds[${ index }]`, group.id );
+            } );
+        }
+        if ( data.productVariants && data.productVariants.length > 0 )
+        {
+            data.productVariants.forEach( ( variant, index ) =>
+            {
+                formData.append( `ProductVariants[${ index }].Code`, variant.code );
+                formData.append( `ProductVariants[${ index }].Name`, variant.name );
+                formData.append( `ProductVariants[${ index }].Description`, variant.description || '' );
+                formData.append( `ProductVariants[${ index }].Sku`, variant.sku || '' );
+                formData.append( `ProductVariants[${ index }].BrandPrice`, variant.brandPrice.toString() );
+                formData.append( `ProductVariants[${ index }].Size`, variant.size );
+                if ( variant.displayOrder !== undefined )
+                {
+                    formData.append( `ProductVariants[${ index }].DisplayOrder`, variant.displayOrder?.toString() || "0" );
                 }
             } );
         }
@@ -248,7 +330,10 @@ const CreateProductPage = () =>
                                     <Switch
                                         checked={ isHasVariants }
                                         onCheckedChange={ ( checked ) =>
-                                            setIsHasVariants( checked as boolean )
+                                        {
+                                            setIsHasVariants( checked as boolean );
+                                            form.setValue( 'productVariants', [] );
+                                        }
                                         }
                                     />
                                 </div>
@@ -527,7 +612,128 @@ const CreateProductPage = () =>
                                     ) }
                                 </CardContent>
                             </Card>
+                            <Card className='shadow-none border-none bg-white '>
+                                <CardHeader className='grid grid-cols-1 md:grid-cols-2 items-center gap-4'>
+                                    <CardTitle>
+                                        Tùy chọn sản phẩm
+                                    </CardTitle>
+                                    <ModifierGroupsDialog
+                                        isOpen={ isModifierGroupsDialogOpen }
+                                        onOpenChange={ setIsModifierGroupsDialogOpen }
+                                        initialData={ modifierGroupFields }
+                                        onSave={ handleSaveModifierGroup }
+                                        isSubmitting={ createProductMutation.isPending }
+                                    >
+                                        <Button variant="outline" size="sm" className="ml-auto" type="button" disabled={ createProductMutation.isPending } onClick={ () =>
+                                        {
+                                            setIsModifierGroupsDialogOpen( true )
+                                        } }>
+                                            {
+                                                modifierGroupFields?.length > 0 ? "Chỉnh sửa" : "Thêm"
+                                            }
+                                            <CircleArrowOutUpRight className="ml-2 h-4 w-4" />
+                                        </Button>
+                                    </ModifierGroupsDialog>
+                                </CardHeader>
+                                <CardContent className=''>
+                                    {
+                                        modifierGroupFields.length > 0 ? (
+                                            <div className="p-3 border rounded-lg relative group bg-secondary/30 hover:cursor-pointer" onClick={ () =>
+                                            {
+                                                setIsModifierGroupsDialogOpen( true );
+                                            } }>
+                                                <Button
+                                                    type="button"
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="absolute top-1 right-1 h-6 w-6 text-muted-foreground opacity-50 group-hover:opacity-100 transition-opacity"
+                                                    onClick={ ( e ) =>
+                                                    {
+                                                        e.stopPropagation();
+                                                        form.setValue( 'modifierGroups', [] );
+                                                    } }
+                                                >
+                                                    <X className="h-4 w-4" />
+                                                    <span className="sr-only">Remove modifier</span>
+                                                </Button>
+                                                <p className="text-sm font-semibold pr-6">
+                                                    Các sản phẩm tùy chọn thuộc sản phẩm gốc này.
+                                                </p>
+                                                <div className="mt-2 space-y-1">
+                                                    <p className="text-xs text-muted-foreground">
+                                                        { modifierGroupFields.length } tùy chọn sản phẩm đã được thêm: <span className="font-semibold text-blue-500">{ modifierGroupFields.map( ( group ) => group.name ).join( ', ' ) }</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center justify-center text-gray-500 text-sm text-center min-h-10">
+                                                Chưa có tùy chọn sản phẩm nào được thêm.
+                                            </div>
+                                        )
+                                    }
+                                </CardContent>
+
+
+                            </Card>
                         </div>
+                        { isHasVariants &&
+                            <Card className='shadow-none border-none bg-white grid lg:col-span-3 xl:col-span-3 gap-4'>
+                                <CardHeader className='grid grid-cols-1 md:grid-cols-2 items-center gap-4'>
+                                    <CardTitle>Biến thể sản phẩm</CardTitle>
+                                    <ProductVariantDialog
+                                        isOpen={ isVariantDialogOpen }
+                                        onOpenChange={ setIsVariantDialogOpen }
+                                        initialData={ editingVariantIndex !== null ? variantFields[ editingVariantIndex ] : undefined }
+                                        onSave={ handleSaveVariant }
+                                        isSubmitting={ createProductMutation.isPending }
+                                    >
+                                        <Button variant="outline" size="sm" className="ml-auto" type="button" disabled={ createProductMutation.isPending } onClick={ () =>
+                                        {
+                                            handleOpenVariantDialog();
+                                        } }>
+                                            Thêm biến thể
+                                            <CircleArrowOutUpRight className="ml-2 h-4 w-4" />
+                                        </Button>
+                                    </ProductVariantDialog>
+                                </CardHeader>
+                                <CardContent>
+                                    {
+                                        variantFields.length > 0 ? (
+                                            <div className="space-y-3">
+                                                { variantFields.map( ( variant, index ) => (
+                                                    <div key={ variant.id } className="p-3 border rounded-lg relative group bg-secondary/30 hover:cursor-pointer" onClick={ () => handleOpenVariantDialog( index ) }>
+                                                        <Button
+                                                            type="button"
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            className="absolute top-1 right-1 h-6 w-6 text-muted-foreground opacity-50 group-hover:opacity-100 transition-opacity"
+                                                            onClick={ ( e ) =>
+                                                            {
+                                                                e.stopPropagation();
+                                                                removeVariant( index );
+                                                            } }
+                                                        >
+                                                            <X className="h-4 w-4" />
+                                                            <span className="sr-only">Remove variant</span>
+                                                        </Button>
+                                                        <p className="text-sm font-semibold pr-6">{ variant.name }</p>
+                                                        <div className="mt-2 space-y-1 text-xs text-muted-foreground grid grid-cols-2 gap-x-4">
+                                                            <p>Mã: <span className="font-mono text-blue-500">{ variant.code }</span></p>
+                                                            <p>SKU: <span className="font-mono text-green-500">{ variant.sku }</span></p>
+                                                            <p>Giá: <span className="font-mono font-semibold text-red-500">{ formatPrice( variant.brandPrice ) }</span></p>
+                                                        </div>
+                                                    </div>
+                                                ) ) }
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center justify-center text-gray-500 text-sm text-center min-h-20">
+                                                Chưa có biến thể sản phẩm nào được thêm.
+                                            </div>
+                                        )
+                                    }
+                                </CardContent>
+                            </Card>
+                        }
                     </div>
                 </div>
                 <div className="flex justify-end h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear sticky bottom-0 bg-transparent z-10">

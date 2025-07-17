@@ -96,9 +96,7 @@ export const ModifierGroupSchema = z.object({
   isActive: z.boolean({ message: "Trạng thái hoạt động là bắt buộc" }),
 
   modifierOptions: z
-    .array(z.lazy(() => ModifierOptionSchema), {
-      invalid_type_error: "Danh sách tùy chọn phải là một mảng hợp lệ",
-    })
+    .array(ModifierOptionSchema)
     .nullable()
     .optional(),
 });
@@ -126,6 +124,10 @@ export const CreateProductSchema = z.object({
   categoryId: z.string().uuid({message: "Danh mục không hợp lệ"}),
   productImages: z.array(CreateProductImageSchema).nullable(),
   productVariants: z.array(CreateProductVariantSchema).nullable().optional(),
+  modifierGroups: z.array(z.object({
+    id: z.string().uuid(),
+    name: z.string(),
+  })).nullable().optional(),
 });
 const ProductStatusEnum = z.union([z.literal(0), z.literal(1)]);
 export const UpdateProductSchema = z.object({
