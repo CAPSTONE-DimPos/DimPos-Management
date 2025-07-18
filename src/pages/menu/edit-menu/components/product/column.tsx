@@ -1,6 +1,6 @@
+import { RowSelectCell, RowSelectHeader } from "@/components/table/row-select";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { copyToClipboard, formatPrice } from "@/lib/utils";
 import type { TProductVariantResponse } from "@/schema/product-variant.schema";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -11,22 +11,10 @@ export const columns: ColumnDef<TProductVariantResponse>[] = [
     {
         id: "select",
         header: ( { table } ) => (
-            <Checkbox
-                color=""
-                checked={
-                    table.getIsAllPageRowsSelected() ||
-                    ( table.getIsSomePageRowsSelected() && "indeterminate" )
-                }
-                onCheckedChange={ ( value ) => table.toggleAllPageRowsSelected( !!value ) }
-                aria-label="Select all"
-            />
+            <RowSelectHeader table={ table } />
         ),
         cell: ( { row } ) => (
-            <Checkbox
-                checked={ row.getIsSelected() }
-                onCheckedChange={ ( value ) => row.toggleSelected( !!value ) }
-                aria-label="Select row"
-            />
+            <RowSelectCell row={ row } />
         ),
         enableSorting: false,
         enableHiding: false,

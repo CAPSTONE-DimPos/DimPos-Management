@@ -34,9 +34,6 @@ const EditProductPage = () =>
                         <DocumentFilterIcon className="w-4 h-4 mr-2" />
                         Tùy chọn
                     </TabsTrigger>
-                    { !data?.data.data.isHasVariants && (
-                        <TabsTrigger value="recipe">Công thức</TabsTrigger>
-                    ) }
                 </TabsList>
                 <TabsContent value="overview">
                     <OverviewProductForm
@@ -53,7 +50,6 @@ const EditProductPage = () =>
                         productId={ id as string }
                     />
                 </TabsContent>
-                <TabsContent value="recipe"></TabsContent>
             </Tabs>`
         </div>
     )

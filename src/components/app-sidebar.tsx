@@ -5,12 +5,22 @@ import CollapseIcon from "@/assets/icons/collapse-icon";
 import GeneralAppIcon from "@/assets/icons/general-app-icon";
 import HomeIcon from "@/assets/icons/home-icon";
 // import InventoryReportIcon from "@/assets/icons/inventory-report-icon"
+import DiscountIcon from "@/assets/icons/discount-icon";
+import DocumentFilterIcon from "@/assets/icons/document-filter-icon";
+import IngredientIcon from "@/assets/icons/ingredient-icon";
+import InventoryReportIcon from "@/assets/icons/inventory-report-icon";
 import MenuIcon from "@/assets/icons/menu-icon";
+import NoteIcon from "@/assets/icons/note-icon";
+import ProductComboIcon from "@/assets/icons/product-combo-icon";
 import ProductIcon from "@/assets/icons/product-icon";
+import ProductVariantIcon from "@/assets/icons/product-variant-icon";
 import ReceiptIcon from "@/assets/icons/receipt-icon";
+import ShopIcon from "@/assets/icons/shop-icon";
+import UsersIcon from "@/assets/icons/users-icon";
 import DimposLogo from "@/assets/logo/dimpos-logo";
 import { NavMain } from "@/components/nav-main";
-import {
+import
+{
   Sidebar,
   SidebarContent,
   SidebarHeader,
@@ -18,21 +28,14 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import {
-  PATH_BRAND_DASHBOARD,
+import type { RootState } from "@/redux/store";
+import
+{
   PATH_ADMIN_DASHBOARD,
+  PATH_BRAND_DASHBOARD,
   PATH_STORE_DASHBOARD,
 } from "@/routes/path";
-import NoteIcon from "@/assets/icons/note-icon";
-import DocumentFilterIcon from "@/assets/icons/document-filter-icon";
-import type { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
-import ProductVariantIcon from "@/assets/icons/product-variant-icon";
-import ProductComboIcon from "@/assets/icons/product-combo-icon";
-import DiscountIcon from "@/assets/icons/discount-icon";
-import UsersIcon from "@/assets/icons/users-icon";
-import ShopIcon from "@/assets/icons/shop-icon";
-import InventoryReportIcon from "@/assets/icons/inventory-report-icon";
 
 // This is sample data.
 const brandRoutes = {
@@ -85,6 +88,11 @@ const brandRoutes = {
         url: PATH_BRAND_DASHBOARD.product.menu,
         icon: NoteIcon,
       },
+      {
+        title: "Thành phần",
+        url: PATH_BRAND_DASHBOARD.ingredient.root,
+        icon: IngredientIcon
+      }
     ],
   },
   // ingredientRecipeManagement: {
@@ -296,64 +304,67 @@ const storeRoutes = {
   },
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar ( { ...props }: React.ComponentProps<typeof Sidebar> )
+{
   const { toggleSidebar, open } = useSidebar();
-  const { role } = useSelector((state: RootState) => state.user);
+  const { role } = useSelector( ( state: RootState ) => state.user );
   return (
-    <Sidebar variant="sidebar" collapsible="icon" {...props}>
+    <Sidebar variant="sidebar" collapsible="icon" { ...props }>
       <SidebarHeader>
         <div className="flex items-center justify-between my-4 ml-2">
           <div
             className="cursor-pointer"
-            onClick={open ? undefined : toggleSidebar}
+            onClick={ open ? undefined : toggleSidebar }
           >
             <DimposLogo
-              className={cn(open ? "size-15" : "size-6", "duration-300")}
+              className={ cn( open ? "size-15" : "size-6", "duration-300" ) }
             />
           </div>
-          {open && (
-            <div className="cursor-pointer" onClick={toggleSidebar}>
+          { open && (
+            <div className="cursor-pointer" onClick={ toggleSidebar }>
               <CollapseIcon className="size-6 cursor-pointer text-gray-500 hover:text-gray-700 transition-colors duration-200" />
             </div>
-          )}
+          ) }
         </div>
       </SidebarHeader>
-      {(() => {
-        switch (role) {
+      { ( () =>
+      {
+        switch ( role )
+        {
           case "BrandAdmin":
             return (
               <SidebarContent>
-                <NavMain content={brandRoutes.dashboard} />
-                <NavMain content={brandRoutes.productManagement} />
-                {/* <NavMain content={ brandRoutes.ingredientRecipeManagement } /> */}
-                {/* <NavMain content={ brandRoutes.taxManagement } /> */}
-                <NavMain content={brandRoutes.promotionCampaignManagement} />
-                <NavMain content={brandRoutes.storeManagement} />
-                <NavMain content={brandRoutes.generalManagement} />
+                <NavMain content={ brandRoutes.dashboard } />
+                <NavMain content={ brandRoutes.productManagement } />
+                {/* <NavMain content={ brandRoutes.ingredientRecipeManagement } /> */ }
+                {/* <NavMain content={ brandRoutes.taxManagement } /> */ }
+                <NavMain content={ brandRoutes.promotionCampaignManagement } />
+                <NavMain content={ brandRoutes.storeManagement } />
+                <NavMain content={ brandRoutes.generalManagement } />
               </SidebarContent>
             );
 
           case "StoreAdmin":
             return (
               <SidebarContent>
-                <NavMain content={storeRoutes.dashboard} />
-                <NavMain content={storeRoutes.sales} />
-                <NavMain content={storeRoutes.operation} />
-                <NavMain content={storeRoutes.settings} />
+                <NavMain content={ storeRoutes.dashboard } />
+                <NavMain content={ storeRoutes.sales } />
+                <NavMain content={ storeRoutes.operation } />
+                <NavMain content={ storeRoutes.settings } />
               </SidebarContent>
             );
           case "SystemAdmin":
             return (
               <SidebarContent>
-                <NavMain content={adminRoutes.dashboard} />
-                <NavMain content={adminRoutes.brand} />
-                <NavMain content={adminRoutes.systemManagement} />
+                <NavMain content={ adminRoutes.dashboard } />
+                <NavMain content={ adminRoutes.brand } />
+                <NavMain content={ adminRoutes.systemManagement } />
               </SidebarContent>
             );
           default:
             return null;
         }
-      })()}
+      } )() }
       <SidebarRail />
     </Sidebar>
   );

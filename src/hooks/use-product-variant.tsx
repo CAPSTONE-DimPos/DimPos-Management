@@ -1,4 +1,5 @@
 import { productVariantApi } from "@/apis/product-variant.api";
+import type { TRequestRecipeItem } from "@/schema/product-variant.schema";
 import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 
 interface UseProductVariantParams
@@ -56,6 +57,29 @@ export const useProductVariant = () =>
       queryFn: () => productVariantApi.getProductVariantById( id ),
     } );
   };
+  const getRecipeItemsByProductVariantId = ( id: string, params: UseProductVariantParams = {} ) =>
+  {
+    const {
+      page = params.page || 1,
+      size = params.size || 10,
+      sortBy = params.sortBy || "id",
+      isAsc = params.isAsc || true,
+    } = params;
+    return useQuery( {
+      queryKey: [ "recipeItems", id, {
+        page,
+        size,
+        sortBy,
+        isAsc,
+      } ],
+      queryFn: () => productVariantApi.getRecipeItemsByProductVariantId( id, {
+        page: page,
+        size: size,
+        sortBy: sortBy,
+        isAsc: isAsc,
+      } ),
+    } );
+  }
   const updateProductVariantMutation = useMutation( {
     mutationFn: ( {
       id,
@@ -69,9 +93,47 @@ export const useProductVariant = () =>
       queryClient.invalidateQueries( { queryKey: [ "productVariant", id ] } );
     },
   } );
+
+  const addRecipeItemMutation = useMutation( {
+    mutationFn: ( {
+      productVariantId,
+      data
+    }: {
+      productVariantId: string;
+      data: TRequestRecipeItem;
+    } ) => productVariantApi.addRecipeItemToProductVariant( productVariantId, data ),
+  } );
+
+  const updateRecipeItemMutation = useMutation( {
+    mutationFn: ( {
+      productVariantId,
+      recipeItemId,
+      data
+    }: {
+      productVariantId: string;
+      recipeItemId: string;
+      data: Pick<TRequestRecipeItem, "quantity">;
+    } ) => productVariantApi.updateRecipeItemInProductVariant( productVariantId, recipeItemId, data ),
+  } );
+
+  const deleteRecipeItemMutation = useMutation( {
+    mutationFn: ( {
+      productVariantId,
+      recipeItemId
+    }: {
+      productVariantId: string;
+      recipeItemId: string;
+    } ) => productVariantApi.deleteRecipeItemFromProductVariant( productVariantId, recipeItemId ),
+  } );
+
   return {
     getProductVariants,
     getProductVariantById,
     updateProductVariantMutation,
+
+    getRecipeItemsByProductVariantId,
+    addRecipeItemMutation,
+    updateRecipeItemMutation,
+    deleteRecipeItemMutation,
   };
 };
