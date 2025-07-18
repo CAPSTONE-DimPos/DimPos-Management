@@ -9,14 +9,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { Button } from "@/components/ui/button";
 import { CalendarIcon } from "lucide-react";
 import {
@@ -36,12 +29,11 @@ import { useStoreOrder } from "@/hooks/use-order";
 import { StoreOrderResponseSchema, type TStoreOrderResponse } from "@/schema/order.schema";
 import { getOrderTypeLabel } from "@/types/enums/order-type.enum";
 import {
-  getOrderStatusLabel,
-  OrderStatusEnum,
-  type TOrderStatusEnum,
+  getOrderStatusLabel
 } from "@/types/enums/order-status.enum";
 import { Calendar } from "@/components/ui/calendar";
 import StoreOrderItemTable from "./components/order-item-table";
+import { Textarea } from "@/components/ui/textarea";
 
 
 const StoreOrderDetailPage = () => {
@@ -60,19 +52,19 @@ const StoreOrderDetailPage = () => {
     defaultValues: initialData,
   });
 
- useEffect(() => {
-  if (initialData && !isLoading) {
-    form.reset({
-      ...initialData,
-      createdDate: initialData.createdDate
-        ? new Date(initialData.createdDate)
-        : undefined,
-      pickupTime: initialData.pickupTime
-        ? new Date(initialData.pickupTime)
-        : undefined, 
-    });
-  }
-}, [initialData]);
+  useEffect(() => {
+    if (initialData && !isLoading) {
+      form.reset({
+        ...initialData,
+        createdDate: initialData.createdDate
+          ? new Date(initialData.createdDate)
+          : undefined,
+        pickupTime: initialData.pickupTime
+          ? new Date(initialData.pickupTime)
+          : undefined,
+      });
+    }
+  }, [initialData]);
 
   return (
     <div>
@@ -103,29 +95,20 @@ const StoreOrderDetailPage = () => {
                   <FormField
                     control={form.control}
                     name="status"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Trạng thái</FormLabel>
-                        <Select
-                          value={String(field.value)}
-                          onValueChange={(value) => field.onChange(Number(value))}
-                        >
-                          <FormControl>
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Chọn trạng thái" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {Object.entries(OrderStatusEnum).map(([key, val]) => (
-                              <SelectItem key={key} value={String(val)}>
-                                {getOrderStatusLabel(val as TOrderStatusEnum).label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                    render={({ field }) => {
+                      const { label, colorClassName, backgroundColorName } = getOrderStatusLabel(field.value);
+
+                      return (
+                        <FormItem>
+                          <FormLabel>Trạng thái</FormLabel>
+                          <div
+                            className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${colorClassName} ${backgroundColorName}`}
+                          >
+                            {label}
+                          </div>
+                        </FormItem>
+                      );
+                    }}
                   />
 
                   <FormField
@@ -143,6 +126,7 @@ const StoreOrderDetailPage = () => {
                                   "w-full pl-3 text-left font-normal",
                                   !field.value && "text-muted-foreground"
                                 )}
+                                disabled
                               >
                                 {field.value ? (
                                   format(new Date(field.value), "EEEE, dd 'tháng' MM, yyyy hh:mm aa", {
@@ -189,6 +173,7 @@ const StoreOrderDetailPage = () => {
                                   "w-full pl-3 text-left font-normal",
                                   !field.value && "text-muted-foreground"
                                 )}
+                                disabled
                               >
                                 {field.value ? (
                                   format(new Date(field.value), "EEEE, dd 'tháng' MM, yyyy hh:mm aa", {

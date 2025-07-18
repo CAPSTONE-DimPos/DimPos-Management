@@ -161,11 +161,6 @@ export const PATH_STORE_DASHBOARD = {
     detail: (id: string) => path(ROOTS_STORE_DASHBOARD, `/orders/${id}`),
   },
 
-  account: {
-    root: path(ROOTS_STORE_DASHBOARD, '/accounts'),
-    detail: (id: string) => path(ROOTS_STORE_DASHBOARD, `/accounts/${id}`),
-  },
-
   purchaseRequest: {
     root: path(ROOTS_STORE_DASHBOARD, '/purchase-requests'),
     detail: (id: string) => path(ROOTS_STORE_DASHBOARD, `/purchase-requests/${id}`),
@@ -181,7 +176,9 @@ export const PATH_STORE_DASHBOARD = {
 
   storeSettings: {
     root: path(ROOTS_STORE_DASHBOARD, '/settings'),
-    paymentMethods: path(ROOTS_STORE_DASHBOARD, '/settings/payment-methods'),
-    shiftConfig: path(ROOTS_STORE_DASHBOARD, '/settings/shift-config'),
+    
+  },
+  shiftConfig: {
+  root: path(ROOTS_STORE_DASHBOARD, '/shift-config'),
   },
 };

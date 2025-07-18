@@ -57,11 +57,19 @@ export const useStore = () => {
         queryClient.invalidateQueries({ queryKey: ["stores"] });
       },
     });
+  const getStoreDetail = () =>
+    useQuery({
+      queryKey: ["store-detail"],
+      queryFn: () => storeApi.getStoreDetail(),
+    });
 
+
+    
   return {
     getStores,
     getStoreById,
     createStoreMutation,
     updateStoreMutation,
+    getStoreDetail,
   };
 };

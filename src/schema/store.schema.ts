@@ -42,5 +42,29 @@ export const CreateStoreRequest = z.object({
     password: z.string().max(50, { message: "Mật khẩu không được quá 50 ký tự" }),
 });
 
+export const StoreResponseSchema = z.object({
+    id: z.string().uuid(),
+    code: z.string(),
+    name: z.string(),
+    phone: z.string(),
+    email: z.string().email(),
+    shortName: z.string(),
+    description: z.string(),
+    address: z.string(),
+    latitude: z.string().nullable(),
+    longitude: z.string().nullable(),
+    status: z.number(), 
+    wifiName: z.string().nullable(),
+    wifiPassword: z.string().nullable(),
+    index: z.number().nullable(),
+    localPasscode: z.string().nullable(),
+    managerName: z.string().nullable(),
+    startingStoreCashLending: z.number(),
+    type: z.number(), 
+    createdDate: z.string(), 
+    lastModifiedDate: z.string(),
+});
+
+export type TStoreResponse = z.infer<typeof StoreResponseSchema>;
 export type TStore = z.infer<typeof StoreSchema>;
 export type TCreateStoreRequest = z.infer<typeof CreateStoreRequest>;

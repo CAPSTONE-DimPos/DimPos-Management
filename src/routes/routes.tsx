@@ -18,6 +18,8 @@ import { ErrorBoundary } from "react-error-boundary";
 import { ErrorFallback } from "@/components/error-fallback";
 
 
+
+
 const Loadable = ( Component: ElementType ) => ( props: any ) =>
 {
   return (
@@ -129,8 +131,8 @@ const StoreCreatePage = Loadable(
 
 const OrderListPage = Loadable( lazy( () => import( "@/pages/store-admin/order-store/order-list-page" ) ) );
 const StoreOrderDetailPage = Loadable( lazy( () => import( "@/pages/store-admin/order-store/order-detail-store" ) ) );
-const AccountPage = Loadable( lazy( () => import( "@/pages/store-admin/store-account/account" ) ) );
-
+const StoreOverviewPage = Loadable( lazy( () => import( "@/pages/store-admin/store-overview" ) ) );
+const ShiftConfigPage = Loadable( lazy( () => import( "@/pages/store-admin/shift-config" ) ) );
 const Page404 = Loadable(lazy(() => import("@/pages/page-404")));
 
 export const AppRoutes = () =>
@@ -388,10 +390,6 @@ export const AppRoutes = () =>
         { path: 'orders', element: <OrderListPage /> },
         { path: 'orders/:id', element: <StoreOrderDetailPage /> },
 
-        // Store Accounts
-        { path: "accounts", element: <AccountPage /> },
-        { path: "accounts/:id", element: <GeneralAppPage /> },
-
         // Purchase Requests
         { path: "purchase-requests", element: <GeneralAppPage /> },
         { path: "purchase-requests/:id", element: <GeneralAppPage /> },
@@ -403,9 +401,8 @@ export const AppRoutes = () =>
         { path: "inventory", element: <GeneralAppPage /> },
 
         // Settings
-        { path: "settings", element: <GeneralAppPage /> },
-        { path: "settings/payment-methods", element: <GeneralAppPage /> },
-        { path: "settings/shift-config", element: <GeneralAppPage /> },
+        { path: "settings", element: <StoreOverviewPage /> },
+        { path: "shift-config", element: <ShiftConfigPage /> },
       ],
     },
     {
