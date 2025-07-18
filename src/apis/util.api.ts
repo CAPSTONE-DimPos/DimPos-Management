@@ -26,6 +26,7 @@ export const API_SUFFIX = {
   CAMPAIGN_API: "/campaigns",
   PROMOTION_RULE_API: "/promotion-rules",
   ORDER_API: "/orders",
+  INTERNAL_PRODUCT_API: "/internal-products",
 
   BRAND_API: {
     BRAND: "/brands",      

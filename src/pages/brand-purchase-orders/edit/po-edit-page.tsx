@@ -45,7 +45,7 @@ import {
   StorePurchaseOrder,
   type TStorePurchaseOrder,
 } from "@/schema/internal-purchase-orders.schema";
-import { useInternalPurchaseOrders } from "@/hooks/use-internal-purchase-orders";
+import { useInternalPurchaseOrders } from "@/hooks/use-internal-purchase-order";
 import {
   getStorePurchaseOrderStatusLabel,
   StorePurchaseOrderStatusEnum,

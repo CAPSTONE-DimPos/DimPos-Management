@@ -143,14 +143,14 @@ const brandRoutes = {
         url: PATH_BRAND_DASHBOARD.store.root,
         icon: GeneralAppIcon,
       },
-      // {
-      //   title: "Tài khoản cửa hàng",
-      //   url: PATH_BRAND_DASHBOARD.accountStore.root,
-      //   icon: GeneralAppIcon,
-      // },
       {
         title: "Đơn hàng",
         url: PATH_BRAND_DASHBOARD.order.root,
+        icon: GeneralAppIcon,
+      },
+      {
+        title: "Sản phẩm nhập hàng",
+        url: PATH_BRAND_DASHBOARD.purchasableProduct.root,
         icon: GeneralAppIcon,
       },
       {
@@ -186,7 +186,6 @@ const adminRoutes = {
         url: PATH_ADMIN_DASHBOARD.general.app,
         icon: GeneralAppIcon,
       },
-
     ],
   },
   brand: {
@@ -218,7 +217,7 @@ const adminRoutes = {
         icon: HomeIcon,
       },
     ],
-  }
+  },
 };
 
 const storeRoutes = {

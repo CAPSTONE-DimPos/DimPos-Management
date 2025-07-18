@@ -1,17 +1,17 @@
 import { DataTable } from "@/components/table/data-table";
 import { useQueryParams } from "@/hooks/use-query-params";
-import type { TStore } from "@/schema/store.schema";
-import { columns } from "./store-table/column";
-import { useStore } from "@/hooks/use-store";
+import { columns } from "./purchasable-product-table/columns";
 import { useEffect, useState } from "react";
 import { handleApiError } from "@/lib/error";
+import { useInternalProduct } from "@/hooks/use-internal-product";
+import type { TPurchasableProduct } from "@/schema/purchasable-product.schema";
 
 type Props = {};
 
-const StoreTable = (_: Props) => {
-  const { getStores } = useStore();
+const PurchasableProductTable = (_: Props) => {
+  const { getInternalProducts } = useInternalProduct();
   const { currentPage, pageSize, setPage, setPageSize } = useQueryParams();
-  const [stores, setStores] = useState([] as TStore[]);
+  const [purchasableProducts, setPurchasableProducts] = useState([] as TPurchasableProduct[]);
   const [totalItems, setTotalItems] = useState(0);
   // const data: TStore[] = [
   //     {
@@ -175,7 +175,7 @@ const StoreTable = (_: Props) => {
   //         password: "secure258"
   //     }
   // ];
-  const { data, isLoading, isError, error, } = getStores({
+  const { data, isLoading, isError, error, } = getInternalProducts({
     size: pageSize,
     page: currentPage,
   });
@@ -187,15 +187,15 @@ const StoreTable = (_: Props) => {
         setTotalItems(data?.data.data.total);
     }
     if (data?.data.data) {
-      setStores(data?.data.data.items);
+      setPurchasableProducts(data?.data.data.items);
     } else {
-      setStores([]);
+      setPurchasableProducts([]);
     }
   }, [!isLoading, data]);
   return (
     <DataTable
       isShort={false}
-      data={stores}
+      data={purchasableProducts}
       totalItems={totalItems}
       columns={columns}
       currentPage={currentPage}
@@ -206,4 +206,4 @@ const StoreTable = (_: Props) => {
   );
 };
 
-export default StoreTable;
+export default PurchasableProductTable;

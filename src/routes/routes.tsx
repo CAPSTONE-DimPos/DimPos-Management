@@ -50,8 +50,9 @@ const SystemPaymentMethodPage = Loadable(
 const SystemLogPage = Loadable( lazy( () => import( "@/pages/system-log" ) ) );
 
 //Brand admin
-const BrandOrderEditPage = Loadable(
-  lazy( () => import( "@/pages/brand-order/edit-order" ) )
+const BrandOrderEditPage = Loadable( lazy( () => import( "@/pages/brand-order/edit-order" ) ) );
+const OrderPage = Loadable(
+  lazy( () => import( "@/pages/brand-order/list-order" ) )
 );
 // Product routes
 const CategoryPage = Loadable( lazy( () => import( "@/pages/category" ) ) );
@@ -78,14 +79,27 @@ const ModifierGroupPage = Loadable(
   lazy( () => import( "@/pages/modifier-group/list-modifier-group" ) )
 );
 
+
 const IngredientPage = Loadable( lazy( () => import( "@/pages/ingredient/list-ingredient" ) ) );
 const IngredientCreatePage = Loadable( lazy( () => import( "@/pages/ingredient/create-ingredient" ) ) );
 const IngredientEditPage = Loadable( lazy( () => import( "@/pages/ingredient/edit-ingredient" ) ) );
+const PurchasableProductListPage = Loadable(
+  lazy(() => import("@/pages/purchasable-product/list-purchasable-product"))
+);
+const PurchasableProductCreatePage = Loadable(
+  lazy(() => import("@/pages/purchasable-product/create-purchasable-product"))
+);
+const PurchasableProductEditPage = Loadable(
+  lazy(() => import("@/pages/purchasable-product/edit-purchasable-product"))
+);
 
 const InternalPurchaseOrderPage = Loadable(
   lazy( () => import( "@/pages/brand-purchase-orders/list" ) )
 );
-const InternalPurchaseOrderEditPage = Loadable( lazy( () => import( "@/pages/brand-purchase-orders/edit" ) ) );
+
+const InternalPurchaseOrderEditPage = Loadable(
+  lazy(() => import("@/pages/brand-purchase-orders/edit"))
+);
 
 // Menu routes
 const MenuPage = Loadable( lazy( () => import( "@/pages/menu/list-menu" ) ) );
@@ -110,23 +124,17 @@ const BrandManagementPage = Loadable(
 const CreateBrandPage = Loadable(
   lazy( () => import( "@/pages/system-admin/create/brand-management-create-page" ) )
 );
-const CampaignPage = Loadable( lazy( () => import( "@/pages/campaign" ) ) );
-const CampaignEditPage = Loadable( lazy( () => import( "@/pages/campaign/edit" ) ) );
-const StorePage = Loadable( lazy( () => import( "@/pages/store" ) ) );
-const StoreEditPage = Loadable(
-  lazy( () => import( "@/pages/store/edit-stores/edit-store-page" ) )
+const CampaignPage = Loadable(lazy(() => import("@/pages/campaign")));
+const CampaignEditPage = Loadable(lazy(() => import("@/pages/campaign/edit")));
+const StorePage = Loadable(lazy(() => import("@/pages/store/list-stores")));
+const StoreEditPage = Loadable(lazy(() => import("@/pages/store/edit-store")));
+const StoreCreatePage = Loadable(
+  lazy(() => import("@/pages/store/create-store"))
 );
 
-const OrderListPage = Loadable(
-  lazy( () => import( "@/pages/store-admin/order-store/order-list-page" ) )
-);
-const OrderPage = Loadable(
-  lazy( () => import( "@/pages/brand-order/list-order" ) )
-);
-
-const AccountPage = Loadable(
-  lazy( () => import( "@/pages/store-admin/store-account/account" ) )
-);
+const OrderListPage = Loadable( lazy( () => import( "@/pages/store-admin/order-store/order-list-page" ) ) );
+const StoreOrderDetailPage = Loadable( lazy( () => import( "@/pages/store-admin/order-store/order-detail-store" ) ) );
+const AccountPage = Loadable( lazy( () => import( "@/pages/store-admin/store-account/account" ) ) );
 
 const Page404 = Loadable( lazy( () => import( "@/pages/page-404" ) ) );
 
@@ -278,6 +286,10 @@ export const AppRoutes = () =>
           element: <StoreEditPage />,
         },
         {
+          path: "store/new",
+          element: <StoreCreatePage />,
+        },
+        {
           path: "role",
           element: <RolePage />,
         },
@@ -300,6 +312,18 @@ export const AppRoutes = () =>
         {
           path: "brand-purchase-orders/:id",
           element: <InternalPurchaseOrderEditPage />,
+        },
+        {
+          path: "purchase-products",
+          element: <PurchasableProductListPage />,
+        },
+        {
+          path: "purchase-products/new",
+          element: <PurchasableProductCreatePage />,
+        },
+        {
+          path: "purchase-products/:id",
+          element: <PurchasableProductEditPage />,
         },
       ],
     },
@@ -379,8 +403,8 @@ export const AppRoutes = () =>
         { path: "promotion/:id", element: <GeneralAppPage /> },
 
         // Orders
-        { path: "orders", element: <OrderListPage /> },
-        { path: "orders/:id", element: <GeneralAppPage /> },
+        { path: 'orders', element: <OrderListPage /> },
+        { path: 'orders/:id', element: <StoreOrderDetailPage /> },
 
         // Store Accounts
         { path: "accounts", element: <AccountPage /> },
