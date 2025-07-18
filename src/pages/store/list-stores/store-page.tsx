@@ -1,23 +1,26 @@
-import { Button } from "@/components/ui/button"
-import StoreTable from "./components/store-table"
-import { CirclePlusIcon } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import StoreTable from "./components/store-table";
+import { CirclePlusIcon } from "lucide-react";
+import { Link } from "react-router-dom";
+import { PATH_BRAND_DASHBOARD } from "@/routes/path";
 
-type Props = {}
+type Props = {};
 
-const StorePage = ( _: Props ) =>
-{
-    return (
-        <div>
-            <div className="flex justify-between items-center  mb-6">
-                <h1 className="text-2xl font-bold">Danh sách Cửa hàng</h1>
-                <Button>
-                    <CirclePlusIcon className="h-6 w-6" />
-                    Tạo cửa hàng mới
-                </Button>
-            </div>
-            <StoreTable />
-        </div>
-    )
-}
+const StorePage = (_: Props) => {
+  return (
+    <div>
+      <div className="flex justify-between items-center  mb-6">
+        <h1 className="text-2xl font-bold">Danh sách Cửa hàng</h1>
+        <Link to={PATH_BRAND_DASHBOARD.store.create}>
+          <Button>
+            <CirclePlusIcon className="h-6 w-6" />
+            Tạo cửa hàng mới
+          </Button>
+        </Link>
+      </div>
+      <StoreTable />
+    </div>
+  );
+};
 
-export default StorePage
+export default StorePage;

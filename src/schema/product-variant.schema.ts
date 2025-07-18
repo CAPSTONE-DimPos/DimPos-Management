@@ -15,13 +15,11 @@ export const ProductVariantSchema = z.object({
 
 export const CreateProductVariantSchema = z.object({
     code: z.string({ message: "Mã của biến thể sản phẩm không được bỏ trống" }).min(1, { message: "Mã của biến thể sản phẩm phải có ít nhất 1 ký tự" }).max(50, { message: "Mã của biến thể sản phẩm không được vượt quá 50 ký tự" }),
-    alternativeCode: z.string().max(100, { message: "Mã thay thế của biến thể sản phẩm không được vượt quá 100 ký tự" }).optional(),
     name: z.string({ message: "Tên của biến thể sản phẩm không được bỏ trống" }).min(1, { message: "Tên của biến thể sản phẩm phải có ít nhất 1 ký tự" }).max(200, { message: "Tên của biến thể sản phẩm không được vượt quá 200 ký tự" }),
-    discountPercent: z.number().optional(),
-    discountPrice: z.number().optional(),
-    brandPrice: z.number().min(0, { message: "Giá brand của biến thể sản phẩm không được bỏ trống" }),
-    priceCOGS: z.number().optional(),
-    size: z.string().optional(),
+    description: z.string().nullable(),
+    sku: z.string({message: "Mã SKU của biến thể sản phẩm không được bỏ trống"}).min(1, { message: "Mã SKU của biến thể sản phẩm có ít nhất 1 ký tự" }).max(100, { message: "Mã SKU của biến thể sản phẩm không được vượt quá 100 ký tự" }).optional(),
+    brandPrice: z.number({message: "Giá của biến thể sản phẩm không được bỏ trống"}).min(1, { message: "Giá của biến thể sản phẩm phải lớn hơn 0" }),
+    size: z.string({message: "Kích thước của biến thể sản phẩm không được bỏ trống"}).min(1, { message: "Kích thước của biến thể sản phẩm không được bỏ trống" }).max(50, { message: "Kích thước của biến thể sản phẩm không được vượt quá 50 ký tự" }),
     displayOrder: z.number().int().optional(),
 });
 

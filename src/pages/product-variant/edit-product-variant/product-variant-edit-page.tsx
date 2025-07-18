@@ -6,13 +6,14 @@ import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import
+  {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+  } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
 import ImageNotFound from "@/assets/illustration/image-not-found";
@@ -22,34 +23,37 @@ import { useCategory } from "@/hooks/use-category";
 import { useProduct } from "@/hooks/use-product";
 import { useProductVariant } from "@/hooks/use-product-variant";
 import { handleApiError } from "@/lib/error";
-import {
-  UpdateProductVariantSchema,
-  type TUpdateProductVariantRequest,
-} from "@/schema/product-variant.schema";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import
+  {
+    UpdateProductVariantSchema,
+    type TUpdateProductVariantRequest,
+  } from "@/schema/product-variant.schema";
+import
+  {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+  } from "@/components/ui/form";
 
-const ProductVariantEditPage = () => {
+const ProductVariantEditPage = () =>
+{
   const { id } = useParams<{ id: string }>();
 
   const { getProductVariantById, updateProductVariantMutation } =
     useProductVariant();
   const { getProductById } = useProduct();
   const { getCategoryById } = useCategory();
-  const { data: productVariantData } = getProductVariantById(id as string);
+  const { data: productVariantData } = getProductVariantById( id as string );
   const productId = productVariantData?.data?.data?.productId;
   const categoryId = productVariantData?.data?.data?.categoryId;
-  const { data: productOfVariantData } = getProductById(productId!);
-  const { data: categoryOfVariantData } = getCategoryById(categoryId!);
+  const { data: productOfVariantData } = getProductById( productId! );
+  const { data: categoryOfVariantData } = getCategoryById( categoryId! );
 
-  const form = useForm<TUpdateProductVariantRequest>({
-    resolver: zodResolver(UpdateProductVariantSchema),
+  const form = useForm<TUpdateProductVariantRequest>( {
+    resolver: zodResolver( UpdateProductVariantSchema ),
     defaultValues: {
       code: productVariantData.data.data.code,
       isActive: productVariantData.data.data.isActive,
@@ -58,12 +62,14 @@ const ProductVariantEditPage = () => {
       size: productVariantData.data.data.size,
       sku: productVariantData.data.data.sku,
     },
-  });
+  } );
 
-  useEffect(() => {
-    if (productVariantData?.data?.data) {
+  useEffect( () =>
+  {
+    if ( productVariantData?.data?.data )
+    {
       const productVariant = productVariantData.data.data;
-      form.reset({
+      form.reset( {
         id: productVariant.id,
         code: productVariant.code,
         isActive: productVariant.isActive,
@@ -71,7 +77,7 @@ const ProductVariantEditPage = () => {
         price: productVariant.price,
         size: productVariant.size,
         sku: productVariant.sku,
-      });
+      } );
       // setValue("id", productVariant.id);
       // setValue( "code", productVariant.code );
       // setValue( "name", productVariant.name );
@@ -80,11 +86,12 @@ const ProductVariantEditPage = () => {
       // setValue( "size", productVariant.size );
       // setValue( "sku", productVariant.sku );
     }
-  }, [productVariantData]);
+  }, [ productVariantData ] );
 
   const onSubmit: SubmitHandler<TUpdateProductVariantRequest> = async (
     data
-  ) => {
+  ) =>
+  {
     const payload = {
       code: data.code,
       name: data.name,
@@ -94,15 +101,17 @@ const ProductVariantEditPage = () => {
       size: data.size,
     };
 
-    try {
-      await updateProductVariantMutation.mutateAsync({
+    try
+    {
+      await updateProductVariantMutation.mutateAsync( {
         id: productVariantData.data.data.id,
         data: payload,
-      });
-      toast.success("Cập nhật chiến dịch thành công!");
+      } );
+      toast.success( "Cập nhật chiến dịch thành công!" );
       // navigate(-1);
-    } catch (error) {
-      handleApiError(error);
+    } catch ( error )
+    {
+      handleApiError( error );
     }
   };
 
@@ -111,12 +120,13 @@ const ProductVariantEditPage = () => {
       <div className="mb-6">
         <h1 className="text-2xl font-semibold">Chi tiết biến thể sản phẩm</h1>
       </div>
-      <Form {...form}>
+      <Form { ...form }>
         <form
           className="relative"
-          onSubmit={form.handleSubmit(onSubmit, (errors) => {
-            console.error("Form validation errors:", errors);
-          })}
+          onSubmit={ form.handleSubmit( onSubmit, ( errors ) =>
+          {
+            console.error( "Form validation errors:", errors );
+          } ) }
         >
           <div className="container pb-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
@@ -125,22 +135,23 @@ const ProductVariantEditPage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <FormField
-                        control={form.control}
+                        control={ form.control }
                         name="id"
-                        render={({ field }) => {
+                        render={ ( { field } ) =>
+                        {
                           return (
                             <FormItem>
                               <FormLabel>Mã biến thể *</FormLabel>
                               <FormControl>
                                 <Input
-                                  {...field}
+                                  { ...field }
                                   placeholder="Nhập mã biến thể"
                                 />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           );
-                        }}
+                        } }
                       />
                       {/* <Input
                         {...register("code")}
@@ -154,22 +165,23 @@ const ProductVariantEditPage = () => {
                     </div>
                     <div>
                       <FormField
-                        control={form.control}
+                        control={ form.control }
                         name="name"
-                        render={({ field }) => {
+                        render={ ( { field } ) =>
+                        {
                           return (
                             <FormItem>
                               <FormLabel>Tên biến thể *</FormLabel>
                               <FormControl>
                                 <Input
-                                  {...field}
+                                  { ...field }
                                   placeholder="Nhập tên biến thể"
                                 />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           );
-                        }}
+                        } }
                       />
                       {/* <Input
                         {...register("name")}
@@ -183,23 +195,24 @@ const ProductVariantEditPage = () => {
                     </div>
                     <div>
                       <FormField
-                        control={form.control}
+                        control={ form.control }
                         name="sku"
-                        render={({ field }) => {
+                        render={ ( { field } ) =>
+                        {
                           return (
                             <FormItem>
                               <FormLabel>SKU*</FormLabel>
                               <FormControl>
                                 <Input
-                                  {...field}
+                                  { ...field }
                                   placeholder="Nhập SKU biến thể"
-                                  value={field.value ?? ""}
+                                  value={ field.value ?? "" }
                                 />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           );
-                        }}
+                        } }
                       />
                       {/* <Input
                         {...register("sku")}
@@ -213,19 +226,20 @@ const ProductVariantEditPage = () => {
                     </div>
                     <div>
                       <FormField
-                        control={form.control}
+                        control={ form.control }
                         name="price"
-                        render={({ field }) => {
+                        render={ ( { field } ) =>
+                        {
                           return (
                             <FormItem>
                               <FormLabel>Giá gốc *</FormLabel>
                               <FormControl>
-                                <Input {...field} placeholder="Nhập giá gốc" />
+                                <Input { ...field } placeholder="Nhập giá gốc" onChange={ ( e ) => { field.onChange( Number( e.target.value ) ); } } />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           );
-                        }}
+                        } }
                       />
                       {/* <label className="block text-sm font-medium">
                         Giá gốc *
@@ -242,23 +256,24 @@ const ProductVariantEditPage = () => {
                     </div>
                     <div>
                       <FormField
-                        control={form.control}
+                        control={ form.control }
                         name="size"
-                        render={({ field }) => {
+                        render={ ( { field } ) =>
+                        {
                           return (
                             <FormItem>
                               <FormLabel>Kích cỡ *</FormLabel>
                               <FormControl>
                                 <Input
-                                  {...field}
+                                  { ...field }
                                   placeholder="Nhập kích cỡ"
-                                  value={field.value ?? ""}
+                                  value={ field.value ?? "" }
                                 />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           );
-                        }}
+                        } }
                       />
                       {/* <label className="block text-sm font-medium">
                         Kích cỡ *
@@ -275,7 +290,7 @@ const ProductVariantEditPage = () => {
                         Sản phẩm
                       </label>
                       <Input
-                        value={productOfVariantData.data.data.name ?? ""}
+                        value={ productOfVariantData.data.data.name ?? "" }
                         placeholder="Nhập kích cỡ"
                         disabled
                       />
@@ -285,7 +300,7 @@ const ProductVariantEditPage = () => {
                         Danh mục
                       </label>
                       <Input
-                        value={categoryOfVariantData?.data.data.name ?? ""}
+                        value={ categoryOfVariantData?.data.data.name ?? "" }
                         placeholder="Nhập kích cỡ"
                         disabled
                       />
@@ -295,24 +310,25 @@ const ProductVariantEditPage = () => {
                 <CardFooter className="flex flex-row items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <FormField
-                      control={form.control}
+                      control={ form.control }
                       name="isActive"
-                      render={({ field }) => {
+                      render={ ( { field } ) =>
+                      {
                         return (
                           <FormItem>
                             <FormLabel>Đã áp dụng tại cửa hàng</FormLabel>
                             <FormControl>
                               <Switch
-                                checked={!!field.value}
-                                onCheckedChange={(checked) =>
-                                  field.onChange(checked)
+                                checked={ !!field.value }
+                                onCheckedChange={ ( checked ) =>
+                                  field.onChange( checked )
                                 }
                               />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         );
-                      }}
+                      } }
                     />
                     {/* <span className="text-sm font-medium">
                       Đã áp dụng tại cửa hàng
@@ -349,33 +365,33 @@ const ProductVariantEditPage = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {(productOfVariantData.data?.data?.productImages
-                        ?.length ?? 0) > 0 ? (
+                      { ( productOfVariantData.data?.data?.productImages
+                        ?.length ?? 0 ) > 0 ? (
                         <div>
                           <h4 className="text-sm font-medium mb-2">
                             Ảnh hiện tại
                           </h4>
                           <div className="grid grid-cols-2 gap-4">
-                            {productOfVariantData.data?.data?.productImages?.map(
-                              (field, index) => (
-                                <div key={field.id} className="relative">
+                            { productOfVariantData.data?.data?.productImages?.map(
+                              ( field, index ) => (
+                                <div key={ field.id } className="relative">
                                   <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
                                     <img
-                                      src={field.imageUrl}
-                                      alt={`Existing ${index}`}
+                                      src={ field.imageUrl }
+                                      alt={ `Existing ${ index }` }
                                       className="w-full h-full object-cover"
                                     />
                                   </div>
                                 </div>
                               )
-                            )}
+                            ) }
                           </div>
                         </div>
                       ) : (
                         <div className="aspect-square rounded-lg overflow-hidden flex items-center justify-center">
                           <ImageNotFound />
                         </div>
-                      )}
+                      ) }
                     </div>
                   </CardContent>
                 </Card>

@@ -96,7 +96,7 @@ const BrandOrderEditPage = () => {
       <div className="grid grid-cols-1 gap-4 mb-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit, (errors) => console.log(errors))}>
-            <Card>
+            <Card className="bg-neutral-0">
               <CardHeader className="font-medium text-xl">Tổng quan</CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-6">
@@ -353,7 +353,7 @@ const BrandOrderEditPage = () => {
         </Form>
       </div>
       <div>
-        <Card>
+        <Card className="bg-neutral-0">
           <CardHeader className="font-medium text-xl">
             Sản phẩm trong đơn hàng
           </CardHeader>

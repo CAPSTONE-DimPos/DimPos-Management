@@ -128,12 +128,15 @@ const StoreMenu = ( { brandMenuId, storeIds }: Props ) =>
 
     return (
         <Form { ...form }>
-            <form onSubmit={ form.handleSubmit( onSubmit ) }>
+            <form onSubmit={ form.handleSubmit( onSubmit, ( error ) =>
+            {
+                console.error( error );
+            } ) }>
                 <ConfirmDialog
                     open={ isOpen }
                     onOpenChange={ ( open ) => dispatch( handleChangeModalState( open ) ) }
-                    title="Xác nhận cập nhật các cửa hàng sử dụng thực đơn"
-                    description="Bạn có chắc chắn muốn cập nhật các cửa hàng sử dụng thực đơn này không?"
+                    title="Xác nhận cập nhật phiếu yêu cầu nhập hàng"
+                    description="Bạn có chắc chắn muốn cập nhật phiếu yêu cầu nhập hàng này không?"
                     actionLabel="Xác nhận"
                     onAction={ handleConfirmSubmit } // Pass the submit handler
                 />

@@ -71,24 +71,22 @@ export const columns: ColumnDef<TProductVariantResponse>[] = [
     },
   },
   {
-    accessorKey: "status",
+    accessorKey: "isActive",
     header: () => (
       <div className="text-center font-semibold text-base">Trạng Thái</div>
     ),
     cell: (info) => {
-      const status = info.getValue() as number;
-      const isActive = status === 0;
-
+      const status = info.getValue() as boolean;
       return (
         <div className="flex justify-center">
           <div
             className={`flex items-center gap-1.5 px-3 py-1 rounded text-sm ${
-              isActive
+              status
                 ? "bg-green-mint-10 text-green-mint-100"
                 : "bg-neutral-10 text-neutral-100"
             }`}
           >
-            {isActive ? <>Kích hoạt</> : <>Không kích hoạt</>}
+            {status ? <>Kích hoạt</> : <>Không kích hoạt</>}
           </div>
           {/* <Badge
             variant={isActive ? "default" : "destructive"}

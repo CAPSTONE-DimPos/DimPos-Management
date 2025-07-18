@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ProductVariantSchema } from "./product-variant.schema";
+import { CreateProductVariantSchema, ProductVariantSchema } from "./product-variant.schema";
 
 export const allowedExtensions = [".jpeg", ".png", ".jpg", ".gif", ".bmp", ".webp"];
 export const ProductSchema = z.object({
@@ -96,9 +96,7 @@ export const ModifierGroupSchema = z.object({
   isActive: z.boolean({ message: "Trạng thái hoạt động là bắt buộc" }),
 
   modifierOptions: z
-    .array(z.lazy(() => ModifierOptionSchema), {
-      invalid_type_error: "Danh sách tùy chọn phải là một mảng hợp lệ",
-    })
+    .array(ModifierOptionSchema)
     .nullable()
     .optional(),
 });
@@ -117,14 +115,19 @@ export const CreateProductImageSchema = z.object({
 // const SaleType = z.union([z.literal(0), z.literal(1)]);
 export const CreateProductSchema = z.object({
   code: z.string({ message: "Mã của sản phẩm không được bỏ trống" }).min(1, { message: "Mã của sản phẩm phải có ít nhất 1 ký tự" }).max(50, { message: "Mã của sản phẩm không được vượt quá 50 ký tự  " }),
-  sku: z.string({message: "Mã SKU của sản phẩm không được bỏ trống"}).min(1, { message: "Mã SKU của sản phẩm phải có ít nhất 1 ký tự" }).max(100, { message: "SKU của sản phẩm không được vượt quá 100 ký tự" }).optional(),
+  sku: z.string({message: "Mã SKU của sản phẩm không được bỏ trống"}).min(1, { message: "Mã SKU của sản phẩm phải có ít nhất 1 ký tự" }).max(100, { message: "SKU của sản phẩm không được vượt quá 100 ký tự" }),
   name: z.string({ message: "Tên của sản phẩm không được bỏ trống" }).min(1, { message: "Tên của sản phẩm phải có ít nhất 1 ký tự" }).max(200, { message: "Tên của sản phẩm không được vượt quá 200 ký tự" }),
-  price: z.number().min(0, { message: "Giá của sản phẩm không được bỏ trống" }),
+  price: z.number({message: "Vui lòng nhập giá là số"}).min(0, { message: "Giá của sản phẩm không được bỏ trống" }),
   description: z.string({ message: "Mô tả của sản phẩm không được bỏ trống" }).min(1, { message: "Mô tả của sản phẩm phải có ít nhất 1 ký tự" }).max(1000, { message: "Mô tả của sản phẩm không được vượt quá 1000 ký tự" }),
-  displayOrder: z.number().int().optional(),
+  displayOrder: z.number().int().min(0, { message: "Thứ tự hiển thị phải lớn hơn hoặc bằng 0" }).optional(),
   note: z.string().nullable().optional(),
-  categoryId: z.string().uuid(),
+  categoryId: z.string().uuid({message: "Danh mục không hợp lệ"}),
   productImages: z.array(CreateProductImageSchema).nullable(),
+  productVariants: z.array(CreateProductVariantSchema).nullable().optional(),
+  modifierGroups: z.array(z.object({
+    id: z.string().uuid(),
+    name: z.string(),
+  })).nullable().optional(),
 });
 const ProductStatusEnum = z.union([z.literal(0), z.literal(1)]);
 export const UpdateProductSchema = z.object({

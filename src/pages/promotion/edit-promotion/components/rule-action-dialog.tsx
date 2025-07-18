@@ -19,7 +19,7 @@ interface RuleConditionDialogProps
     isOpen: boolean;
     onOpenChange: ( open: boolean ) => void;
     initialData?: TRuleActions;
-    onSave: ( data: TRuleActions ) => void;
+    onSave: ( data: TRuleActions ) => Promise<void>;
     isSubmitting?: boolean;
 }
 
@@ -32,6 +32,7 @@ const RuleActionDialog = ( {
     onSave,
 }: RuleConditionDialogProps ) =>
 {
+    console.log( "RuleActionDialog initialData:", initialData );
     const {
         currentPage,
         pageSize,
@@ -107,7 +108,7 @@ const RuleActionDialog = ( {
         }
     }, [ isOpen, initialData, form ] );
     const watchedActionType = form.watch( 'actionType' );
-    const handleFormSubmit = ( data: TEditRuleAction ) =>
+    const handleFormSubmit = async ( data: TEditRuleAction ) =>
     {
         console.log( "Form submitted with data:", data );
         if ( data.actionType === 0 )
@@ -216,7 +217,7 @@ const RuleActionDialog = ( {
             data.value = numericValue.toString();
         }
         form.reset();
-        onSave( {
+        await onSave( {
             ...data,
             targetCriteriaForItemAction: data.targetCriteriaForItemAction ? JSON.stringify( data.targetCriteriaForItemAction ) : null,
         } ); // Call generic save handler
@@ -371,7 +372,7 @@ const RuleActionDialog = ( {
                         />
                         {
                             ( watchedActionType === 2 || watchedActionType === 3 || watchedActionType === 4 || watchedActionType === 5 || watchedActionType === 6 ) &&
-                            <>
+                            <div className='space-x-2'>
                                 <label className="block text-sm font-medium">
                                     Chọn sản phẩm áp dụng *
                                 </label>
@@ -395,13 +396,13 @@ const RuleActionDialog = ( {
                                     rowSelection={ rowSelection }
                                     onRowSelectionChange={ handleRowSelectionChange }
                                 />
-                            </>
+                            </div>
                         }
                     </form>
                 </Form>
                 <DialogFooter>
                     <Button type="button" variant="outline" onClick={ () => onOpenChange( false ) }>Hủy</Button>
-                    <Button type="button" form="add-condition-form" disabled={ isSubmitting } onClick={ form.handleSubmit( handleFormSubmit ) }>Thêm điều kiện</Button>
+                    <Button type="button" form="add-condition-form" disabled={ isSubmitting } onClick={ form.handleSubmit( handleFormSubmit ) }>Cập nhập</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

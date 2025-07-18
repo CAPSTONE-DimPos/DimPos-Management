@@ -17,7 +17,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 
-const EditStorePage = () => {
+type Props = {
+  initialData: TStore;
+}
+
+const EditStorePage = ({initialData}: Props) => {
   //   const { id } = useParams();
   //   const { getStoreById } = useStore();
   // const { data, isError, error } = getStoreById( id as string );
@@ -27,27 +31,27 @@ const EditStorePage = () => {
   //     handleApiError( error );
   // }
 
-  const initialData: TStore = {
-    id: "550e8400-e29b-41d4-a716-446655440001",
-    code: "HN001",
-    name: "Cửa hàng Hà Nội Đống Đa",
-    phone: "0243456789",
-    email: "dongda@store.com",
-    shortName: "HN-DD",
-    description:
-      "Cửa hàng flagship tại trung tâm Hà Nội, phục vụ khách hàng cao cấp",
-    address: "123 Đường Láng, Đống Đa, Hà Nội",
-    latitude: "21.0245",
-    longitude: "105.8412",
-    wifiName: "Store_HN001_Wifi",
-    wifiPassword: "hanoistore123",
-    index: 1,
-    localPasscode: "HN001PASS",
-    managerName: "Nguyễn Văn An",
-    type: 1,
-    username: "hn001_admin",
-    password: "secure123",
-  };
+  // const initialData: TStore = {
+  //   id: "550e8400-e29b-41d4-a716-446655440001",
+  //   code: "HN001",
+  //   name: "Cửa hàng Hà Nội Đống Đa",
+  //   phone: "0243456789",
+  //   email: "dongda@store.com",
+  //   shortName: "HN-DD",
+  //   description:
+  //     "Cửa hàng flagship tại trung tâm Hà Nội, phục vụ khách hàng cao cấp",
+  //   address: "123 Đường Láng, Đống Đa, Hà Nội",
+  //   latitude: "21.0245",
+  //   longitude: "105.8412",
+  //   wifiName: "Store_HN001_Wifi",
+  //   wifiPassword: "hanoistore123",
+  //   index: 1,
+  //   localPasscode: "HN001PASS",
+  //   managerName: "Nguyễn Văn An",
+  //   type: 1,
+  //   username: "hn001_admin",
+  //   password: "secure123",
+  // };
   const form = useForm<TStore>({
     resolver: zodResolver(StoreSchema),
     defaultValues: initialData,
@@ -366,7 +370,7 @@ const EditStorePage = () => {
         </form>
       </Form>
       <div>
-        <Card>
+        <Card className="shadow-none border-none bg-white">
           <CardHeader>Các tài khoản</CardHeader>
           <CardContent>
             

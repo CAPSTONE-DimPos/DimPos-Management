@@ -60,9 +60,9 @@ export const PATH_BRAND_DASHBOARD = {
     root: path(ROOTS_BRAND_DASHBOARD, '/recipe'),
   },
   internalPurchaseOrders: {
-    root: path(ROOTS_BRAND_DASHBOARD, '/internal-purchase-orders'),
-    create: path(ROOTS_BRAND_DASHBOARD, '/internal-purchase-orders/create'),
-    detail: (id: string) => path(ROOTS_BRAND_DASHBOARD, `/internal-purchase-orders/${id}`),
+    root: path(ROOTS_BRAND_DASHBOARD, '/brand-purchase-orders'),
+    create: path(ROOTS_BRAND_DASHBOARD, '/brand-purchase-orders/create'),
+    detail: (id: string) => path(ROOTS_BRAND_DASHBOARD, `/brand-purchase-orders/${id}`),
   },
   promotion: {
     root: path(ROOTS_BRAND_DASHBOARD, '/promotion'),
@@ -74,7 +74,11 @@ export const PATH_BRAND_DASHBOARD = {
     createCampaign: path(ROOTS_BRAND_DASHBOARD, '/campaign/new'),
     editCampaign: (id: string) => path(ROOTS_BRAND_DASHBOARD, `/campaign/${id}`),
   },
-
+  purchasableProduct: {
+    root: path(ROOTS_BRAND_DASHBOARD, '/purchase-products'),
+    create: path(ROOTS_BRAND_DASHBOARD, '/purchase-products/new'),
+    edit: (id: string) => path(ROOTS_BRAND_DASHBOARD, `/purchase-products/${id}`),
+  },
   accountStore: {
     root: path(ROOTS_BRAND_DASHBOARD, '/store-account'),
   },
@@ -114,7 +118,7 @@ export const PATH_ADMIN_DASHBOARD = {
     edit: (id: string) => path(ROOTS_ADMIN_DASHBOARD, `/brand/${id}`),
   },
 
-  brandAccount:{
+  brandAccount: {
     root: path(ROOTS_ADMIN_DASHBOARD, "/brand-account"),
     create: path(ROOTS_ADMIN_DASHBOARD, "/brand-account/new"),
     edit: (id: string) => path(ROOTS_ADMIN_DASHBOARD, `/brand-account/${id}`),

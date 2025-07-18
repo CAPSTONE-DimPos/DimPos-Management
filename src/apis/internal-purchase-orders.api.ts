@@ -1,26 +1,24 @@
-// import { apiRequest } from "@/lib/http";
-// import { API_SUFFIX } from "./util.api";
+import { apiRequest } from "@/lib/http";
+import { API_SUFFIX } from "./util.api";
 
-// import type {
-//   TStorePurchaseOrder,
-//   TStorePurchaseOrderListItem,
-//   TCreateStorePurchaseOrderRequest,
-//   TUpdateStorePurchaseOrderRequest,
-// } from "@/schema/internal-purchase-orders.schema";
-// import type { BaseResponse, PaginationResponse } from "@/types/response.type";
+import type {
+TStorePurchaseOrder,
+TUpdateStorePurchaseOrder
+} from "@/schema/internal-purchase-orders.schema";
+import type { BaseResponse, PaginationResponse } from "@/types/response.type";
 
 // // ==== INTERNAL PURCHASE ORDERS ====
 
-// const getList = async (params?: any) =>
-//   await apiRequest.inventory.get<BaseResponse<PaginationResponse<TStorePurchaseOrderListItem>>>(
-//     API_SUFFIX.INTERNAL_PURCHASE_ORDER_API,
-//     { params }
-//   );
+const getListPurchaseOrder = async (params?: any) =>
+  await apiRequest.order.get<BaseResponse<PaginationResponse<TStorePurchaseOrder>>>(
+    API_SUFFIX.INTERNAL_PURCHASE_ORDER_API,
+    { params }
+  );
 
-// const getById = async (id: string) =>
-//   await apiRequest.inventory.get<BaseResponse<TStorePurchaseOrder>>(
-//     `${API_SUFFIX.INTERNAL_PURCHASE_ORDER_API}/${id}`
-//   );
+const getPurchaseOrderById = async (id: string) =>
+  await apiRequest.order.get<BaseResponse<TStorePurchaseOrder>>(
+    `${API_SUFFIX.INTERNAL_PURCHASE_ORDER_API}/${id}`
+  );
 
 // const create = async (data: TCreateStorePurchaseOrderRequest) =>
 //   await apiRequest.inventory.post<BaseResponse<TStorePurchaseOrder>>(
@@ -28,11 +26,11 @@
 //     data
 //   );
 
-// const update = async (id: string, data: Partial<TUpdateStorePurchaseOrderRequest>) =>
-//   await apiRequest.inventory.patch<BaseResponse<TStorePurchaseOrder>>(
-//     `${API_SUFFIX.INTERNAL_PURCHASE_ORDER_API}/${id}`,
-//     data
-//   );
+const update = async (id: string, data: Partial<TUpdateStorePurchaseOrder>) =>
+  await apiRequest.order.put<BaseResponse<TUpdateStorePurchaseOrder>>(
+    `${API_SUFFIX.INTERNAL_PURCHASE_ORDER_API}/${id}`,
+    data
+  );
 
 // const requestCancel = async (id: string, reason: string) =>
 //   await apiRequest.inventory.patch<BaseResponse<TStorePurchaseOrder>>(
@@ -40,12 +38,12 @@
 //     { reason }
 //   );
 
-// // ==== EXPORT COMBINED API ====
+// ==== EXPORT COMBINED API ====
 
-// export const internalPOApi = {
-//   getList,
-//   getById,
+export const internalPOApi = {
+  getListPurchaseOrder,
+  getPurchaseOrderById,
 //   create,
-//   update,
+  update,
 //   requestCancel,
-// };
+};

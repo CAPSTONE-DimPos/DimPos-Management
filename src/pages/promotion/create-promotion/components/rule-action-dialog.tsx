@@ -84,7 +84,6 @@ const RuleActionDialog = ( {
             actionType: 0,
             value: "",
             targetCriteriaForItemAction: null,
-            maxDiscountAmountForPercentage: 0,
         }
     } );
 
@@ -96,7 +95,6 @@ const RuleActionDialog = ( {
                 actionType: 0,
                 value: "",
                 targetCriteriaForItemAction: null,
-                maxDiscountAmountForPercentage: 0,
             } );
         }
     }, [ isOpen, initialData, form ] );
@@ -351,7 +349,7 @@ const RuleActionDialog = ( {
                                     <FormControl>
                                         <Input
                                             disabled={ isSubmitting }
-                                            placeholder=""
+                                            placeholder={ watchedActionType === 6 ? "Nhập số lượng tặng" : watchedActionType === 0 || watchedActionType === 2 || watchedActionType === 3 ? "Nhập phần trăm giảm giá" : "Nhập giá tiền giảm giá" }
                                             { ...field }
                                             value={ field.value ?? '' }
                                         />
@@ -362,7 +360,7 @@ const RuleActionDialog = ( {
                         />
                         {
                             ( watchedActionType === 2 || watchedActionType === 3 || watchedActionType === 4 || watchedActionType === 5 || watchedActionType === 6 ) &&
-                            <>
+                            <div className="space-x-2">
                                 <label className="block text-sm font-medium">
                                     Chọn sản phẩm áp dụng *
                                 </label>
@@ -386,7 +384,7 @@ const RuleActionDialog = ( {
                                     rowSelection={ rowSelection }
                                     onRowSelectionChange={ handleRowSelectionChange }
                                 />
-                            </>
+                            </div>
                         }
                     </form>
                 </Form>

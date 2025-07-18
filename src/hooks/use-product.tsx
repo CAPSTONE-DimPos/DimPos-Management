@@ -96,7 +96,7 @@ export const useProduct = () =>
             isAsc = params.isAsc || true,
         } = params;
 
-        return useSuspenseQuery( {
+        return useQuery( {
             queryKey: [
                 "modifier-groups",
                 {
