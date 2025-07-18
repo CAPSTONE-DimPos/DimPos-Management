@@ -5,12 +5,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { PATH_BRAND_DASHBOARD } from "@/routes/path";
-import type { TStore } from "@/schema/store.schema";
+import type { TPurchasableProduct } from "@/schema/purchasable-product.schema";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export const columns: ColumnDef<TStore>[] = [
+export const columns: ColumnDef<TPurchasableProduct>[] = [
   {
     accessorKey: "index",
     header: () => (
@@ -32,21 +32,21 @@ export const columns: ColumnDef<TStore>[] = [
     size: 60,
   },
   {
-    accessorKey: "code",
-    header: () => <div className="font-semibold text-base">Mã cửa hàng</div>,
+    accessorKey: "sku",
+    header: () => (
+      <div className="font-semibold text-base text-center">SKU</div>
+    ),
     cell: ({ row }) => {
       const code = row.getValue("code") as string;
       return (
-        <div className={`font-normal font-medium text-blueberry-100`}>
-          {code}
-        </div>
+        <div className={`font-normal font-medium text-center`}>{code}</div>
       );
     },
     size: 120,
   },
   {
     accessorKey: "name",
-    header: () => <div className="font-semibold text-base">Tên cửa hàng</div>,
+    header: () => <div className="font-semibold text-base">Tên sản phẩm</div>,
     cell: ({ row }) => {
       const name = row.getValue("name") as string;
       // const shortName = row.original.shortName;
@@ -60,33 +60,49 @@ export const columns: ColumnDef<TStore>[] = [
     size: 100,
   },
   {
-    accessorKey: "phone",
-    header: () => <div className="font-semibold text-base">Số điện thoại</div>,
+    accessorKey: "price",
+    header: () => (
+      <div className="font-semibold text-base text-center">Giá nhập</div>
+    ),
     cell: ({ row }) => {
-      const phone = row.getValue("phone") as string;
-      return <div className="font-normal text-gray-700">{phone}</div>;
-    },
-    size: 130,
-  },
-  {
-    accessorKey: "email",
-    header: () => <div className="font-semibold text-base">Email</div>,
-    cell: ({ row }) => {
-      const email = row.getValue("email") as string;
-      return <div className="font-normal text-gray-700">{email}</div>;
-    },
-    size: 130,
-  },
-  {
-    accessorKey: "managerName",
-    header: () => <div className="font-semibold text-base">Quản lý</div>,
-    cell: ({ row }) => {
-      const managerName = row.getValue("managerName") as string;
+      const price = row.getValue("price") as number;
       return (
-        <div className="text-gray-900">
-          {managerName || (
-            <span className="text-gray-400 italic">Chưa phân công</span>
-          )}
+        <div className="font-normal text-gray-700 text-center">{price}</div>
+      );
+    },
+    size: 130,
+  },
+  {
+    accessorKey: "displayOrder",
+    header: () => (
+      <div className="font-semibold text-base text-center">Độ ưu tiên</div>
+    ),
+    cell: ({ row }) => {
+      const displayOrder = row.getValue("displayOrder") as number;
+      return (
+        <div className="font-normal text-gray-700 text-center">
+          {displayOrder}
+        </div>
+      );
+    },
+    size: 130,
+  },
+  {
+    accessorKey: "isActive",
+    header: () => <div className="font-semibold text-base text-center">Trạng thái</div>,
+    cell: ({ row }) => {
+      const isActive = row.getValue("isActive") as boolean;
+      return (
+        <div className="flex justify-center">
+          <div
+            className={`flex items-center gap-1.5 px-3 py-1 rounded text-sm ${
+              isActive
+                ? "bg-green-mint-10 text-green-mint-100"
+                : "bg-neutral-10 text-neutral-100"
+            }`}
+          >
+            {isActive ? <>Kích hoạt</> : <>Không kích hoạt</>}
+          </div>
         </div>
       );
     },
@@ -98,7 +114,7 @@ export const columns: ColumnDef<TStore>[] = [
       <div className="text-center font-semibold text-base">Thao tác</div>
     ),
     cell: ({ row }) => {
-      const store = row.original;
+      const purchasableProduct = row.original;
       const navigate = useNavigate();
 
       return (
@@ -109,7 +125,7 @@ export const columns: ColumnDef<TStore>[] = [
                 <div
                   className="group relative flex items-center cursor-pointer"
                   onClick={() =>
-                    navigate(PATH_BRAND_DASHBOARD.store.edit(store.id))
+                    navigate(PATH_BRAND_DASHBOARD.purchasableProduct.edit(purchasableProduct.id))
                   }
                 >
                   <Eye className="h-4 w-4 hover:cursor-pointer" />

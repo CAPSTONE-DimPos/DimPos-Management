@@ -1,6 +1,5 @@
 // src/pages/internal-purchase-orders/list/components/column.tsx
 
-import { Badge } from "@/components/ui/badge";
 import {
   Tooltip,
   TooltipContent,

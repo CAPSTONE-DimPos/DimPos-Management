@@ -1,4 +1,5 @@
 import { storeApi } from "@/apis/store.api";
+import type { TCreateStoreRequest } from "@/schema/store.schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface UseStoreParams {
@@ -40,28 +41,27 @@ export const useStore = () => {
       queryFn: () => storeApi.getStoreById(id),
     });
 
-  const createStore = () =>
-    useMutation({
-      mutationFn: (data: FormData) => storeApi.createStoreMutation(data),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["Stores"] });
-      },
-    });
+  const createStoreMutation = useMutation({
+    mutationFn: (data: TCreateStoreRequest) => storeApi.createStoreMutation(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["store"] });
+    },
+  });
 
-  const updateStore = () =>
+  const updateStoreMutation = () =>
     useMutation({
       mutationFn: (params: { id: string; data: FormData }) =>
         storeApi.updateStoreMutation(params.id, params.data),
       onSuccess: (_, { id }) => {
-        queryClient.invalidateQueries({ queryKey: ["Store", id] });
-        queryClient.invalidateQueries({ queryKey: ["Stores"] });
+        queryClient.invalidateQueries({ queryKey: ["store", id] });
+        queryClient.invalidateQueries({ queryKey: ["stores"] });
       },
     });
 
   return {
     getStores,
     getStoreById,
-    createStore,
-    updateStore,
+    createStoreMutation,
+    updateStoreMutation,
   };
 };
