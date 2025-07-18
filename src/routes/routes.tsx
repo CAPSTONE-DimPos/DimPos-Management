@@ -130,9 +130,6 @@ const StoreCreatePage = Loadable(
 const OrderListPage = Loadable( lazy( () => import( "@/pages/store-admin/order-store/order-list-page" ) ) );
 const StoreOrderDetailPage = Loadable( lazy( () => import( "@/pages/store-admin/order-store/order-detail-store" ) ) );
 const AccountPage = Loadable( lazy( () => import( "@/pages/store-admin/store-account/account" ) ) );
-const OrderPage = Loadable(
-  lazy(() => import("@/pages/brand-order/list-order"))
-);
 
 const Page404 = Loadable(lazy(() => import("@/pages/page-404")));
 
