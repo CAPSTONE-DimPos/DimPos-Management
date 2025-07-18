@@ -32,9 +32,15 @@ const EditIngredientPage = () =>
     } )
     const onSubmit = async ( data: TUpdateIngredientRequest ) =>
     {
+        const updatedData: Omit<TUpdateIngredientRequest, "code" | "sku"> = {
+            name: data.name,
+            measureUnit: data.measureUnit,
+            description: data.description,
+            isActive: data.isActive,
+        };
         try
         {
-            await updateIngredientMutation.mutateAsync( { id: id as string, data } );
+            await updateIngredientMutation.mutateAsync( { id: id as string, data: updatedData } );
             toast.success( "Cập nhật thành phần thành công!" );
         } catch ( error )
         {
@@ -81,7 +87,7 @@ const EditIngredientPage = () =>
                                         <FormItem>
                                             <FormLabel>Mã thành phần *</FormLabel>
                                             <FormControl>
-                                                <Input disabled={ updateIngredientMutation.isPending } placeholder="Nhập mã thành phần" { ...field } />
+                                                <Input disabled placeholder="Nhập mã thành phần" { ...field } />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -95,7 +101,7 @@ const EditIngredientPage = () =>
                                             <FormLabel>Mã SKU *</FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    disabled={ updateIngredientMutation.isPending }
+                                                    disabled
                                                     placeholder="Nhập mã SKU thành phần"
                                                     { ...field }
                                                 />

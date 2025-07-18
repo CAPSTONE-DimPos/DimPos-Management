@@ -51,7 +51,7 @@ export const useIngredient = () =>
         },
     } )
     const updateIngredientMutation = useMutation( {
-        mutationFn: ( { id, data }: { id: string; data: TUpdateIngredientRequest } ) => ingredientApi.updateIngredient( id, data ),
+        mutationFn: ( { id, data }: { id: string; data: Omit<TUpdateIngredientRequest, "code" | "sku"> } ) => ingredientApi.updateIngredient( id, data ),
         onSuccess: () =>
         {
             queryClient.invalidateQueries( { queryKey: [ 'ingredients' ] } );

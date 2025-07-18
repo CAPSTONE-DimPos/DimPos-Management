@@ -17,7 +17,7 @@ const createIngredient = async (data: TCreateIngredientRequest) =>
         API_SUFFIX.INGREDIENT_API,
         data
     );
-const updateIngredient = async (id: string, data: TUpdateIngredientRequest) =>
+const updateIngredient = async (id: string, data: Omit<TUpdateIngredientRequest, "code" | "sku">) =>
     await apiRequest.catalog.patch(
         `${API_SUFFIX.INGREDIENT_API}/${id}`,
         data
