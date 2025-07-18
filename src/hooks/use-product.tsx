@@ -1,5 +1,6 @@
 import { productApi } from "@/apis/product.api";
 import type {
+    TUpdateModifierGroupProductRequest,
     TUpdateModifierGroupRequest,
     TUpdateModifierOptionRequest,
 } from "@/schema/product.schema";
@@ -80,6 +81,20 @@ export const useProduct = () =>
             id: string;
             data: FormData;
         } ) => productApi.updateProductApi( id, data ),
+        onSuccess: ( _res, { id } ) =>
+        {
+            queryClient.invalidateQueries( { queryKey: [ "product", id ] } );
+        },
+    } );
+
+    const updateModifierGroupsIntoProductMutation = useMutation( {
+        mutationFn: ( {
+            id,
+            data,
+        }: {
+            id: string;
+            data: TUpdateModifierGroupProductRequest;
+        } ) => productApi.updateModifierGroupsIntoProduct( id, data ),
         onSuccess: ( _res, { id } ) =>
         {
             queryClient.invalidateQueries( { queryKey: [ "product", id ] } );
@@ -185,6 +200,7 @@ export const useProduct = () =>
         getProductById,
         createProductMutation,
         updateProductMutation,
+        updateModifierGroupsIntoProductMutation,
 
         getModifierGroups,
         getModifierGroupById,

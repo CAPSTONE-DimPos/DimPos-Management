@@ -8,6 +8,7 @@ import type {
   TCreateModifierGroupRequest,
   TUpdateModifierGroupRequest,
   TUpdateModifierOptionRequest,
+  TUpdateModifierGroupProductRequest,
 } from "@/schema/product.schema";
 import type { BaseResponse, PaginationResponse } from "@/types/response.type";
 
@@ -26,6 +27,11 @@ const getProductById = async (id: string) =>
 const updateProductApi = async (id: string, data: FormData) =>
   await apiRequest.catalog.patch<BaseResponse<TProductResponse>>(
     `${API_SUFFIX.PRODUCT_API}/${id}`,
+    data
+  );
+const updateModifierGroupsIntoProduct = async (id: string, data: TUpdateModifierGroupProductRequest) =>
+  await apiRequest.catalog.put<BaseResponse<TProductResponse>>(
+    `${API_SUFFIX.PRODUCT_API}/${id}/modifier-groups`,
     data
   );
 
@@ -94,4 +100,5 @@ export const productApi = {
   getModifierOptionsByGroupId,
   getModifierOptionById,
   updateModifierOption,
+  updateModifierGroupsIntoProduct,
 };

@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useProduct } from '@/hooks/use-product';
 import { useParams } from 'react-router-dom';
-import ModifierGroupForm from './components/modifier-option-form';
+import ModifierGroupForm from './components/modifier-group-form';
 import OverviewProductForm from './components/overview-product-form';
 import VariantsProductSection from './components/variants-product-section';
 import ProductIcon from '@/assets/icons/product-icon';
@@ -30,7 +30,7 @@ const EditProductPage = () =>
                             Biến thể
                         </TabsTrigger>
                     ) }
-                    <TabsTrigger value="modifierOptions">
+                    <TabsTrigger value="modifierGroups">
                         <DocumentFilterIcon className="w-4 h-4 mr-2" />
                         Tùy chọn
                     </TabsTrigger>
@@ -45,9 +45,10 @@ const EditProductPage = () =>
                         initialData={ data?.data.data.productVariants as any || [] }
                     />
                 </TabsContent>
-                <TabsContent value="modifierOptions">
+                <TabsContent value="modifierGroups">
                     <ModifierGroupForm
                         productId={ id as string }
+                        initialData={ data?.data.data.modifierGroup as any || [] }
                     />
                 </TabsContent>
             </Tabs>`
