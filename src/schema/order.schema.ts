@@ -57,10 +57,10 @@ export const StoreOrderResponseSchema = z.object({
   totalAmount: z.number({ message: "Tổng tiền không hợp lệ" }),
   amountPaid: z.number({ message: "Tiền đã trả không hợp lệ" }),
   cashRoundingAmount: z.number({ message: "Làm tròn tiền không hợp lệ" }),
-  pickupTime: z.string({ message: "Thời gian nhận không hợp lệ" }).nullable(),
+  pickupTime: z.date().nullable().optional(),
   note: z.string({ message: "Ghi chú không hợp lệ" }).nullable(),
   systemPaymentMethodNameSnapshot: z.string({ message: "Phương thức thanh toán không hợp lệ" }),
-  createdDate: z.string({ message: "Ngày tạo không hợp lệ" }),
+  createdDate: z.date(),
   orderItems: z.array(StoreOrderItemSchema, { message: "Danh sách sản phẩm không hợp lệ" }),
   appliedOrderPromotions: z.array(StoreOrderPromotionSchema, { message: "Danh sách khuyến mãi không hợp lệ" }),
 });

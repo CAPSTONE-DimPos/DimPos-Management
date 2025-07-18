@@ -17,7 +17,9 @@ import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import { ErrorBoundary } from "react-error-boundary";
 import { ErrorFallback } from "@/components/error-fallback";
 
-const Loadable = (Component: ElementType) => (props: any) => {
+
+const Loadable = ( Component: ElementType ) => ( props: any ) =>
+{
   return (
     <QueryErrorResetBoundary>
       {({ reset }) => (
@@ -48,8 +50,9 @@ const SystemPaymentMethodPage = Loadable(
 const SystemLogPage = Loadable(lazy(() => import("@/pages/system-log")));
 
 //Brand admin
-const BrandOrderEditPage = Loadable(
-  lazy(() => import("@/pages/brand-order/edit-order"))
+const BrandOrderEditPage = Loadable( lazy( () => import( "@/pages/brand-order/edit-order" ) ) );
+const OrderPage = Loadable(
+  lazy( () => import( "@/pages/brand-order/list-order" ) )
 );
 // Product routes
 const CategoryPage = Loadable(lazy(() => import("@/pages/category")));
@@ -124,15 +127,11 @@ const StoreCreatePage = Loadable(
   lazy(() => import("@/pages/store/create-store"))
 );
 
-const OrderListPage = Loadable(
-  lazy(() => import("@/pages/store-admin/order-store/order-list-page"))
-);
+const OrderListPage = Loadable( lazy( () => import( "@/pages/store-admin/order-store/order-list-page" ) ) );
+const StoreOrderDetailPage = Loadable( lazy( () => import( "@/pages/store-admin/order-store/order-detail-store" ) ) );
+const AccountPage = Loadable( lazy( () => import( "@/pages/store-admin/store-account/account" ) ) );
 const OrderPage = Loadable(
   lazy(() => import("@/pages/brand-order/list-order"))
-);
-
-const AccountPage = Loadable(
-  lazy(() => import("@/pages/store-admin/store-account/account"))
 );
 
 const Page404 = Loadable(lazy(() => import("@/pages/page-404")));
@@ -389,8 +388,8 @@ export const AppRoutes = () =>
         { path: "promotion/:id", element: <GeneralAppPage /> },
 
         // Orders
-        { path: "orders", element: <OrderListPage /> },
-        { path: "orders/:id", element: <GeneralAppPage /> },
+        { path: 'orders', element: <OrderListPage /> },
+        { path: 'orders/:id', element: <StoreOrderDetailPage /> },
 
         // Store Accounts
         { path: "accounts", element: <AccountPage /> },

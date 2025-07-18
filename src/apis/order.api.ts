@@ -14,7 +14,7 @@ const getBrandOrderById = async (id: string) =>
 
 const getStoreOrders = async (params?: any) =>
   await apiRequest.order.get<BaseResponse<PaginationResponse<TStoreOrderResponse>>>(
-    API_SUFFIX.ORDER_API,
+    API_SUFFIX.ORDER_API, 
     { params }
   );
 
