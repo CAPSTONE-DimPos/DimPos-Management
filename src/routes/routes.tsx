@@ -136,8 +136,6 @@ const OrderListPage = Loadable( lazy( () => import( "@/pages/store-admin/order-s
 const StoreOrderDetailPage = Loadable( lazy( () => import( "@/pages/store-admin/order-store/order-detail-store" ) ) );
 const StoreOverviewPage = Loadable( lazy( () => import( "@/pages/store-admin/store-overview" ) ) );
 const ShiftConfigPage = Loadable( lazy( () => import( "@/pages/store-admin/shift-config" ) ) );
-const Page404 = Loadable(lazy(() => import("@/pages/page-404")));
-const AccountPage = Loadable( lazy( () => import( "@/pages/store-admin/store-account/account" ) ) );
 
 const Page404 = Loadable( lazy( () => import( "@/pages/page-404" ) ) );
 
