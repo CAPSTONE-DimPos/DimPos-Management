@@ -2,7 +2,7 @@ import { apiRequest } from "@/lib/http";
 import { API_SUFFIX } from "./util.api";
 
 import type { BaseResponse, PaginationResponse } from "@/types/response.type";
-import type { TCreateStoreRequest, TStore } from "@/schema/store.schema";
+import type { TCreateStoreRequest, TStore, TStoreResponse } from "@/schema/store.schema";
 
 // ==== Store ====
 const getStores = async (params?: any) =>
@@ -28,9 +28,13 @@ const createStoreMutation = async (data: TCreateStoreRequest) =>
     data
   );
 
+const getStoreDetail = async () =>
+  await apiRequest.store.get<BaseResponse<TStoreResponse>>(API_SUFFIX.STORE_DETAIL_API);
+
 export const storeApi = {
   getStores,
   getStoreById,
+  getStoreDetail,
   updateStoreMutation,
   createStoreMutation,
 };

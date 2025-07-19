@@ -244,15 +244,16 @@ const storeRoutes = {
   sales: {
     mainTitle: "Bán hàng & khuyến mãi",
     items: [
-      {
-        title: "Thực đơn",
-        url: PATH_STORE_DASHBOARD.menu.root,
-        icon: MenuIcon,
-      },
+      
       {
         title: "Đơn hàng",
         url: PATH_STORE_DASHBOARD.order.root,
         icon: ReceiptIcon,
+      },
+            {
+        title: "Ca tài chính",
+        url: PATH_STORE_DASHBOARD.financialShift.root,
+        icon: NoteIcon,
       },
       {
         title: "Chiến dịch khuyến mãi",
@@ -262,8 +263,13 @@ const storeRoutes = {
     ],
   },
   operation: {
-    mainTitle: "Vận hành cửa hàng",
+    mainTitle: "Quản lí cửa hàng & sản phẩm",
     items: [
+      {
+        title: "Thực đơn",
+        url: PATH_STORE_DASHBOARD.menu.root,
+        icon: MenuIcon,
+      },
       {
         title: "Yêu cầu nhập hàng",
         url: PATH_STORE_DASHBOARD.purchaseRequest.root,
@@ -274,29 +280,19 @@ const storeRoutes = {
         url: PATH_STORE_DASHBOARD.inventory.root,
         icon: ProductIcon,
       },
-      {
-        title: "Ca tài chính",
-        url: PATH_STORE_DASHBOARD.financialShift.root,
-        icon: NoteIcon,
-      },
     ],
   },
   settings: {
-    mainTitle: "Quản lý & cấu hình",
+    mainTitle: "Cấu hình",
     items: [
       {
-        title: "Tài khoản cửa hàng",
-        url: PATH_STORE_DASHBOARD.account.root,
-        icon: UsersIcon,
-      },
-      {
-        title: "Phương thức thanh toán",
-        url: PATH_STORE_DASHBOARD.storeSettings.paymentMethods,
+        title: "Cấu hình chung",
+        url: PATH_STORE_DASHBOARD.storeSettings.root,
         icon: ShopIcon,
       },
       {
-        title: "Cấu hình ca tài chính",
-        url: PATH_STORE_DASHBOARD.storeSettings.shiftConfig,
+        title: "Ca tài chính & thanh toán",
+        url: PATH_STORE_DASHBOARD.shiftConfig.root,
         icon: CollapseIcon,
       },
     ],
