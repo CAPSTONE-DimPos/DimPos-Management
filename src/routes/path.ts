@@ -51,6 +51,8 @@ export const PATH_BRAND_DASHBOARD = {
 
   ingredient: {
     root: path(ROOTS_BRAND_DASHBOARD, '/ingredient'),
+    create: path(ROOTS_BRAND_DASHBOARD, '/ingredient/new'),
+    edit: (id: string) => path(ROOTS_BRAND_DASHBOARD, `/ingredient/${id}`),
   },
   tax: {
     root: path(ROOTS_BRAND_DASHBOARD, '/tax'),

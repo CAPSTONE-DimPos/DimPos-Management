@@ -15,6 +15,8 @@ export {default as ShoppingBagIcon} from './icons/shopping-bag-icon';
 export {default as TotalOrderIcon} from './icons/total-order-icon';
 export {default as NoteIcon} from './icons/note-icon';
 export {default as DocumentFilterIcon} from './icons/document-filter-icon';
+export {default as IngredientIcon} from './icons/ingredient-icon';
+export {default as RecipeIcon} from './icons/recipe-icon';
 export {default as DimposIcon} from './logo/dimpos-logo';
 export {default as LoginFormIllustration1} from './illustration/login-form-illustration-1';
 export {default as LoginFormIllustration2} from './illustration/login-form-illustration-2';

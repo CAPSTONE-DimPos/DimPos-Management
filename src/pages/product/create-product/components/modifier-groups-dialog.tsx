@@ -5,12 +5,12 @@ import { Form } from '@/components/ui/form';
 import { useProduct } from '@/hooks/use-product';
 import { useQueryParams } from '@/hooks/use-query-params';
 import { handleApiError } from '@/lib/error';
-import React from 'react';
+import { type ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
-import { columns } from './column';
+import { columns } from '../../components/column';
 
 type ModifierGroupsDialogProps = {
-    children: React.ReactNode;
+    children: ReactNode;
     isOpen: boolean;
     onOpenChange: ( open: boolean ) => void;
     initialData?: { id: string, name: string }[];

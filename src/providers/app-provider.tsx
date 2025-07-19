@@ -30,7 +30,7 @@ const AppProvider = ( { children }: Props ) =>
                             toastOptions={ {
                                 classNames: {
                                     success: "!bg-green-50 !border !border-green-200 !text-green-600",
-                                    error: "!bg-red-50 !border !border-red-200 !text-red-600",
+                                    error: "!bg-red-10 !border !border-red-200 !text-red-600",
                                     info: "!bg-blue-50 !border !border-blue-200 !text-blue-600",
                                     warning: "!bg-yellow-50 !border !border-yellow-200 !text-yellow-600",
                                 },

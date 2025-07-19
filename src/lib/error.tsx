@@ -28,7 +28,7 @@ export const handleApiError = ( error: any ): BaseResponse<any> | null =>
                     handledError = {
                         status: status,
                         message: "Dữ liệu không hợp lệ.",
-                        data: data.data[ 0 ].errorMessage,
+                        data: data.data[ 0 ].errorMessage || data.data,
                     };
                 } else
 

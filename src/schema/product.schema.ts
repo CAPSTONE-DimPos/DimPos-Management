@@ -2,20 +2,7 @@ import { z } from "zod";
 import { CreateProductVariantSchema, ProductVariantSchema } from "./product-variant.schema";
 
 export const allowedExtensions = [".jpeg", ".png", ".jpg", ".gif", ".bmp", ".webp"];
-export const ProductSchema = z.object({
-  id: z.string().uuid(),
-  code: z.string(),
-  name: z.string(),
-  description: z.string(),
-  isHasVariants: z.boolean().default(false),
-  status: z.number().int().optional(),
-  displayOrder: z.number().int().optional(),
-  note: z.string().optional(),
-  createdDate: z.string().datetime().optional(),
-  lastModifiedDate: z.string().datetime().optional(),
-  productVariants: z.array(z.lazy(() => ProductVariantSchema)).optional(),
-  productImages: z.array(z.lazy(() => ProductImageSchema)).optional(),
-});
+
 export const ProductImageSchema = z.object({
   id: z.string().uuid(),
   imageUrl: z.string().url(),
@@ -166,6 +153,29 @@ export const UpdateProductModifierOptionSchema = z.object({
 export const UpdateModifierGroupSchema = CreateModifierGroupSchema.extend({
   id: z.string().uuid({ message: "ID không hợp lệ" }),
 });
+
+
+export const ProductSchema = z.object({
+  id: z.string().uuid(),
+  code: z.string(),
+  name: z.string(),
+  description: z.string(),
+  isHasVariants: z.boolean().default(false),
+  status: z.number().int().optional(),
+  displayOrder: z.number().int().optional(),
+  note: z.string().optional(),
+  createdDate: z.string().datetime().optional(),
+  lastModifiedDate: z.string().datetime().optional(),
+  productVariants: z.array(ProductVariantSchema).optional(),
+  productImages: z.array(ProductImageSchema).optional(),
+  modifierGroup: z.array(ModifierGroupSchema).optional(),
+});
+
+export const UpdateModifierGroupProductSchema = z.object({
+  modifierGroupIds: z.array(z.string().uuid())
+})
+
+
 export const UpdateModifierOptionSchema = ModifierOptionSchema.omit({ id: true });
 export type TProductImageResponse = z.infer<typeof ProductImageSchema>;
 export type TProductResponse = z.infer<typeof ProductSchema>;
@@ -177,4 +187,5 @@ export type TUpdateModifierGroupRequest = z.infer<typeof UpdateModifierGroupSche
 export type TUpdateModifierOptionRequest = z.infer<typeof UpdateModifierOptionSchema>;
 export type TProductRequest = z.infer<typeof CreateProductSchema>;
 export type TUpdateProductRequest = z.infer<typeof UpdateProductSchema>;
+export type TUpdateModifierGroupProductRequest = z.infer<typeof UpdateModifierGroupProductSchema>;
 export type TProductModifierOptionRequest = z.infer<typeof UpdateProductModifierOptionSchema>;

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { IngredientSchema } from "./ingredients.schema";
 
 export const ProductVariantSchema = z.object({
     id: z.string().uuid(),
@@ -24,7 +25,6 @@ export const CreateProductVariantSchema = z.object({
 });
 
 export const UpdateProductVariantSchema = z.object({
-    id: z.string().uuid(),
     code: z.string(),
     name: z.string({ message: "Tên của biến thể sản phẩm không được bỏ trống" }).min(1, { message: "Tên của biến thể sản phẩm phải có ít nhất 1 ký tự" }).max(200, { message: "Tên của biến thể sản phẩm không được vượt quá 200 ký tự" }),
     price: z.number().min(0, { message: "Giá brand của biến thể sản phẩm không được bỏ trống" }),
@@ -33,6 +33,21 @@ export const UpdateProductVariantSchema = z.object({
     sku: z.string().nullable(),
 });
 
+export const RecipeItemSchema = z.object({
+    id: z.string().uuid(),
+    quantity: z.number().min(1, { message: "Số lượng phải lớn hơn 0" }),
+    ingredient: IngredientSchema.omit({
+        description: true,
+    })
+})
+
+export const RequestRecipeItemSchema = z.object({
+    quantity: z.number({message:"Số lượng không được để trống"}).min(0, { message: "Số lượng phải lớn hơn hoặc bằng 0" }),
+    ingredientId: z.string({message: "Vui lòng chọn thành phần"}).uuid({ message: "ID thành phần không hợp lệ" }),
+});
+
 export type TProductVariantResponse = z.infer<typeof ProductVariantSchema>;
 export type TCreateProductVariantRequest = z.infer<typeof CreateProductVariantSchema>;
 export type TUpdateProductVariantRequest = z.infer<typeof UpdateProductVariantSchema>;
+export type TRecipeItemResponse = z.infer<typeof RecipeItemSchema>;
+export type TRequestRecipeItem = z.infer<typeof RequestRecipeItemSchema>;
